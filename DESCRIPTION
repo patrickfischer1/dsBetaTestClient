@@ -11,5 +11,3 @@ Depends:
     dsStatsClient,
     dsGraphicsClient,
     dsModellingClient
-AggregateMethods:
-AssignMethods:
