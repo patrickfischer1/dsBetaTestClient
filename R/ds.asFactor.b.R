@@ -57,7 +57,7 @@
 #' If the \code{baseline.level} is set to be equal to a value that is not one of the levels of the factor then a 
 #' matrix of dummy variables is created having as many columns as the number of levels are. In that case in each row
 #' there is a unique entry equal to 1 at a certain column indicating the level of each data point. So, for the 
-#' above example where the vector has five levels, if we set the \code{baseline.level equal to a value that does not
+#' above example where the vector has five levels, if we set the \code{baseline.level} equal to a value that does not
 #' belong to those five levels (let's say for example \code{baseline.level=8}) the the matrix of dummy variables is:
 #'       DV1 DV2 DV3 DV4 DV5
 #'  [1,]   1   0   0   0   0
