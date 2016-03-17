@@ -14,12 +14,20 @@ This is an internal function required by a client function
 }
 \details{
 if the user does not set the argument 'datasources', this function
-is called to searches for opal login objects in the environment. If more than one 
-login object is found a prompt asks the user to choose one and if none is found
-the process stops.
+is called to searches for opal login objects in the environment.
+If only one opal object is found, it automatically becomes the default selection.
+If more than one is found but one is called 'default.opals' then that is selected.
+If more than one is found with none is called 'default.opals' the user is 
+told that they can either specify a particular Opal using the 'datasources=' argument
+that exists in every relevant datashield client-side function or else they
+can use the 'ds.setDefaultOpals()' function to create a copy of a selected Opal objects
+which is called 'default.opals' and is then selected by default in future calls to findLoginObjects.
+If the default Opal object needs to be changed then 'ds.setDefaultOpals()' can be run again.
+A previous version of 'findLoginObjects()' asked the user to specify which Opal to choose
+if no default could be identified, but that did not work in all versions of R and so was removed.
 }
 \author{
-Gaye, A.
+Gaye, A. Updated Burton, PR. 5/1/16
 }
 \keyword{internal}
 
