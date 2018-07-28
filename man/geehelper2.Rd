@@ -26,4 +26,3 @@ function \code{ds.gee}.
 Gaye, A.; Jones EM.
 }
 \keyword{internal}
-

@@ -98,12 +98,11 @@ on distinct servers by sending
 }
 
 }
-\author{
-Burton,P;Gaye,A;Laflamme,P
-}
 \seealso{
 \link{ds.lexis} for survival analysis using piecewise exponential regression
 
 \link{ds.gee} for generalized estimating equation models
 }
-
+\author{
+Burton,P;Gaye,A;Laflamme,P
+}

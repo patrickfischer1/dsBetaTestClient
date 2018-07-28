@@ -22,4 +22,3 @@ The function is required required by the client function \code{ds.table2D}.
 Gaye, A.
 }
 \keyword{internal}
-

@@ -24,4 +24,3 @@ which may stop the process due to some checks not required when computing a mean
 a function.
 }
 \keyword{internal}
-

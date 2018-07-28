@@ -30,4 +30,3 @@ if no default could be identified, but that did not work in all versions of R an
 Gaye, A. Updated Burton, PR. 5/1/16
 }
 \keyword{internal}
-

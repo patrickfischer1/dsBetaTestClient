@@ -27,4 +27,3 @@ This function is called by the function 'ds.subset' to ensure that the requested
 is not larger than the original object.
 }
 \keyword{internal}
-

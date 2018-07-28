@@ -23,4 +23,3 @@ In DataSHIELD an object included in analysis must be of the same type in all
 the collaborating studies. If that is not the case the process is stopped
 }
 \keyword{internal}
-

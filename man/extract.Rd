@@ -19,4 +19,3 @@ This is an internal function.
 Not required
 }
 \keyword{internal}
-

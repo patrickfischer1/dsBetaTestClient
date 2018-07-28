@@ -21,4 +21,3 @@ character into an integer: '>' is turned into 1, '>=' into 2, '<' into 3,
 '<=' into 4, '==' into 5 and '!=' into 6.
 }
 \keyword{internal}
-

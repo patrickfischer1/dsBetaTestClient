@@ -21,4 +21,3 @@ This way no matter what the user calls his opal login object it will be captured
 Gaye,A.
 }
 \keyword{internal}
-

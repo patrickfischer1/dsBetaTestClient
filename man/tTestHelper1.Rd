@@ -33,4 +33,3 @@ This is an internal function.
 \keyword{internal}
 \keyword{see}
 \keyword{the}
-

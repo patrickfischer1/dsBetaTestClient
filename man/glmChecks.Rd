@@ -37,4 +37,3 @@ at complete) and evantually (if 'offset' or 'weights') are of 'numeric' with non
 Gaye, A.
 }
 \keyword{internal}
-

@@ -23,4 +23,3 @@ In DataSHIELD an object included in analysis must be defined (i.e. exists)
 in all the studies. If not the process should halt.
 }
 \keyword{internal}
-

@@ -88,4 +88,3 @@ cases included in the correlation calculations.
 \author{
 Gaye A., Avraam D., Burton P.
 }
-

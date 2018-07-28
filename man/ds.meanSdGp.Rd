@@ -150,12 +150,11 @@ ds.meanSdGp("SBP","CVA","split")
 
 }
 }
-\author{
-Paul Burton
-}
 \seealso{
 \link{ds.subsetByClass} to subset by the classes of factor vector(s).
 
 \link{ds.subset} to subset by complete cases (i.e. removing missing values), threshold, columns and rows.
 }
-
+\author{
+Paul Burton
+}
