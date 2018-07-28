@@ -2,7 +2,7 @@
 #' @title Converts a numeric vector into a factor type
 #' @description This function assigns a numeric vector into a factor type
 #' @details Converts a numeric vector into a factor type which is represented either as a vector
-#' or as a matrix of dummy variables dependending on the argyment \code{fixed.dummy.vars}.
+#' or as a matrix of dummy variables dependending on the argument \code{fixed.dummy.vars}.
 #' @param input.var.name the name of the variable that is to be converted to a factor
 #' @param newobj.name the name of the new object. If this argument is set to NULL or not specified 
 #' then the default name of the new variable is the name of the input variable with the suffixe '.f'.
@@ -14,9 +14,9 @@
 #' are combined together and a vector with all unique levels is created.
 #' @param fixed.dummy.vars a boolean that determines whether the new object is represented as a vector
 #' or as a matrix with elements dummy variables indicating the factor level of each data point.
-#' If this argyment is set to FALSE (default) then the input variable is converted to a factor and
+#' If this argument is set to FALSE (default) then the input variable is converted to a factor and
 #' assigned as a vector. If is set to TRUE then the input variable is converted to a factor but presented
-#' as a matrix of dummy variables. The matrix of dummy variables also depends on argyment 
+#' as a matrix of dummy variables. The matrix of dummy variables also depends on argument 
 #' \code{baseline.level}. To understand how this matrix is created let's assume that we have the vector
 #' (1, 2, 1, 3, 4, 4, 1, 3, 4, 5) of ten integer numbers. If we set the arqyment \code{fixed.dummy.vars}
 #' to TRUE and the \code{baseline.level} to 1 which is the default value and the \code{forced.factor.levels}
@@ -88,41 +88,41 @@
 #'   ds.asNumeric("EM$time.id","TID")
 #'
 #'   Example 1 
-#'   ds.asFactor.b("TID","TID.f")
+#'   ds.asFactor.o("TID","TID.f")
 #'   ds.class("TID.f") 
 #'   ds.table1D("TID.f")
 #'
 #'   Example 2
-#'   ds.asFactor.b("TID","TID.f2",forced.factor.levels=1:6)
+#'   ds.asFactor.o("TID","TID.f2",forced.factor.levels=1:6)
 #'   ds.class("TID.f2")
 #'   ds.table1D("TID.f2")
 #'
 #'   Example 3
-#'   ds.asFactor.b("TID","TID.f3",forced.factor.levels=0:10)
+#'   ds.asFactor.o("TID","TID.f3",forced.factor.levels=0:10)
 #'   ds.class("TID.f3")
 #'   ds.table1D("TID.f3")
 #'
 #'   Example 4
-#'   ds.asFactor.b("TID","TID.f4",forced.factor.levels=2:3)
+#'   ds.asFactor.o("TID","TID.f4",forced.factor.levels=2:3)
 #'   ds.class("TID.f4")
 #'   ds.table1D("TID.f4")
 #'
 #'   Example 5
-#'   ds.asFactor.b("TID","TID.f5",forced.factor.levels=c(1,2,3,4,"a","h",5))
+#'   ds.asFactor.o("TID","TID.f5",forced.factor.levels=c(1,2,3,4,"a","h",5))
 #'   ds.class("TID.f5")
 #'   ds.table1D("TID.f5")
 #'
 #'   Example 6
-#'   ds.asFactor.b("TID","TID.mat1",fixed.dummy.vars=TRUE)
+#'   ds.asFactor.o("TID","TID.mat1",fixed.dummy.vars=TRUE)
 #'   ds.class("TID.mat1")
 #'
 #'   Example 7
-#'   ds.asFactor.b("TID","TID.mat6",fixed.dummy.vars=TRUE,baseline.level=6)
+#'   ds.asFactor.o("TID","TID.mat6",fixed.dummy.vars=TRUE,baseline.level=6)
 #'   ds.class("TID.mat6")
 #'
 #' }
 #' 
-ds.asFactor.b <- function(input.var.name=NULL, newobj.name=NULL, forced.factor.levels=NULL, fixed.dummy.vars=FALSE,
+ds.asFactor.o <- function(input.var.name=NULL, newobj.name=NULL, forced.factor.levels=NULL, fixed.dummy.vars=FALSE,
                         baseline.level=1, datasources=NULL){
   
   # if no opal login details are provided look for 'opal' objects in the environment
@@ -147,7 +147,7 @@ ds.asFactor.b <- function(input.var.name=NULL, newobj.name=NULL, forced.factor.l
 
   #CALL THE FIRST SERVER SIDE FUNCTION (AN AGGREGATE FUNCTION)
   #TO DETERMINE ALL OF THE LEVELS REQUIRED
-  calltext1 <- call("asFactorDS1.b", input.var.name)
+  calltext1 <- call("asFactorDS1.o", input.var.name)
   all.levels <- datashield.aggregate(datasources, calltext1)
   
   numstudies <- length(datasources)
@@ -166,11 +166,61 @@ ds.asFactor.b <- function(input.var.name=NULL, newobj.name=NULL, forced.factor.l
 
   all.unique.levels.transmit <- paste0(all.unique.levels, collapse=",")
 
-  calltext2 <- call("asFactorDS2.b", input.var.name, all.unique.levels.transmit, fixed.dummy.vars, baseline.level)
-  tracer <- calltext2
+  calltext2 <- call("asFactorDS2.o", input.var.name, all.unique.levels.transmit, fixed.dummy.vars, baseline.level)
   datashield.assign(datasources, newobj.name, calltext2)
 
-  return(list(all.unique.levels=all.unique.levels, tracer=tracer))
+##########################################################################################################
+#MODULE 5: CHECK KEY DATA OBJECTS SUCCESSFULLY CREATED                                                   #
+																										 #
+#SET APPROPRIATE PARAMETERS FOR THIS PARTICULAR FUNCTION                                                 #
+test.obj.name<-newobj.name                                                                               #
+                                                                                                         #
+# CALL SEVERSIDE FUNCTION                                                                                #
+calltext <- call("testObjExistsDS.o", test.obj.name)													 #
+object.info<-datashield.aggregate(datasources, calltext)												 #
+																										 #
+# CHECK IN EACH SOURCE WHETHER OBJECT NAME EXISTS														 #
+# AND WHETHER OBJECT PHYSICALLY EXISTS WITH A NON-NULL CLASS											 #
+num.datasources<-length(object.info)																	 #
+																										 #
+																										 #
+obj.name.exists.in.all.sources<-TRUE																	 #
+obj.non.null.in.all.sources<-TRUE																		 #
+																										 #
+for(j in 1:num.datasources){																			 #
+	if(!object.info[[j]]$test.obj.exists){																 #
+		obj.name.exists.in.all.sources<-FALSE															 #
+		}																								 #
+	if(object.info[[j]]$test.obj.class=="ABSENT"){														 #
+		obj.non.null.in.all.sources<-FALSE																 #
+		}																								 #
+	}																									 #
+																										 #
+if(obj.name.exists.in.all.sources && obj.non.null.in.all.sources){										 #
+																										 #
+	return.message<-																					 #
+    paste0("Data object <", test.obj.name, "> correctly created in all specified data sources")		 	 #
+																										 #
+	return(list(all.unique.levels=all.unique.levels,return.message=return.message))						 #
+																										 #
+	}else{																								 #
+																										 #
+    return.message.1<-																					 #
+	paste0("Error: A valid data object <", test.obj.name, "> does NOT exist in ALL specified data sources")#
+																										 #
+	return.message.2<-																					 #
+	paste0("It is either ABSENT and/or has no valid content/class,see return.info above")				 #
+																										 #
+	return.message<-list(return.message.1,return.message.2)												 #
+																										 #
+	return.info<-object.info																			 #
+																										 #
+return(list(all.unique.levels=all.unique.levels,return.info=return.info,return.message=return.message))	 #
+																										 #
+	}																									 #
+#END OF MODULE 5																						 #
+##########################################################################################################
+
 
 }
-#ds.asFactor.b
+#ds.asFactor.o

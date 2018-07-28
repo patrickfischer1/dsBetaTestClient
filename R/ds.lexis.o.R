@@ -199,7 +199,7 @@
 #' #ds.ls() #to confirm expanded dataframe created
 #' }
 #'
-ds.lexis.b<-function(data=NULL, intervalWidth=NULL, idCol=NULL, entryCol=NULL, exitCol=NULL, statusCol=NULL, variables=NULL, expandDF=NULL,datasources=NULL){
+ds.lexis.o<-function(data=NULL, intervalWidth=NULL, idCol=NULL, entryCol=NULL, exitCol=NULL, statusCol=NULL, variables=NULL, expandDF=NULL,datasources=NULL){
   
   # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
@@ -220,10 +220,11 @@ ds.lexis.b<-function(data=NULL, intervalWidth=NULL, idCol=NULL, entryCol=NULL, e
   if(is.null(exitCol)){
     stop("Please provide the name of the column that holds the exit times (i.e. end of follow up time)!", call.=FALSE)
   }
-  
-  # if no value provided for 'intervalWidth' instruct user to specify one
-  if(is.null(intervalWidth)){
-    stop("Please provide a single numeric value or vector to identify the survival time intervals", call.=FALSE)
+
+
+  # if no valid value provided for 'intervalWidth' instruct user to specify one
+  if(is.null(intervalWidth)||is.na(intervalWidth)||intervalWidth==0){
+    stop("Please provide a (non-zero) single numeric value or vector to identify the survival time intervals", call.=FALSE)
   }
   
   # if no value spcified for output (expanded) data set, then specify a default
@@ -233,10 +234,20 @@ ds.lexis.b<-function(data=NULL, intervalWidth=NULL, idCol=NULL, entryCol=NULL, e
 
 #FIRST CALL TO SERVER SIDE TO IDENTIFY THE MAXIMUM FOLLOW UP TIME IN ANY
 #SOURCE. THE MAXIMUM I EACH SOURCE IS MASKED BY A RANDOM POSITIVE INCREMENT
-  calltext1 <- call("lexisDS1.b", exitCol)
+  calltext1 <- call("lexisDS1.o", exitCol)
 
   maxtime<-datashield.aggregate(datasources, calltext1)
+  
+  num.studies<-length(datasources)
 
+  for(ss in 1:num.studies){
+#  print(maxtime[ss][[1]]$max.time) 
+
+    if(is.null(maxtime[ss][[1]]$max.time)){
+    return(list(maxtime=maxtime))
+	}
+  } 
+ 
   nummax<-length(maxtime)
 
   temp1<-rep(NA,nummax)
@@ -253,18 +264,21 @@ intervalWidth.transmit<-paste0(as.character(intervalWidth),collapse=",")
 #SECOND CALL TO SERVER SIDE USES maxmaxtime AND intervalWidth TO SET
 #FOLLOW-UP TIME BREAKS IN EACH STUDY (ALL THE SAME)
   # call the main server side function
-  calltext2 <- call("lexisDS2.b", data, intervalWidth=intervalWidth.transmit, maxmaxtime, idCol, entryCol, exitCol, statusCol, variables)
+  calltext2 <- call("lexisDS2.o", data, intervalWidth=intervalWidth.transmit, maxmaxtime, idCol, entryCol, exitCol, statusCol, variables)
   	datashield.assign(datasources, "messageobj", calltext2)
 
-  calltext3<- call("lexisDS3.b")
+	
+	
+  calltext3<- call("lexisDS3.o")
   	datashield.assign(datasources, expandDF, calltext3)
 
 
 #RETURN COMPLETION INFORMATION TO CLIENT SIDE
   Note1<-"END OF LAST FOLLOW-UP PERIOD SET (RANDOMLY) AT maxmaxtime:"
   Note2<-"ASSIGN FUNCTION COMPLETED - USE ds.ls() TO CONFIRM"
-  Note3<-"IF FUNCTION FAILED ON ONE OR MORE STUDIES, USE ds.message('messageobj') FOR ERROR MESSAGES"
-  out.obj<-list(Note1=Note1,maxmaxtime=maxmaxtime,Note2=Note2,Note3=Note3)
+  Note3<-"IF FUNCTION FAILED ON ONE OR MORE STUDIES WITHOUT EXPLANATION, TYPE [PRECISELY] THE COMMAND:"
+  Note4<-"ds.message.o('messageobj') FOR MORE ERROR MESSAGES"
+  out.obj<-list(Note1=Note1,maxmaxtime=maxmaxtime,Note2=Note2,Note3=Note3,Note4=Note4)
   return(out.obj)
 }
-#ds.lexis.b
+#ds.lexis.o
