@@ -6,7 +6,7 @@
 #' @param y the dependent variable
 #' @param datasources a list of opal object(s) obtained after login to opal servers;
 #' these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.
-#' @return 
+#' @return regression outcome
 #' @author Avraam D.
 #' @export
 #' 
