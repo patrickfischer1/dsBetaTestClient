@@ -1,10 +1,10 @@
 Package: dsBetaTestClient
 Title: New DataSHIELD Client Functions
-Version: 0.0.11
+Version: 0.0.12
 Authors@R: person("DataSHIELD", "Developers", email = "datashield@newcastle.ac.uk", role = c("aut", "cre"))
 Description: Beta versions of new DataSHIELD client functions. Collected in this
     temporary package, prior to inclusion in the main DataSHIELD packages.
-License: GPLv3
+License: GPL-3
 Depends:
     dsBaseClient,
     dsStatsClient,
