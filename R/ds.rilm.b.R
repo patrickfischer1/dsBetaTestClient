@@ -8,10 +8,40 @@
 #' these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.
 #' @return regression outcome
 #' @author Avraam D
-#' @importFrom schoolmath is.whole
 #' @export
 #' 
 ds.rilm.b <- function(..., y=NULL, datasources=NULL){
+
+##############################
+is.whole <- function(x){
+    start <- 1
+    end <- length(x) + 1
+    while (start < end) {
+        y <- x[start]
+        test <- floor(y)
+        if (y == test) {
+            if (start == 1) {
+                result = TRUE
+            }
+            else {
+                result <- c(result, TRUE)
+            }
+        }
+        else {
+            if (start == 1) {
+                result = FALSE
+            }
+            else {
+                result <- c(result, FALSE)
+            }
+        }
+        start <- start + 1
+    }
+    return(result)
+}
+###############################
+
+
 
 	# Set number of decimals.
 	options(digits = 20)
@@ -204,7 +234,7 @@ ds.rilm.b <- function(..., y=NULL, datasources=NULL){
 		colnames(Beta) <- "Beta"
 	  
 		# Print something to see that the program is running / working.
-		if(schoolmath::is.whole(Count / Milestone)){
+		if(is.whole(Count / Milestone)){
 			options(digits = 20)
 			cat("The program is at iteration", Count, "\n")
 		}
