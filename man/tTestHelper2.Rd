@@ -21,6 +21,9 @@ results similar to that of a t.test
 \description{
 This is an internal function.
 }
+\details{
+internal function
+}
 \keyword{calling}
 \keyword{function}
 \keyword{internal}

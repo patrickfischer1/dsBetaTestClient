@@ -72,46 +72,38 @@ ds.Boole.o <- function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=T
     stop("Please provide a Boolean operator in character format: eg '==' or '>=' or '<' or '!='", call.=FALSE)
   }
   
-  #check if na.assign has legal value
+  # check if na.assign has legal value
   if(!(na.assign=="NA"||na.assign=="0"||na.assign=="1")){
     stop("Error: na.assign must be a character string taking value 'NA', '0' or '1'- if <na.action> not specified default is 'NA'", call.=FALSE)
   }
   
-  
-
-#convert Boolean operator to numeric
-
-BO.n<-0
-if(Boolean.operator == "=="){
-   BO.n<-1
-}
-
-if(Boolean.operator == "!="){
-   BO.n<-2
-}
-
-if(Boolean.operator == "<"){
-   BO.n<-3
-}
-
-if(Boolean.operator == "<="){
-   BO.n<-4
-}
-
-if(Boolean.operator == ">"){
-   BO.n<-5
-}
-
-if(Boolean.operator == ">="){
-   BO.n<-6
-}
+  # convert Boolean operator to numeric
+  BO.n <- 0
+  if(Boolean.operator == "=="){
+    BO.n <- 1
+  }
+  if(Boolean.operator == "!="){
+    BO.n <- 2
+  }
+  if(Boolean.operator == "<"){
+    BO.n <- 3
+  }
+  if(Boolean.operator == "<="){
+    BO.n <- 4
+  }
+  if(Boolean.operator == ">"){
+    BO.n <- 5
+  }
+  if(Boolean.operator == ">="){
+    BO.n <- 6
+  }
 
   # if no value spcified for output object, then specify a default
   if(is.null(newobj)){
     newobj <- paste0(V1,"_Boole")
   }
 
-# CALL THE MAIN SERVER SIDE FUNCTION
+  # CALL THE MAIN SERVER SIDE FUNCTION
   calltext <- call("BooleDS.o", V1, V2, BO.n, na.assign,numeric.output)
   datashield.assign(datasources, newobj, calltext)
   
@@ -123,9 +115,9 @@ test.obj.name<-newobj
 
 #TRACER
 #return(test.obj.name)
-#}                                                                                   #
- 
- #
+#}                                                                                                       #
+                                                                                                         #
+                                                                                                         #
 # CALL SEVERSIDE FUNCTION                                                                                #
 calltext <- call("testObjExistsDS.o", test.obj.name)													 #
 																										 #

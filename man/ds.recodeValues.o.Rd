@@ -9,6 +9,8 @@ ds.recodeValues.o(var.name = NULL, values2replace.vector = NULL,
   datasources = NULL)
 }
 \arguments{
+\item{var.name}{A character string specifying the name of the vector whose values are to be changed}
+
 \item{values2replace.vector}{A vector containing the value of elements in <var.name> that are to be changed.
 This must either be specified in format c(1,2,8,...) where all values are numeric or, more generally,
 as c(1,2,"hhh",-1,"b",NA,5,...) where the values specified can include numerics, characters (in inverted commas)
@@ -24,14 +26,14 @@ to that for <values2replace.vector> except that values in <new.values.vector> ca
 If no <newobj> argument is specified, the recoded variable name defalults to "var.name_recoded" where <var.name>
 is the first argument of the function.}
 
+\item{force.output.format}{A boolean.}
+
 \item{datasources}{specifies the particular opal object(s) to use. If the <datasources> argument is not specified
 the default set of opals will be used. The default opals are called default.opals and the default can be set
 using the function {ds.setDefaultOpals.o}. If the <datasources> is to be specified, it should be set without
 without inverted commas: e.g. datasources=opals.em or datasources=default.opals. If you wish to apply the function
 solely to e.g. the second opal server in a set of three, the argument can be specified as: e.g. datasources=opals.em[2].
 If you wish to specify the first and third opal servers in a set you specify: e.g. datasources=opals.em[c(1,3)]}
-
-\item{varname}{A character string specifying the name of the vector whose values are to be changed}
 }
 \value{
 the object specified by the <newobj argument (or default name varname_recoded) which is written to the
@@ -68,5 +70,5 @@ changes nothing. So, for example, <value2replace.vector> can be specified as c(3
 This then changes NAs to 99s while leaving values of 3 as 3.
 }
 \author{
-Burton PR, Gaye, A.
+Burton PR; Gaye A
 }

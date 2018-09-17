@@ -1,6 +1,7 @@
 #' 
 #' @title Uses glm to compute means of numeric vector across factor vector
 #' @description This is an internal function.
+#' @details internal function
 #' @param formula a character form of a formula (e.g. 'a~b')
 #' @param CI a numeric, the confidence interval
 #' @param family a description of the error distribution function to use in the model

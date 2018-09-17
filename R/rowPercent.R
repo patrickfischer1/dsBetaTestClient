@@ -5,7 +5,7 @@
 #' @param dataframe a data frame
 #' @keywords internal
 #' @return a data frame
-#' @author Gaye, A.
+#' @author Gaye A
 #' 
 rowPercent <- function(dataframe){
   dt <- dataframe

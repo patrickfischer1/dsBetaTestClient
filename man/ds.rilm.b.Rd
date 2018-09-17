@@ -21,8 +21,8 @@ regression outcome
 Runs a Random Intercept Linear Model on horizontally-partinioned data
 }
 \details{
-
+see description
 }
 \author{
-Avraam D.
+Avraam D
 }

@@ -31,32 +31,32 @@
 #' threshold for the minimum cell size in a contingency table. If save.mean.Nvalid=TRUE, ds.mean.o writes
 #' the objects "Nvalid.all.studies", "Nvalid.study.specific", "mean.all.studies", and "mean.study.specific"
 #' to the serverside on each server 
-#' @author Burton PR, Gaye A, Isaeva I.
+#' @author Burton PR; Gaye A; Isaeva I;
 #' @seealso \code{ds.quantileMean} to compute quantiles.
 #' @seealso \code{ds.summary} to generate the summary of a variable.
 #' @export
 #' @examples {
 #' 
-#'   # load that contains the login details
-#'   data(logindata)
-#'   library(opal)
-#'
-#'   # login and assign specific variable(s)
-#'   myvar <- list('LAB_TSC')
-#'   opals <- datashield.login(logins=logindata,assign=TRUE,variables=myvar)
-#' 
-#'   # Example 1: compute the pooled statistical mean of the variable 'LAB_TSC' - default behaviour
-#'   ds.mean(x='D$LAB_TSC')
-#' 
-#'   # Example 2: compute the statistical mean of each study separately
-#'   ds.mean(x='D$LAB_TSC', type='split')
-#' 
-#'   # clear the Datashield R sessions and logout
-#'   datashield.logout(opals)
+#' #  # load that contains the login details
+#' #  data(logindata)
+#' #  library(opal)
+#' #
+#' #  # login and assign specific variable(s)
+#' #  myvar <- list('LAB_TSC')
+#' #  opals <- datashield.login(logins=logindata,assign=TRUE,variables=myvar)
+#' #
+#' #  # Example 1: compute the pooled statistical mean of the variable 'LAB_TSC' - default behaviour
+#' #  ds.mean(x='D$LAB_TSC')
+#' #
+#' #  # Example 2: compute the statistical mean of each study separately
+#' #  ds.mean(x='D$LAB_TSC', type='split')
+#' #
+#' #  # clear the Datashield R sessions and logout
+#' #  datashield.logout(opals)
 #' 
 #' }
-ds.mean.o<-function(x=NULL, type='split', checks=FALSE, save.mean.Nvalid=FALSE,
-                  datasources=NULL){
+#'
+ds.mean.o <- function(x=NULL, type='split', checks=FALSE, save.mean.Nvalid=FALSE, datasources=NULL){
 
 #####################################################################################
 #MODULE 1: IDENTIFY DEFAULT OPALS  													#
@@ -120,45 +120,42 @@ if(type == 'both' | type == 'b' ) type <- 'both'                                
   cally <- paste0("meanDS.o(", x, ")")
   ss.obj <- datashield.aggregate(datasources, as.symbol(cally))
   
-  Nstudies<-length(datasources)
-    ss.mat<-matrix(as.numeric(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,1:4]),nrow=Nstudies)
-    dimnames(ss.mat)<-c(list(names(ss.obj),names(ss.obj[[1]])[1:4]))
+  Nstudies <- length(datasources)
+    ss.mat <- matrix(as.numeric(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,1:4]),nrow=Nstudies)
+    dimnames(ss.mat) <- c(list(names(ss.obj),names(ss.obj[[1]])[1:4]))
 
-	ValidityMessage.mat<-matrix(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,5],nrow=Nstudies)
-	dimnames(ValidityMessage.mat)<-c(list(names(ss.obj),names(ss.obj[[1]])[5]))
+	ValidityMessage.mat <- matrix(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,5],nrow=Nstudies)
+	dimnames(ValidityMessage.mat) <- c(list(names(ss.obj),names(ss.obj[[1]])[5]))
 	
-	ss.mat.combined<-t(matrix(ss.mat[1,]))
+	ss.mat.combined <- t(matrix(ss.mat[1,]))
 
-	ss.mat.combined[1,1]<-(t(matrix(ss.mat[,3]))%*%ss.mat[,1])/sum(ss.mat[,3])
-	ss.mat.combined[1,2]<-sum(ss.mat[,2])
-	ss.mat.combined[1,3]<-sum(ss.mat[,3])
-	ss.mat.combined[1,4]<-sum(ss.mat[,4])
+	ss.mat.combined[1,1] <- (t(matrix(ss.mat[,3]))%*%ss.mat[,1])/sum(ss.mat[,3])
+	ss.mat.combined[1,2] <- sum(ss.mat[,2])
+	ss.mat.combined[1,3] <- sum(ss.mat[,3])
+	ss.mat.combined[1,4] <- sum(ss.mat[,4])
 
-	dimnames(ss.mat.combined)<-c(list("studiesCombined"),list(names(ss.obj[[1]])[1:4]))
+	dimnames(ss.mat.combined) <- c(list("studiesCombined"),list(names(ss.obj[[1]])[1:4]))
 
-#IF save.mean.Nvalid==TRUE - KEY STUDY SPECIFIC STATISTICS ON APPROPRIATE OPAL SERVERS WITH ASSIGN FUNCTION
-if(save.mean.Nvalid==TRUE){
+  # IF save.mean.Nvalid==TRUE - KEY STUDY SPECIFIC STATISTICS ON APPROPRIATE OPAL SERVERS WITH ASSIGN FUNCTION
+  if(save.mean.Nvalid==TRUE){
 
-for(j in 1:Nstudies){
-selected.opal<-datasources[j]
-mean.study.specific<-ss.mat[j,1]
-Nvalid.study.specific<-ss.mat[j,3]
-#SAVE VALIDITY MESSAGE
+    for(j in 1:Nstudies){
+      selected.opal <- datasources[j]
+      mean.study.specific <- ss.mat[j,1]
+      Nvalid.study.specific <- ss.mat[j,3]
+      # SAVE VALIDITY MESSAGE
+      datashield.assign(selected.opal, "mean.study.specific", as.symbol(mean.study.specific))
+      datashield.assign(selected.opal, "Nvalid.study.specific", as.symbol(Nvalid.study.specific))
+    }
 
-datashield.assign(selected.opal, "mean.study.specific", as.symbol(mean.study.specific))
-datashield.assign(selected.opal, "Nvalid.study.specific", as.symbol(Nvalid.study.specific))
-}
-
-#SAVE KEY GLOBAL STATISTICS ON ALL OPAL SERVERS WITH ASSIGN FUNCTION
-mean.all.studies<-ss.mat.combined[1,1]
-Nvalid.all.studies<-ss.mat.combined[1,3]
-
-datashield.assign(datasources, "mean.all.studies", as.symbol(mean.all.studies))
-datashield.assign(datasources, "Nvalid.all.studies", as.symbol(Nvalid.all.studies))
-
+    # SAVE KEY GLOBAL STATISTICS ON ALL OPAL SERVERS WITH ASSIGN FUNCTION
+    mean.all.studies <- ss.mat.combined[1,1]
+    Nvalid.all.studies <- ss.mat.combined[1,3]
+    datashield.assign(datasources, "mean.all.studies", as.symbol(mean.all.studies))
+    datashield.assign(datasources, "Nvalid.all.studies", as.symbol(Nvalid.all.studies))
 
 #############################################################################
-#MODULE 5: CHECK DATA OBJECTS SUCCESSFULLY CREATED                          #
+# MODULE 5: CHECK DATA OBJECTS SUCCESSFULLY CREATED                         #
   key.names <- extract("mean.all.studies")                                  #
   key.varname <- key.names$elements                                         #
   key.obj2lookfor <- key.names$holders                                      #
@@ -177,17 +174,18 @@ print("Data object <mean.all.studies> created successfully in all sources") #
   
 #PRIMARY FUNCTION OUTPUT SUMMARISE RESULTS FROM
 #AGGREGATE FUNCTION AND RETURN TO CLIENT-SIDE
-  if (type=='split') {
+  if (type=='split'){
   	return(list(Mean.by.Study=ss.mat,Nstudies=Nstudies,ValidityMessage=ValidityMessage.mat))
-  	}
+  }
 
   if (type=="combine") {
 	return(list(Global.Mean=ss.mat.combined,Nstudies=Nstudies,ValidityMessage=ValidityMessage.mat))
-	}
+  }
 
   if (type=="both") {
-	return(list(Mean.by.Study=ss.mat,Global.Mean=ss.mat.combined,Nstudies=Nstudies,ValidityMessage=ValidityMessage.mat))
-	}
+    return(list(Mean.by.Study=ss.mat,Global.Mean=ss.mat.combined,Nstudies=Nstudies,ValidityMessage=ValidityMessage.mat))
+  }
+
 }
 #ds.mean.o
 

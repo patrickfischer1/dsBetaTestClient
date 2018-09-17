@@ -28,6 +28,9 @@ the results of the t-test
 \description{
 This is an internal function.
 }
+\details{
+internal function
+}
 \keyword{calling}
 \keyword{function}
 \keyword{internal}
