@@ -10,7 +10,7 @@ Depends:
     dsStatsClient,
     dsGraphicsClient,
     dsModellingClient,
-	opal
+    opal
 Imports:
     schoolmath
 RoxygenNote: 6.0.1
