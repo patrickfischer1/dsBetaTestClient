@@ -4,10 +4,11 @@ Version: 0.0.6
 Authors@R: person("DataSHIELD", "Developers", email = "datashield-research@bristol.ac.uk", role = c("aut", "cre"))
 Description: Beta versions of new DataSHIELD client functions. Collected in this
     temporary package, prior to inclusion in the main DataSHIELD packages.
-License: GPLv3
+License: GPL-3
 Depends:
     dsBaseClient,
     dsStatsClient,
     dsGraphicsClient,
     dsModellingClient
 RoxygenNote: 6.0.1
+Encoding: UTF-8
