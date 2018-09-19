@@ -53,7 +53,7 @@
 #' study-level meta-analysis. The alternative function ds.glm.REMA fits the glms to completion
 #' in each source and returns the final estimates and standard errors (rather than score vectors
 #' and information matrices) and we currently use the function ds.metaFor derived from functions in the
-#' package metafor 
+#' package metafor.
 #'
 #' @param formula Denotes an object of class formula which is a character string which describes
 #' the model to be fitted. Most shortcut notation allowed by R's standard glm() function is

@@ -157,7 +157,7 @@ the final parameter estimates and standard errors to the CS where they can be po
 study-level meta-analysis. The alternative function ds.glm.REMA fits the glms to completion
 in each source and returns the final estimates and standard errors (rather than score vectors
 and information matrices) and we currently use the function ds.metaFor derived from functions in the
-package metafor
+package metafor.
 }
 \examples{
 {
