@@ -46,7 +46,7 @@
 #' - which is closely related to the Newton Raphson approach but uses the expected information rather than
 #' the observed information.
 #'
-#' (5) Repeat steps 2-4 until the model converges (using the standard R convergence criterion).
+#' (5) Repeat steps (2)-(4) until the model converges (using the standard R convergence criterion).
 #' NB An alternative way to coherently pool the glm across multiple sources is to fit each
 #' glm to completion (i.e. multiple iterations until convergence) in each source and then return
 #' the final parameter estimates and standard errors to the CS where they can be pooled using
