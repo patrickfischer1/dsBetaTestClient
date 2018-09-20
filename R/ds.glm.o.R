@@ -46,16 +46,14 @@
 #' - which is closely related to the Newton Raphson approach but uses the expected information rather than
 #' the observed information.
 #'
-#' (5) Repeat steps 2-4 until the model converges (using the standard R convergence criterion)
-#'
+#' (5) Repeat steps (2)-(4) until the model converges (using the standard R convergence criterion).
 #' NB An alternative way to coherently pool the glm across multiple sources is to fit each
 #' glm to completion (i.e. multiple iterations until convergence) in each source and then return
 #' the final parameter estimates and standard errors to the CS where they can be pooled using
 #' study-level meta-analysis. The alternative function ds.glm.REMA fits the glms to completion
 #' in each source and returns the final estimates and standard errors (rather than score vectors
 #' and information matrices) and we currently use the function ds.metaFor derived from functions in the
-#' package metafor (Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package.
-#' Journal of Statistical Software, 36(3), 1–48. http://www.jstatsoft.org/v36/i03/)
+#' package metafor.
 #'
 #' @param formula Denotes an object of class formula which is a character string which describes
 #' the model to be fitted. Most shortcut notation allowed by R's standard glm() function is
@@ -137,7 +135,7 @@
 #' @return The main elements of the output returned by ds.glm are
 #' listed (below) as Example 1 under 'examples'. 
 #' 
-#' @author Burton,P;Gaye,A;Laflamme,P
+#' @author Burton PR; Gaye A; LaFlamme P
 #' @seealso \link{ds.glmREMA} 
 #' @seealso \link{ds.lexis} for survival analysis using piecewise exponential regression
 #' @seealso \link{ds.gee} for generalized estimating equation models
@@ -331,12 +329,9 @@
 #' #datashield.logout(opals) 
 #' }
 #'
-
-#FIRST SIMPLY ADD try() TO MATRIX INVERSION STEP - MAKE CLIENTSIDE NAME ds.glm.o.150817
-
-ds.glm.o <- function(formula=NULL, dataName=NULL, family=NULL, offset=NULL, weights=NULL, checks=FALSE, maxit=15, CI=0.95, viewIter=FALSE, viewVarCov=FALSE, viewCor=FALSE, datasources=NULL) {
+ds.glm.o <- function(formula=NULL, data=NULL, family=NULL, offset=NULL, weights=NULL, checks=FALSE, maxit=15, CI=0.95, viewIter=FALSE, viewVarCov=FALSE, viewCor=FALSE, datasources=NULL) {
   
- # if no opal login details are provided look for 'opal' objects in the environment
+  # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
     datasources <- findLoginObjects()
   }
@@ -346,180 +341,157 @@ ds.glm.o <- function(formula=NULL, dataName=NULL, family=NULL, offset=NULL, weig
     stop(" Please provide a valid regression formula!", call.=FALSE)
   }
 
-# check if user gave offset or weights directly in formula, if so the argument 'offset' or 'weights'
-# to provide name of offset or weights variable
-    if(sum(as.numeric(grepl('offset', formula, ignore.case=TRUE)))>0 ||
-       sum(as.numeric(grepl('weights', formula, ignore.case=TRUE)))>0)
-	{
+  # check if user gave offset or weights directly in formula, if so the argument 'offset' or 'weights'
+  # to provide name of offset or weights variable
+  if(sum(as.numeric(grepl('offset', formula, ignore.case=TRUE)))>0 ||
+     sum(as.numeric(grepl('weights', formula, ignore.case=TRUE)))>0)
+  {
        cat("\n\n WARNING: you may have specified an offset or regression weights")
        cat("\n as part of the model formula. In ds.glm (unlike the usual glm in R)")
        cat("\n you must specify an offset or weights separately from the formula")
        cat("\n using the offset or weights argument.\n\n")
-	}
+  }
 
   formula <- as.formula(formula)
 
-  
   # check that 'family' was set
   if(is.null(family)){
     stop(" Please provide a valid 'family' argument!", call.=FALSE)
   }
   
   # if the argument 'data' is set, check that the data frame is defined (i.e. exists) on the server site
-  if(!(is.null(dataName))){
-    defined <- isDefined(datasources, dataName)
+  if(!(is.null(data))){
+    defined <- isDefined(datasources, data)
   }
   
   # beginning of optional checks - the process stops if any of these checks fails #
   if(checks){
     message(" -- Verifying the variables in the model")
     # call the function that checks the variables in the formula are defined (exist) on the server site and are not missing at complete
- 
-   glmChecks(formula, dataName, offset, weights, datasources)
+    glmChecks(formula, data, offset, weights, datasources)
   }else{
     #message("WARNING:'checks' is set to FALSE; variables in the model are not checked and error messages may not be intelligible!")
   }
 
-#MOVE ITERATION COUNT BEFORE ASSIGNMENT OF beta.vect.next  
-#Iterations need to be counted. Start off with the count at 0
-  #and increment by 1 at each new iteration
-  iteration.count<-0
+  # MOVE ITERATION COUNT BEFORE ASSIGNMENT OF beta.vect.next  
+  # Iterations need to be counted. Start off with the count at 0
+  # and increment by 1 at each new iteration
+  iteration.count <- 0
 
   # number of 'valid' studies (those that passed the checks) and vector of beta values
   numstudies <- length(datasources)
- 
 
-#ARBITRARY LENGTH FOR START BETAs AT THIS STAGE BUT IN LEGAL TRANSMISSION FORMAT ("0,0,0,0,0")
- beta.vect.next <- rep(0,5)
- beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
+  # ARBITRARY LENGTH FOR START BETAs AT THIS STAGE BUT IN LEGAL TRANSMISSION FORMAT ("0,0,0,0,0")
+  beta.vect.next <- rep(0,5)
+  beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
   
-
-#IDENTIFY THE CORRECT DIMENSION FOR START BETAs VIA CALLING FIRST COMPONENT OF glmDS
+  # IDENTIFY THE CORRECT DIMENSION FOR START BETAs VIA CALLING FIRST COMPONENT OF glmDS
  
-   cally1 <- call('glmDS1.o', formula, family, weights, dataName)
+  cally1 <- call('glmDS1.o', formula, family, weights, data)
    
-   study.summary.0 <- datashield.aggregate(datasources, cally1)
+  study.summary.0 <- datashield.aggregate(datasources, cally1)
 
-at.least.one.study.data.error<-0
+  at.least.one.study.data.error <- 0
 
-for(hh in 1:numstudies) {
+  for(hh in 1:numstudies){
 	if(study.summary.0[[hh]]$errorMessage!="No errors"){
-	at.least.one.study.data.error<-1
+      at.least.one.study.data.error <- 1
 	}
-}
+  }
 
+  num.par.glm <- NULL
+  coef.names <- NULL
 
-num.par.glm<-NULL
-coef.names<-NULL
+  if(at.least.one.study.data.error==0){
+    num.par.glm<-study.summary.0[[1]][[1]][[2]]
+    coef.names<-study.summary.0[[1]][[2]]
+  }
 
-if(at.least.one.study.data.error==0){
-num.par.glm<-study.summary.0[[1]][[1]][[2]]
-coef.names<-study.summary.0[[1]][[2]]
-}
+  y.invalid <- NULL
+  Xpar.invalid <- NULL
+  w.invalid <- NULL
+  glm.saturation.invalid <- NULL
+  errorMessage <- NULL
 
-y.invalid<-NULL
-Xpar.invalid<-NULL
-w.invalid<-NULL
-glm.saturation.invalid<-NULL
-errorMessage<-NULL
+  for(ss in 1:numstudies){
+    y.invalid <- c(y.invalid,study.summary.0[[ss]][[3]])
+    Xpar.invalid <- rbind(Xpar.invalid,study.summary.0[[ss]][[4]])
+    w.invalid <- c(w.invalid,study.summary.0[[ss]][[5]])
+    glm.saturation.invalid <- c(glm.saturation.invalid,study.summary.0[[ss]][[6]])
+    errorMessage <- c(errorMessage,study.summary.0[[ss]][[7]])
+  }
 
-	for(ss in 1:numstudies)
-	{
-	  y.invalid<-c(y.invalid,study.summary.0[[ss]][[3]])
-	  Xpar.invalid<-rbind(Xpar.invalid,study.summary.0[[ss]][[4]])
-   	  w.invalid<-c(w.invalid,study.summary.0[[ss]][[5]])
-      glm.saturation.invalid <-c(glm.saturation.invalid,study.summary.0[[ss]][[6]])
-      errorMessage<-c(errorMessage,study.summary.0[[ss]][[7]])
-	}
+  y.invalid <- as.matrix(y.invalid)
+  sum.y.invalid <- sum(y.invalid)
+  dimnames(y.invalid) <- list(names(datasources),"Y VECTOR")
 
-y.invalid<-as.matrix(y.invalid)
-sum.y.invalid<-sum(y.invalid)
-dimnames(y.invalid)<-list(names(datasources),"Y VECTOR")
+  Xpar.invalid <- as.matrix(Xpar.invalid)
+  sum.Xpar.invalid <- sum(Xpar.invalid)
+  dimnames(Xpar.invalid) <- list(names(datasources),coef.names)
 
-Xpar.invalid<-as.matrix(Xpar.invalid)
-sum.Xpar.invalid<-sum(Xpar.invalid)
-dimnames(Xpar.invalid)<-list(names(datasources),coef.names)
+  w.invalid <- as.matrix(w.invalid)
+  sum.w.invalid <- sum(w.invalid)
+  dimnames(w.invalid) <- list(names(datasources),"WEIGHT VECTOR")
 
+  glm.saturation.invalid <- as.matrix(glm.saturation.invalid)
+  sum.glm.saturation.invalid <- sum(glm.saturation.invalid)
+  dimnames(glm.saturation.invalid) <- list(names(datasources),"MODEL OVERPARAMETERIZED")
 
-w.invalid<-as.matrix(w.invalid)
-sum.w.invalid<-sum(w.invalid)
-dimnames(w.invalid)<-list(names(datasources),"WEIGHT VECTOR")
+  errorMessage <- as.matrix(errorMessage)
+  dimnames(errorMessage) <- list(names(datasources),"ERROR MESSAGES")
 
-glm.saturation.invalid<-as.matrix(glm.saturation.invalid)
-sum.glm.saturation.invalid<-sum(glm.saturation.invalid)
-dimnames(glm.saturation.invalid)<-list(names(datasources),"MODEL OVERPARAMETERIZED")
+  output.blocked.information.1 <- "MODEL FITTING TERMINATED AT FIRST ITERATION:"
+  output.blocked.information.2 <- "ANY VALUES OF 1 IN THE FOLLOWING TABLES DENOTE"
+  output.blocked.information.3 <- "POTENTIAL DISCLOSURE RISKS. PLEASE USE THE ARGUMENT"
+  output.blocked.information.4 <- "[datasources=] TO EXCLUDE STUDIES WITH DATA ERRORS"
 
-errorMessage<-as.matrix(errorMessage)
-dimnames(errorMessage)<-list(names(datasources),"ERROR MESSAGES")
-
-
-
-output.blocked.information.1<-"MODEL FITTING TERMINATED AT FIRST ITERATION:"
-output.blocked.information.2<-"ANY VALUES OF 1 IN THE FOLLOWING TABLES DENOTE"
-output.blocked.information.3<-"POTENTIAL DISCLOSURE RISKS. PLEASE USE THE ARGUMENT"
-output.blocked.information.4<-"[datasources=] TO EXCLUDE STUDIES WITH DATA ERRORS"
-
-
-
-
-if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.invalid>0||at.least.one.study.data.error==1){
+  if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.invalid>0||at.least.one.study.data.error==1){
     return(list(
 		    output.blocked.information.1,
 		    output.blocked.information.2,
 		    output.blocked.information.3,
 		    output.blocked.information.4,
 		    y.vector.error=y.invalid,
-                X.matrix.error=Xpar.invalid,
-                weight.vector.error=w.invalid,
-                glm.overparameterized=glm.saturation.invalid,
-	    	    errorMessage=errorMessage
-                ))
-		stop("DATA ERROR") 
- }
+            X.matrix.error=Xpar.invalid,
+            weight.vector.error=w.invalid,
+            glm.overparameterized=glm.saturation.invalid,
+	  	    errorMessage=errorMessage
+             ))
+	stop("DATA ERROR") 
+  }
 
-   
-
-   beta.vect.next <- rep(0,num.par.glm)
-   beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
+  beta.vect.next <- rep(0,num.par.glm)
+  beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
  
+  # Provide arbitrary starting value for deviance to enable subsequent calculation of the
+  # change in deviance between iterations
+  dev.old <- 9.99e+99
+  
+  # Convergence state needs to be monitored.
+  converge.state <- FALSE
+  
+  # Define a convergence criterion. This value of epsilon corresponds to that used
+  # by default for GLMs in R (see section S3 for details)
+  epsilon <- 1.0e-08
+  
+  f <- NULL
 
-  #Provide arbitrary starting value for deviance to enable subsequent calculation of the
-  #change in deviance between iterations
-  dev.old<-9.99e+99
-  
-  #Convergence state needs to be monitored.
-  converge.state<-FALSE
-  
-  #Define a convergence criterion. This value of epsilon corresponds to that used
-  #by default for GLMs in R (see section S3 for details)
-  epsilon<-1.0e-08
-  
-  f<-NULL
-
-
-  
   while(!converge.state && iteration.count < maxit) {
-    
-    iteration.count<-iteration.count+1
-    
+    iteration.count <- iteration.count+1
     message("Iteration ", iteration.count, "...")
+    # NOW CALL SECOND COMPONENT OF glmDS TO GENERATE SCORE VECTORS AND INFORMATION MATRICES
+    cally2 <- call('glmDS2.o', formula, family, beta.vect=beta.vect.temp, offset, weights, data)
+    study.summary <- datashield.aggregate(datasources, cally2)
 
-#NOW CALL SECOND COMPONENT OF glmDS TO GENERATE SCORE VECTORS AND INFORMATION MATRICES
-    cally2 <- call('glmDS2.o', formula, family, beta.vect=beta.vect.temp, offset, weights, dataName)
-
-      study.summary <- datashield.aggregate(datasources, cally2)
-
-  
-
-#INTEGRATE RETURNED OUTPUT
-      .select <- function(l, field) {
+    # INTEGRATE RETURNED OUTPUT
+    .select <- function(l, field) {
       lapply(l, function(obj) {obj[[field]]})
     }
 
     disclosure.risk.total<-Reduce(f="+", .select(study.summary, 'disclosure.risk'))
 
-	disclosure.risk<-NULL
-      errorMessage2<-NULL
+	disclosure.risk <- NULL
+    errorMessage2 <- NULL
 
 	for(ss2 in 1:numstudies){
          disclosure.risk<-c(disclosure.risk,study.summary[[ss]][[9]])
@@ -528,7 +500,6 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
 
     disclosure.risk<-as.matrix(disclosure.risk)
     dimnames(disclosure.risk)<-list(names(datasources),"RISK OF DISCLOSURE")
-
 
     errorMessage2<-as.matrix(errorMessage2)
     dimnames(errorMessage2)<-list(names(datasources),"ERROR MESSAGES")
@@ -564,33 +535,28 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
       f <- study.summary[[1]]$family
     }
     
-	#################################################### THIS IS KEY MATRIX INVERSION ################################# 
-	#ADD try() SO IF FAILS DOES NOT COMPLETELY BLOCK SCRIPT FILE
-	
     #Create variance covariance matrix as inverse of information matrix
-    variance.covariance.matrix.total<-try(solve(info.matrix.total))
-	try.save=try.save<-variance.covariance.matrix.total
+    variance.covariance.matrix.total <- solve(info.matrix.total)
     
     # Create beta vector update terms
-    beta.update.vect<-variance.covariance.matrix.total %*% score.vect.total
+    beta.update.vect <- variance.covariance.matrix.total %*% score.vect.total
     
     #Add update terms to current beta vector to obtain new beta vector for next iteration
 	if(iteration.count==1)
 	{
-	 beta.vect.next<-rep(0,length(beta.update.vect))
+	  beta.vect.next <- rep(0,length(beta.update.vect))
 	}
 	
-	beta.vect.next<-beta.vect.next+beta.update.vect
-
+	beta.vect.next <- beta.vect.next+beta.update.vect
  	beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
 
-    #Create a vector with the square roots of diagonal elements of variance covariance matrix 
+    # Create a vector with the square roots of diagonal elements of variance covariance matrix 
     sqrt.diagonal <- sqrt(1/diag(variance.covariance.matrix.total))
 	
-	#Calculate the correlation matrix using the variance covariance matrix
+	# Calculate the correlation matrix using the variance covariance matrix
 	correlation <- rep(sqrt.diagonal, dim(variance.covariance.matrix.total)[1]) * variance.covariance.matrix.total * rep(sqrt.diagonal, each = dim(variance.covariance.matrix.total)[1])
     
-    #Calculate value of convergence statistic and test whether meets convergence criterion
+    # Calculate value of convergence statistic and test whether meets convergence criterion
     converge.value<-abs(dev.total-dev.old)/(abs(dev.total)+0.1)
     if(converge.value<=epsilon)converge.state<-TRUE
     if(converge.value>epsilon)dev.old<-dev.total
@@ -738,7 +704,6 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
     
     if(!viewVarCov & !viewCor){	
       glmds <- list(
-			try.save=try.save,
 			Nvalid=Nvalid.total,
 			Nmissing=Nmissing.total,
 			Ntotal=Ntotal.total,
@@ -754,14 +719,12 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
 			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"
     			)
     
-#   class(glmds) <- 'glmds'
-      
-        return(glmds)
+    # class(glmds) <- 'glmds'
+    return(glmds)
 	}
 
     if(viewVarCov & viewCor){
       glmds <- list(
-			try.save=try.save,
 			Nvalid=Nvalid.total,
 			Nmissing=Nmissing.total,
 			Ntotal=Ntotal.total,
@@ -776,15 +739,14 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
     		coefficients=model.parameters,
       		dev=dev.total,
       		df=(nsubs.total-length(beta.vect.next)),
-			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"
+			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"			
     			)   
 #   class(glmds) <- 'glmds'
 			return(glmds)	
     }	
 	if(!viewVarCov & viewCor){
 	      glmds <- list(
-			try.save=try.save,
-		    Nvalid=Nvalid.total,
+			Nvalid=Nvalid.total,
 			Nmissing=Nmissing.total,
 			Ntotal=Ntotal.total,
 			disclosure.risk=disclosure.risk,
@@ -797,7 +759,7 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
     		coefficients=model.parameters,
       		dev=dev.total,
       		df=(nsubs.total-length(beta.vect.next)),
-			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"
+			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"			
     			)   
         return(glmds)	
     }	
@@ -805,7 +767,6 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
 
     if(viewVarCov & !viewCor){
 	      glmds <- list(
-			try.save=try.save,
 			Nvalid=Nvalid.total,
 			Nmissing=Nmissing.total,
 			Ntotal=Ntotal.total,
@@ -819,7 +780,7 @@ if(sum.y.invalid>0||sum.Xpar.invalid>0||sum.w.invalid>0||sum.glm.saturation.inva
     		coefficients=model.parameters,
       		dev=dev.total,
       		df=(nsubs.total-length(beta.vect.next)),
-			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"
+			output.information="SEE TOP OF OUTPUT FOR INFORMATION ON MISSING DATA AND ERROR MESSAGES"			
     			)   
         return(glmds)	
     }	

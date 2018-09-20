@@ -1,4 +1,56 @@
-ds.Boole.o<-function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=TRUE, na.assign="NA",newobj=NULL, datasources=NULL){
+#' 
+#' @title ds.Boole.o
+#' @description Converts the individual elements of a vector or other object into Boolean indicators
+#' (TRUE/FALSE or 1/0) based on the standard set of Boolean operators: ==, !=, >, >=, <, <=.
+#' @details A combination of operators reflected in AND can be obtained by multiplying two or more
+#' binary/Boolean vectors together: observations taking the value 1 in every vector will then
+#' take the value 1 while all others will take the value 0. The combination OR can be obtained by
+#' adding two or more vectors and then then reapply ds.Boole.o using the operator >= 1: any observation
+#' taking the value 1 in one or more vectors will take the value 1 in the final vector.
+#' @param V1 A character string specifying the name of the vector to which the Boolean operator is to be applied
+#' @param V2 A character string specifying the name of the vector or scalar to which <V1> is to be compared.
+#' So, if <V2> is a scalar (e.g. '4') and the Boolean operator is '<=', the output vector will be a binary/Boolean
+#' variable with elements taking the value 1 or TRUE if the corresponding element of <V1> is 4 or less and 0
+#' or FALSE otherwise. On the other hand, if <V2> is a vector and the Boolean operator is '==', the
+#' output vector will be a binary/Boolean variable with elements taking the value 1 or TRUE if the corresponding
+#' elements of <V1> and <V2> are equal and 0 or FALSE otherwise. If <V2> is a vector rather than a scalar it
+#' must be of the same length as <V1>
+#' @param Boolean.operator A character string specifying one of six possible Boolean operators: '==', '!=', '>', '>=',
+#' '<', '<='
+#' @param numeric.output a TRUE/FALSE indicator defaulting to TRUE determining whether the final output variable
+#' should be of class numeric (1/0) or class logical (TRUE/FALSE). It is easy to convert a
+#' logical class variable to numeric using the ds.asNumeric() function and to convert a numeric (1/0)
+#' variable to logical you can apply ds.Boole.o with <Boolean.operator> '==', <V2> the scalar '1' and
+#' <numeric.output> FALSE. 
+#' @param na.assign A character string taking values 'NA', '1' or '0'. If 'NA' then any NA values in the
+#' input vector remain as NAs in the output vector. If '1' or '0' NA values in the input vector are
+#' all converted to 1 or 0 respectively.
+#' @param newobj A character string specifying the name of the vector to which the output vector is to be written.
+#' If no <newobj> argument is specified, the output vector defaults to "V1_Boole" where <V1>
+#' is the first argument of the function.
+#' @param datasources specifies the particular opal object(s) to use. If the <datasources> argument is not specified
+#' the default set of opals will be used. The default opals are called default.opals and the default can be set
+#' using the function {ds.setDefaultOpals.o}. If the <datasources> is to be specified, it should be set without
+#' without inverted commas: e.g. datasources=opals.em or datasources=default.opals. If you wish to apply the function
+#' solely to e.g. the second opal server in a set of three, the argument can be specified as: e.g. datasources=opals.em[2].
+#' If you wish to specify the first and third opal servers in a set you specify: e.g. datasources=opals.em[c(1,3)]
+#' @return the object specified by the <newobj argument (or default name <V1>_Boole) which is written to the
+#' serverside. In addition, a validity message indicating whether <newobj> has been correctly
+#' created at each source is returned to the client. There are some circumstances in which it will be reported that
+#' <newobj> has been created in every datasource but in one or more data servers <newobj> will contain an error message
+#' rather than the recoded vector. The reason for this will appear as a warning in the screen output as the function
+#' is run - it will generally be because one or more of the inputs or outputs to the function fails to satisfy
+#' the disclosure thresholds that have been specified for your analysis. As well as appearing on the screen at run time,
+#' the warning is also written as a studysideMessage, which is saved as a list object named <newobj>$studysideMessage.
+#' If you wish to see the studysideMessage at a later date you can use the {ds.message.o} function. If you type
+#' ds.message.o("newobj") it will print out the relevant studysideMessage from any datasource in which there was an
+#' error in creating <newobj> and a studysideMessage was saved. If there was no error and <newobj> was created
+#' without problems no studysideMessage will have been saved and ds.message.o("newobj") will return the message:
+#' "ALL OK: there are no studysideMessage(s) on this datasource".
+#' @author Burton PR
+#' @export
+#'
+ds.Boole.o <- function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=TRUE, na.assign="NA",newobj=NULL, datasources=NULL){
   
   # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
@@ -20,46 +72,38 @@ ds.Boole.o<-function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=TRU
     stop("Please provide a Boolean operator in character format: eg '==' or '>=' or '<' or '!='", call.=FALSE)
   }
   
-  #check if na.assign has legal value
+  # check if na.assign has legal value
   if(!(na.assign=="NA"||na.assign=="0"||na.assign=="1")){
     stop("Error: na.assign must be a character string taking value 'NA', '0' or '1'- if <na.action> not specified default is 'NA'", call.=FALSE)
   }
   
-  
-
-#convert Boolean operator to numeric
-
-BO.n<-0
-if(Boolean.operator == "=="){
-   BO.n<-1
-}
-
-if(Boolean.operator == "!="){
-   BO.n<-2
-}
-
-if(Boolean.operator == "<"){
-   BO.n<-3
-}
-
-if(Boolean.operator == "<="){
-   BO.n<-4
-}
-
-if(Boolean.operator == ">"){
-   BO.n<-5
-}
-
-if(Boolean.operator == ">="){
-   BO.n<-6
-}
+  # convert Boolean operator to numeric
+  BO.n <- 0
+  if(Boolean.operator == "=="){
+    BO.n <- 1
+  }
+  if(Boolean.operator == "!="){
+    BO.n <- 2
+  }
+  if(Boolean.operator == "<"){
+    BO.n <- 3
+  }
+  if(Boolean.operator == "<="){
+    BO.n <- 4
+  }
+  if(Boolean.operator == ">"){
+    BO.n <- 5
+  }
+  if(Boolean.operator == ">="){
+    BO.n <- 6
+  }
 
   # if no value spcified for output object, then specify a default
   if(is.null(newobj)){
     newobj <- paste0(V1,"_Boole")
   }
 
-# CALL THE MAIN SERVER SIDE FUNCTION
+  # CALL THE MAIN SERVER SIDE FUNCTION
   calltext <- call("BooleDS.o", V1, V2, BO.n, na.assign,numeric.output)
   datashield.assign(datasources, newobj, calltext)
   
@@ -71,9 +115,9 @@ test.obj.name<-newobj
 
 #TRACER
 #return(test.obj.name)
-#}                                                                                   #
- 
- #
+#}                                                                                                       #
+                                                                                                         #
+                                                                                                         #
 # CALL SEVERSIDE FUNCTION                                                                                #
 calltext <- call("testObjExistsDS.o", test.obj.name)													 #
 																										 #

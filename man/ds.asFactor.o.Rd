@@ -101,45 +101,46 @@ or as a matrix of dummy variables dependending on the argument \code{fixed.dummy
 \examples{
 {
 
-  # load that contains the login details
-  logindata.VMs.em <- ds.createLogindata(110,110,110,table=c("SURVIVAL.EXPAND_WITH_MISSING1","SURVIVAL.EXPAND_WITH_MISSING2","SURVIVAL.EXPAND_WITH_MISSING3"))
-  logindata.VMs.em <- logindata.VMs.em[1:3,]
-  opals.em <- datashield.login(logins=logindata.VMs.em,assign=TRUE,symbol="EM")
-
-  ds.asNumeric("EM$time.id","TID")
-
-  Example 1 
-  ds.asFactor.o("TID","TID.f")
-  ds.class("TID.f") 
-  ds.table1D("TID.f")
-
-  Example 2
-  ds.asFactor.o("TID","TID.f2",forced.factor.levels=1:6)
-  ds.class("TID.f2")
-  ds.table1D("TID.f2")
-
-  Example 3
-  ds.asFactor.o("TID","TID.f3",forced.factor.levels=0:10)
-  ds.class("TID.f3")
-  ds.table1D("TID.f3")
-
-  Example 4
-  ds.asFactor.o("TID","TID.f4",forced.factor.levels=2:3)
-  ds.class("TID.f4")
-  ds.table1D("TID.f4")
-
-  Example 5
-  ds.asFactor.o("TID","TID.f5",forced.factor.levels=c(1,2,3,4,"a","h",5))
-  ds.class("TID.f5")
-  ds.table1D("TID.f5")
-
-  Example 6
-  ds.asFactor.o("TID","TID.mat1",fixed.dummy.vars=TRUE)
-  ds.class("TID.mat1")
-
-  Example 7
-  ds.asFactor.o("TID","TID.mat6",fixed.dummy.vars=TRUE,baseline.level=6)
-  ds.class("TID.mat6")
+#  # load that contains the login details
+#  logindata.VMs.em <- ds.createLogindata(110,110,110,table=c("SURVIVAL.EXPAND_WITH_MISSING1",
+#                            "SURVIVAL.EXPAND_WITH_MISSING2","SURVIVAL.EXPAND_WITH_MISSING3"))
+#  logindata.VMs.em <- logindata.VMs.em[1:3,]
+#  opals.em <- datashield.login(logins=logindata.VMs.em,assign=TRUE,symbol="EM")
+#
+#  ds.asNumeric("EM$time.id","TID")
+#
+#  Example 1 
+#  ds.asFactor.o("TID","TID.f")
+#  ds.class("TID.f") 
+#  ds.table1D("TID.f")
+#
+#  Example 2
+#  ds.asFactor.o("TID","TID.f2",forced.factor.levels=1:6)
+#  ds.class("TID.f2")
+#  ds.table1D("TID.f2")
+#
+#  Example 3
+#  ds.asFactor.o("TID","TID.f3",forced.factor.levels=0:10)
+#  ds.class("TID.f3")
+#  ds.table1D("TID.f3")
+#
+#  Example 4
+#  ds.asFactor.o("TID","TID.f4",forced.factor.levels=2:3)
+#  ds.class("TID.f4")
+#  ds.table1D("TID.f4")
+#
+#  Example 5
+#  ds.asFactor.o("TID","TID.f5",forced.factor.levels=c(1,2,3,4,"a","h",5))
+#  ds.class("TID.f5")
+#  ds.table1D("TID.f5")
+#
+#  Example 6
+#  ds.asFactor.o("TID","TID.mat1",fixed.dummy.vars=TRUE)
+#  ds.class("TID.mat1")
+#
+#  Example 7
+#  ds.asFactor.o("TID","TID.mat6",fixed.dummy.vars=TRUE,baseline.level=6)
+#  ds.class("TID.mat6")
 
 }
 

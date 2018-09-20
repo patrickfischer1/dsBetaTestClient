@@ -7,6 +7,7 @@
 #' @return a vector of characters
 #'
 extract <- function(input){
+
   input <- unlist(input)
   output1 <- c()
   output2 <- c()
@@ -24,4 +25,5 @@ extract <- function(input){
   }
   output <- list('holders'=output1, 'elements'=output2)
   return(output)
+  
 }

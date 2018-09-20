@@ -1,4 +1,3 @@
-
 #'
 #' @title searches for opal login object in the environment
 #' @description This is an internal function required by a client function
@@ -16,34 +15,31 @@
 #' if no default could be identified, but that did not work in all versions of R and so was removed.
 #' @keywords internal
 #' @return returns a list of opal login objects or stops the process
-#' @author Gaye, A. Updated Burton, PR. 5/1/16
+#' @author Gaye A; Burton PR
 #' 
-findLoginObjects<-function(){
+findLoginObjects <- function(){
 
   findLogin <- getOpals()
 
-    if (findLogin$flag == 0){
+  if (findLogin$flag == 0){
     stop(" Are you logged in to any server? Please provide a valid opal login object! ", call.=FALSE)
-    } 
+  } 
 
- 
-    if(findLogin$flag == 1){
+  if(findLogin$flag == 1){
     datasources <- findLogin$opals
     return(datasources)
-    }
+  }
 
-
-    if(findLogin$flag > 1) {
-      for(j in 1:findLogin$flag){
-	    if(findLogin$opals[[j]]=="default.opals"){
-          datasources<-eval(parse(text=findLogin$opals[[j]]),envir=0)
-          return(datasources)
+  if(findLogin$flag > 1) {
+    for(j in 1:findLogin$flag){
+      if(findLogin$opals[[j]]=="default.opals"){
+        datasources<-eval(parse(text=findLogin$opals[[j]]),envir=0)
+        return(datasources)
 	  }
-	 }
-
-         message(paste0(" More than one list of opal login objects was found with no default specified:\n '", paste(findLogin$opals.list,collapse="', '"), "'!!"))
-	   stop(" \n\n Please specify a default Opal object using the following call syntax:\n ds.setDefaultOpals(opal.name='name of opal in inverted commas')\n\n",call.=FALSE) 
-    }
+	}
+    message(paste0(" More than one list of opal login objects was found with no default specified:\n '", paste(findLogin$opals.list,collapse="', '"), "'!!"))
+    stop(" \n\n Please specify a default Opal object using the following call syntax:\n ds.setDefaultOpals(opal.name='name of opal in inverted commas')\n\n",call.=FALSE) 
+  }
+	
 }
-
 #findLoginObjects

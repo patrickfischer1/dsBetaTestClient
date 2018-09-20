@@ -1,6 +1,7 @@
 #' 
 #' @title runs a t-test for two continuous variables
 #' @description This is an internal function.
+#' @details internal function
 #' @param type see the calling function
 #' @param alternative see the calling function
 #' @param mu see the calling function 

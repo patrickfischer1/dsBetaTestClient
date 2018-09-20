@@ -31,41 +31,42 @@
 #' is dichotomous with a level having less counts than the pre-specified threshold). If any of the input variables does not
 #' pass the disclosure control then all the output values are replaced with NAs. If all the variables are valid and pass 
 #' the control, then the output matrices are returned and also an error message is returned but it is replaced by NA.
-#' @author Gaye A., Avraam D., Burton P.
+#' @author Gaye A; Avraam D; Burton PR
 #' @export
 #' @examples {
 #'
-#'   # load that contains the login details
-#'   data(logindata)
-#' 
-#'   # login and assign specific variable(s)
-#'   # (by default the assigned dataset is a dataframe named 'D')
-#'   myvar <- list('LAB_HDL', 'LAB_TSC', 'LAB_GLUC_ADJUSTED', 'GENDER')
-#'   opals <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
-#' 
-#'   # Example 1: generate the covariance matrix for the assigned dataset 'D' 
-#'   # which contains 4 vectors (3 continuous and 1 categorical)
-#'   ds.cov.o(x='D')
-#'
-#'   # Example 2: generate the covariance matrix for the dataset 'D' combined for all 
-#'   # studies and removing any missing values casewise 
-#'   ds.cov.o(x='D', naAction='casewise.complete', type='combine')
-#' 
-#'   # Example 3: calculate the covariance between two vectors 
-#'   # (first assign the vectors from 'D')
-#'   ds.assign(newobj='labhdl', toAssign='D$LAB_HDL')
-#'   ds.assign(newobj='labtsc', toAssign='D$LAB_TSC')
-#'   ds.assign(newobj='gender', toAssign='D$GENDER')
-#'   ds.cov.o(x='labhdl', y='labtsc', naAction='pairwise.complete', type='combine')
-#'   ds.cov.o(x='labhdl', y='labtsc', naAction='casewise.complete', type='combine')
-#'   ds.cov.o(x='labhdl', y='gender', naAction='pairwise.complete', type='combine')
-#'   ds.cov.o(x='labhdl', y='gender', naAction='casewise.complete', type='combine')
-#' 
-#'   # clear the Datashield R sessions and logout
-#'   datashield.logout(opals)
+#' #  # load that contains the login details
+#' #  data(glmLoginData)
+#' #  library(opal)
+#' #
+#' #  # login and assign specific variable(s)
+#' #  # (by default the assigned dataset is a dataframe named 'D')
+#' #  myvar <- list('LAB_HDL', 'LAB_TSC', 'LAB_GLUC_ADJUSTED', 'GENDER')
+#' #  opals <- datashield.login(logins=glmLoginData, assign=TRUE, variables=myvar)
+#' #
+#' #  # Example 1: generate the covariance matrix for the assigned dataset 'D' 
+#' #  # which contains 4 vectors (3 continuous and 1 categorical)
+#' #  ds.cov.o(x='D')
+#' #
+#' #  # Example 2: generate the covariance matrix for the dataset 'D' combined for all 
+#' #  # studies and removing any missing values casewise 
+#' #  ds.cov.o(x='D', naAction='casewise.complete', type='combine')
+#' #
+#' #  # Example 3: calculate the covariance between two vectors 
+#' #  # (first assign the vectors from 'D')
+#' #  ds.assign(newobj='labhdl', toAssign='D$LAB_HDL')
+#' #  ds.assign(newobj='labtsc', toAssign='D$LAB_TSC')
+#' #  ds.assign(newobj='gender', toAssign='D$GENDER')
+#' #  ds.cov.o(x='labhdl', y='labtsc', naAction='pairwise.complete', type='combine')
+#' #  ds.cov.o(x='labhdl', y='labtsc', naAction='casewise.complete', type='combine')
+#' #  ds.cov.o(x='labhdl', y='gender', naAction='pairwise.complete', type='combine')
+#' #  ds.cov.o(x='labhdl', y='gender', naAction='casewise.complete', type='combine')
+#' #
+#' #  # clear the Datashield R sessions and logout
+#' #  datashield.logout(opals)
 #' 
 #' }
-#' 
+#'
 ds.cov.o <- function(x=NULL, y=NULL, naAction='pairwise.complete', type="split", datasources=NULL){
   
   # if no opal login details are provided look for 'opal' objects in the environment

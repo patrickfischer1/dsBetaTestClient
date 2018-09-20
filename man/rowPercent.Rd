@@ -19,6 +19,6 @@ this is an INTERNAL function.
 The function is required required by the client function \code{ds.table2D}.
 }
 \author{
-Gaye, A.
+Gaye A
 }
 \keyword{internal}

@@ -27,6 +27,6 @@ A previous version of 'findLoginObjects()' asked the user to specify which Opal 
 if no default could be identified, but that did not work in all versions of R and so was removed.
 }
 \author{
-Gaye, A. Updated Burton, PR. 5/1/16
+Gaye A; Burton PR
 }
 \keyword{internal}

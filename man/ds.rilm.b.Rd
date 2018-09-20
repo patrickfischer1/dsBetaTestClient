@@ -14,12 +14,15 @@ ds.rilm.b(..., y = NULL, datasources = NULL)
 \item{datasources}{a list of opal object(s) obtained after login to opal servers;
 these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.}
 }
+\value{
+regression outcome
+}
 \description{
 Runs a Random Intercept Linear Model on horizontally-partinioned data
 }
 \details{
-
+see description
 }
 \author{
-Avraam D.
+Avraam D
 }

@@ -1,18 +1,47 @@
 #' 
 #' @title Random Intercept Linear Model (RILM)
 #' @description Runs a Random Intercept Linear Model on horizontally-partinioned data
-#' @details  
+#' @details  see description
 #' @param ... the explanatory variables, could be factor or numeric vectors
 #' @param y the dependent variable
 #' @param datasources a list of opal object(s) obtained after login to opal servers;
 #' these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.
-#' @return 
-#' @author Avraam D.
+#' @return regression outcome
+#' @author Avraam D
 #' @export
 #' 
 ds.rilm.b <- function(..., y=NULL, datasources=NULL){
-  
-	library(schoolmath)
+
+##############################
+is.whole <- function(x){
+    start <- 1
+    end <- length(x) + 1
+    while (start < end) {
+        y <- x[start]
+        test <- floor(y)
+        if (y == test) {
+            if (start == 1) {
+                result = TRUE
+            }
+            else {
+                result <- c(result, TRUE)
+            }
+        }
+        else {
+            if (start == 1) {
+                result = FALSE
+            }
+            else {
+                result <- c(result, FALSE)
+            }
+        }
+        start <- start + 1
+    }
+    return(result)
+}
+###############################
+
+
 
 	# Set number of decimals.
 	options(digits = 20)

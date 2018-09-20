@@ -24,15 +24,15 @@ getPooledVar <- function(dtsources, x){
   cally <- paste0("numNaDS(", x, ")")
   numNA.local <- opal::datashield.aggregate(dtsources, cally)
 
-  length.total = 0
-  sum.weighted = 0
-  var.global  = NA
+  length.total <- 0
+  sum.weighted <- 0
+  var.global <- NA
   
   for (i in 1:num.sources){
     if ((!is.null(length.local[[i]])) & (length.local[[i]]!=0)) {
       completeLength <- length.local[[i]]-numNA.local[[i]]
-      length.total = length.total+completeLength
-      sum.weighted = sum.weighted+completeLength*var.local[[i]]
+      length.total <- length.total+completeLength
+      sum.weighted <- sum.weighted+completeLength*var.local[[i]]
     }
   }
   

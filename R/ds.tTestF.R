@@ -5,17 +5,17 @@
 #' on distinct servers by sending 
 #' @param formula a character, a formula which describes the model to be fitted
 #' @param family a description of the error distribution function to use in the model
-#' @param startBetas starting values for the parameters in the linear predictor
-#' @param offset  a character, null or a numeric vector that can be used to specify an a priori known component 
-#' to be included in the linear predictor during fitting.
-#' @param weights  a character, the name of an optional vector of 'prior weights' to be used in the fitting 
-#' process. Should be NULL or a numeric vector.
-#' @param data a character, the name of an optional data frame containing the variables in 
-#' in the \code{formula}. The process stops if a non existing data frame is indicated. 
-#' @param checks a boolean, if TRUE (default) checks that takes 1-3min are carried out to verify that the 
-#' variables in the model are defined (exist) on the server site and that they have the correct characteristics
-#' required to fit a GLM. The default value is FALSE because checks lengthen the runtime and are mainly meant to be 
-#' # used as help to look for causes of eventual errors.
+#' @param offset  a character, null or a numeric vector that can be used to specify an a priori
+#' known component to be included in the linear predictor during fitting.
+#' @param weights  a character, the name of an optional vector of 'prior weights' to be used in the
+#' fitting process. Should be NULL or a numeric vector.
+#' @param data a character, the name of an optional data frame containing the variables in the
+#' \code{formula}. The process stops if a non existing data frame is indicated. 
+#' @param checks a boolean, if TRUE (default) checks that takes 1-3min are carried out to verify
+#' that the variables in the model are defined (exist) on the server site and that they have the
+#' correct characteristics required to fit a GLM. The default value is FALSE because checks
+#' lengthen the runtime and are mainly meant to be used as help to look for causes of eventual
+#' errors.
 #' @param maxit the number of iterations of IWLS used
 #' instructions to each computer requesting non-disclosing summary statistics.
 #' The summaries are then combined to estimate the parameters of the model; these
@@ -33,50 +33,51 @@
 #' @return rank the numeric rank of the fitted linear model.
 #' @return family the \code{family} object used.
 #' @return linear.predictors the linear fit on link scale.
-#' 
-#' @author Burton,P;Gaye,A;Laflamme,P
+#' @author Burton PR; Gaye A; LaFlamme P 
 #' @seealso \link{ds.lexis} for survival analysis using piecewise exponential regression
 #' @seealso \link{ds.gee} for generalized estimating equation models
 #' @export
 #' @examples {
 #' 
-#'  # load the file that contains the login details
-#'  data(glmLoginData)
+#' # # load the file that contains the login details
+#' # data(glmLoginData)
+#' #
+#' # # login and assign all the variables to R
+#' # opals <- datashield.login(logins=glmLoginData, assign=TRUE)
+#' #
+#' # # Example 1: run a GLM without interaction (e.g. diabetes prediction using BMI and HDL levels
+#' # # and GENDER)
+#' # mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
+#' # mod
+#' #
+#' # # Example 2: run the above GLM model without an intercept
+#' # # (produces separate baseline estimates for Male and Female)
+#' # mod <- ds.glm(formula='D$DIS_DIAB~0+D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
+#' # mod
+#' #
+#' # # Example 3: run the above GLM with interaction between GENDER and PM_BMI_CONTINUOUS
+#' # mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER*D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
+#' # mod
+#' #
+#' # # Example 4: Fit a standard Gaussian linear model with an interaction
+#' # mod <- ds.glm(formula='D$PM_BMI_CONTINUOUS~D$DIS_DIAB*D$GENDER+D$LAB_HDL', family='gaussian')
+#' # mod
+#' #
+#' # # Example 5: now run a GLM where the error follows a poisson distribution
+#' # # P.S: A poisson model requires a numeric vector as outcome so in this example we first convert
+#' # # the categorical BMI, which is of type 'factor', into a numeric vector
+#' # ds.asNumeric('D$PM_BMI_CATEGORICAL','BMI.123')
+#' # mod <- ds.glm(formula='BMI.123~D$PM_BMI_CONTINUOUS+D$LAB_HDL+D$GENDER', family='poisson')
+#' # mod
+#' # 
+#' # # clear the Datashield R sessions and logout
+#' # datashield.logout(opals) 
 #' 
-#'  # login and assign all the variables to R
-#'  opals <- datashield.login(logins=glmLoginData, assign=TRUE)
-#' 
-#'  # Example 1: run a GLM without interaction (e.g. diabetes prediction using BMI and HDL levels and GENDER)
-#'  mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
-#'  mod
-
-#'  # Example 2: run the above GLM model without an intercept
-#'  # (produces separate baseline estimates for Male and Female)
-#'  mod <- ds.glm(formula='D$DIS_DIAB~0+D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
-#'  mod
-
-#'  # Example 3: run the above GLM with interaction between GENDER and PM_BMI_CONTINUOUS
-#'  mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER*D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
-#'  mod
-
-#'  # Example 4: Fit a standard Gaussian linear model with an interaction
-#'  mod <- ds.glm(formula='D$PM_BMI_CONTINUOUS~D$DIS_DIAB*D$GENDER+D$LAB_HDL', family='gaussian')
-#'  mod
-
-#'  # Example 5: now run a GLM where the error follows a poisson distribution
-#'  # P.S: A poisson model requires a numeric vector as outcome so in this example we first convert
-#'  # the categorical BMI, which is of type 'factor', into a numeric vector
-#'  ds.asNumeric('D$PM_BMI_CATEGORICAL','BMI.123')
-#'  mod <- ds.glm(formula='BMI.123~D$PM_BMI_CONTINUOUS+D$LAB_HDL+D$GENDER', family='poisson')
-#'  mod
-#'  
-#'  # clear the Datashield R sessions and logout
-#'  datashield.logout(opals) 
 #' }
 #'
-ds.tTestF <- function(formula=NULL, data=NULL, family="gaussian", offset=NULL, weights=NULL, checks=FALSE, maxit=15, CI=0.95, viewIter=FALSE, datasources=NULL) {
+ds.tTestF <- function(formula=NULL, data=NULL, family="gaussian", offset=NULL, weights=NULL, checks=FALSE, maxit=15, CI=0.95, viewIter=FALSE, datasources=NULL){
   
- # if no opal login details are provided look for 'opal' objects in the environment
+  # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
     datasources <- findLoginObjects()
   }
@@ -86,20 +87,18 @@ ds.tTestF <- function(formula=NULL, data=NULL, family="gaussian", offset=NULL, w
     stop(" Please provide a valid regression formula eg qvar~bvar (qvar continuous, bvar binary), !", call.=FALSE)
   }
 
-# check if user gave offset or weights directly in formula, if so the argument 'offset' or 'weights'
-# to provide name of offset or weights variable
-    if(sum(as.numeric(grepl('offset', formula, ignore.case=TRUE)))>0 ||
-       sum(as.numeric(grepl('weights', formula, ignore.case=TRUE)))>0)
-{
-       cat("\n\n WARNING: you may have specified an offset or regression weights")
-       cat("\n as part of the model formula. In ds.glm (unlike the usual glm in R)")
-       cat("\n you must specify an offset or weights separately from the formula")
-       cat("\n using the offset or weights argument.\n\n")
-}
+  # check if user gave offset or weights directly in formula, if so the argument 'offset' or 'weights'
+  # to provide name of offset or weights variable
+  if(sum(as.numeric(grepl('offset', formula, ignore.case=TRUE)))>0 ||
+        sum(as.numeric(grepl('weights', formula, ignore.case=TRUE)))>0){
+    cat("\n\n WARNING: you may have specified an offset or regression weights")
+    cat("\n as part of the model formula. In ds.glm (unlike the usual glm in R)")
+    cat("\n you must specify an offset or weights separately from the formula")
+    cat("\n using the offset or weights argument.\n\n")
+  }
 
   formula <- as.formula(formula)
 
-  
   # check that 'family' was set
   if(is.null(family)){
     stop(" Please provide a valid 'family' argument!", call.=FALSE)
@@ -114,137 +113,119 @@ ds.tTestF <- function(formula=NULL, data=NULL, family="gaussian", offset=NULL, w
   if(checks){
     message(" -- Verifying the variables in the model")
     # call the function that checks the variables in the formula are defined (exist) on the server site and are not missing at complete
- 
-   glmChecks(formula, data, offset, weights, datasources)
+    glmChecks(formula, data, offset, weights, datasources)
   }else{
     #message("WARNING:'checks' is set to FALSE; variables in the model are not checked and error messages may not be intelligible!")
   }
 
-#MOVE ITERATION COUNT BEFORE ASSIGNMENT OF beta.vect.next  
-#Iterations need to be counted. Start off with the count at 0
-  #and increment by 1 at each new iteration
-  iteration.count<-0
+  # MOVE ITERATION COUNT BEFORE ASSIGNMENT OF beta.vect.next  
+  # Iterations need to be counted. Start off with the count at 0
+  # and increment by 1 at each new iteration
+  iteration.count <- 0
 
   # number of 'valid' studies (those that passed the checks) and vector of beta values
   numstudies <- length(datasources)
- 
 
-#ARBITRARY LENGTH FOR START BETAs AT THIS STAGE BUT IN LEGAL TRANSMISSION FORMAT ("0,0,0,0,0")
- beta.vect.next <- rep(0,5)
- beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
-  
+  # ARBITRARY LENGTH FOR START BETAs AT THIS STAGE BUT IN LEGAL TRANSMISSION FORMAT ("0,0,0,0,0")
+  beta.vect.next <- rep(0,5)
+  beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
 
-#IDENTIFY THE CORRECT DIMENSION FOR START BETAs VIA CALLING FIRST COMPONENT OF glmDS
- 
-   cally1 <- call('glmDS1', formula, family, data)
+  # IDENTIFY THE CORRECT DIMENSION FOR START BETAs VIA CALLING FIRST COMPONENT OF glmDS
+  cally1 <- call('glmDS1', formula, family, data)
    
-   study.summary <- datashield.aggregate(datasources, cally1)
-#  num.par.glm<-study.summary$study1$dimX[2]
-   num.par.glm<-study.summary[[1]][[1]][[2]]
+  study.summary <- datashield.aggregate(datasources, cally1)
+  #num.par.glm<-study.summary$study1$dimX[2]
+  num.par.glm<-study.summary[[1]][[1]][[2]]
 
-if(num.par.glm!=2){
+  if(num.par.glm!=2){
     stop("Explanatory variable invalid: need formula of type qvar~bvar (qvar continuous, bvar binary)", call.=FALSE)
-}
+  }
 
-   beta.vect.next <- rep(0,num.par.glm)
-   beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
- 
+  beta.vect.next <- rep(0,num.par.glm)
+  beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
 
-  #Provide arbitrary starting value for deviance to enable subsequent calculation of the
-  #change in deviance between iterations
-  dev.old<-9.99e+99
+  # Provide arbitrary starting value for deviance to enable subsequent calculation of the change in
+  # deviance between iterations
+  dev.old <- 9.99e+99
   
-  #Convergence state needs to be monitored.
-  converge.state<-FALSE
+  # Convergence state needs to be monitored.
+  converge.state <- FALSE
   
-  #Define a convergence criterion. This value of epsilon corresponds to that used
-  #by default for GLMs in R (see section S3 for details)
-  epsilon<-1.0e-08
+  # Define a convergence criterion. This value of epsilon corresponds to that used
+  # by default for GLMs in R (see section S3 for details)
+  epsilon <- 1.0e-08
   
-  f<-NULL
+  f <- NULL
   
-  while(!converge.state && iteration.count < maxit) {
-    
+  while(!converge.state && iteration.count < maxit){
     iteration.count<-iteration.count+1
     
     message("Iteration ", iteration.count, "...")
    
-#NOW CALL SECOND COMPONENT OF glmDS TO GENERATE SCORE VECTORS AND INFORMATION MATRICES
+    # NOW CALL SECOND COMPONENT OF glmDS TO GENERATE SCORE VECTORS AND INFORMATION MATRICES
     cally2 <- call('tTestFDS2', formula, family, beta.vect=beta.vect.temp, offset, weights, data)
 
-      study.summary <- datashield.aggregate(datasources, cally2)
-
-      
-      .select <- function(l, field) {
+    study.summary <- datashield.aggregate(datasources, cally2)
+  
+    .select <- function(l, field){
       lapply(l, function(obj) {obj[[field]]})
     }
     
-    info.matrix.total<-Reduce(f="+", .select(study.summary, 'info.matrix'))
-    score.vect.total<-Reduce(f="+", .select(study.summary, 'score.vect'))
-    dev.total<-Reduce(f="+", .select(study.summary, 'dev'))
-    Nvalid.total<-Reduce(f="+", .select(study.summary, 'Nvalid'))
-    Nmissing.total<-Reduce(f="+", .select(study.summary, 'Nmissing'))
-    Ntotal.total<-Reduce(f="+", .select(study.summary, 'Ntotal'))
-    Nmissing.qvar.total<-Reduce(f="+", .select(study.summary, 'Nmissing.qvar'))
-    Nmissing.bvar.total<-Reduce(f="+", .select(study.summary, 'Nmissing.bvar'))
+    info.matrix.total <- Reduce(f="+", .select(study.summary, 'info.matrix'))
+    score.vect.total <- Reduce(f="+", .select(study.summary, 'score.vect'))
+    dev.total <- Reduce(f="+", .select(study.summary, 'dev'))
+    Nvalid.total <- Reduce(f="+", .select(study.summary, 'Nvalid'))
+    Nmissing.total <- Reduce(f="+", .select(study.summary, 'Nmissing'))
+    Ntotal.total <- Reduce(f="+", .select(study.summary, 'Ntotal'))
+    Nmissing.qvar.total <- Reduce(f="+", .select(study.summary, 'Nmissing.qvar'))
+    Nmissing.bvar.total <- Reduce(f="+", .select(study.summary, 'Nmissing.bvar'))
     
-
     message("CURRENT DEVIANCE:      ", dev.total)
 
+    # If formula is bad, formulatest=1 so sum >=1
+    formulatest.total <- Reduce(f="+", .select(study.summary, 'formulatest'))
+    formulabad <- formulatest.total>=1
 
-#If formula is bad, formulatest=1 so sum >=1
-    formulatest.total<-Reduce(f="+", .select(study.summary, 'formulatest'))
-    formulabad<-formulatest.total>=1
+    if(formulabad){
+      stop("Formula invalid: need formula of type qvar~bvar (qvar continuous, bvar binary)", call.=FALSE)
+    }
 
-if(formulabad){
-    stop("Formula invalid: need formula of type qvar~bvar (qvar continuous, bvar binary)", call.=FALSE)
-}
-
-
-    if(iteration.count==1) {
+    if(iteration.count==1){
       # Sum participants only during first iteration.
-      nsubs.total<-Reduce(f="+", .select(study.summary, 'numsubs'))
+      nsubs.total <- Reduce(f="+", .select(study.summary, 'numsubs'))
       # Save family
       f <- study.summary[[1]]$family
     }
     
-    #Create variance covariance matrix as inverse of information matrix
-    variance.covariance.matrix.total<-solve(info.matrix.total)
+    # Create variance covariance matrix as inverse of information matrix
+    variance.covariance.matrix.total <- solve(info.matrix.total)
     
     # Create beta vector update terms
-    beta.update.vect<-variance.covariance.matrix.total %*% score.vect.total
+    beta.update.vect <- variance.covariance.matrix.total %*% score.vect.total
     
-    #Add update terms to current beta vector to obtain new beta vector for next iteration
-if(iteration.count==1)
-{
- beta.vect.next<-rep(0,length(beta.update.vect))
-}
+    # Add update terms to current beta vector to obtain new beta vector for next iteration
+    if(iteration.count==1){
+      beta.vect.next <- rep(0,length(beta.update.vect))
+    }
 
-beta.vect.next<-beta.vect.next+beta.update.vect
+    beta.vect.next <- beta.vect.next + beta.update.vect
+    beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
 
- beta.vect.temp <- paste0(as.character(beta.vect.next), collapse=",")
-
-
-    
-    #Calculate value of convergence statistic and test whether meets convergence criterion
-    converge.value<-abs(dev.total-dev.old)/(abs(dev.total)+0.1)
-    if(converge.value<=epsilon)converge.state<-TRUE
-    if(converge.value>epsilon)dev.old<-dev.total
+    # Calculate value of convergence statistic and test whether meets convergence criterion
+    converge.value <- abs(dev.total-dev.old)/(abs(dev.total)+0.1)
+    if(converge.value<=epsilon)converge.state <- TRUE
+    if(converge.value>epsilon)dev.old <- dev.total
     
     if(viewIter){
-      #For ALL iterations summarise model state after current iteration
+      # For ALL iterations summarise model state after current iteration
       message("SUMMARY OF MODEL STATE after iteration ", iteration.count)
       message("Current deviance ", dev.total," on ",(nsubs.total-length(beta.vect.next)), " degrees of freedom")
       message("Convergence criterion ",converge.state," (", converge.value,")")
-      
       message("\nbeta: ", paste(as.vector(beta.vect.next), collapse=" "))
-      
       message("\nInformation matrix overall:")
       message(paste(capture.output(info.matrix.total), collapse="\n"))
-      
       message("\nScore vector overall:")
       message(paste(capture.output(score.vect.total), collapse="\n"))
-      
       message("\nCurrent deviance: ", dev.total, "\n")
     }
   }
@@ -253,75 +234,65 @@ beta.vect.next<-beta.vect.next+beta.update.vect
     message("SUMMARY OF MODEL STATE after iteration ", iteration.count)
     message("Current deviance ", dev.total," on ",(nsubs.total-length(beta.vect.next)), " degrees of freedom")
     message("Convergence criterion ",converge.state," (", converge.value,")")
-    
     message("\nbeta: ", paste(as.vector(beta.vect.next), collapse=" "))
-    
     message("\nInformation matrix overall:")
     message(paste(capture.output(info.matrix.total), collapse="\n"))
-    
     message("\nScore vector overall:")
     message(paste(capture.output(score.vect.total), collapse="\n"))
-    
     message("\nCurrent deviance: ", dev.total, "\n")
   }
   
-  #If convergence has been obtained, declare final (maximum likelihood) beta vector,
-  #and calculate the corresponding standard errors, z scores and p values
-  #(the latter two to be consistent with the output of a standard GLM analysis)
-  #Then print out final model summary
+  # If convergence has been obtained, declare final (maximum likelihood) beta vector,
+  # and calculate the corresponding standard errors, z scores and p values
+  # (the latter two to be consistent with the output of a standard GLM analysis)
+  # Then print out final model summary
 
-#MODIFIED ORIGINAL CODE FROM ds.glm AS LITTLE AS POSSIBLE
-  if(converge.state)
-  {
-    family.identified<-0
-    
-    beta.vect.final<-beta.vect.next
+  # MODIFIED ORIGINAL CODE FROM ds.glm AS LITTLE AS POSSIBLE
+  if(converge.state){
+    family.identified <- 0
+    beta.vect.final <- beta.vect.next
     
     scale.par <- 1
-    if(f$family== 'gaussian') {
+    if(f$family=='gaussian'){
       scale.par <- dev.total / (nsubs.total-length(beta.vect.next))
     }
     
-    family.identified<-1
+    family.identified <- 1
     se.vect.final <- sqrt(diag(variance.covariance.matrix.total)) * sqrt(scale.par)
-    z.vect.final<-beta.vect.final/se.vect.final
-    pval.vect.final<-2*pnorm(-abs(z.vect.final))
-    parameter.names<-names(score.vect.total[,1])
-    model.parameters<-cbind(beta.vect.final,se.vect.final,z.vect.final,pval.vect.final)
-    dimnames(model.parameters)<-list(parameter.names,c("Estimate","Std. Error","z-value","p-value"))
+    z.vect.final <- beta.vect.final/se.vect.final
+    pval.vect.final <- 2*pnorm(-abs(z.vect.final))
+    parameter.names <- names(score.vect.total[,1])
+    model.parameters <- cbind(beta.vect.final,se.vect.final,z.vect.final,pval.vect.final)
+    dimnames(model.parameters) <- list(parameter.names,c("Estimate","Std. Error","z-value","p-value"))
  
-if(family=="gaussian"){
-    se.vect.final <- sqrt(diag(variance.covariance.matrix.total)) * sqrt(scale.par)
-    t.vect.final<-beta.vect.final/se.vect.final
-df.t<-(nsubs.total-length(beta.vect.next))
-    pval.vect.final<-2*pt(-abs(t.vect.final),df.t)
-    parameter.names<-names(score.vect.total[,1])
-    model.parameters<-cbind(beta.vect.final,se.vect.final,z.vect.final,pval.vect.final)
-    dimnames(model.parameters)<-list(parameter.names,c("Estimate","Std. Error","t-value","p-value"))
-
-}
+    if(family=="gaussian"){
+      se.vect.final <- sqrt(diag(variance.covariance.matrix.total)) * sqrt(scale.par)
+      t.vect.final <- beta.vect.final/se.vect.final
+      df.t <- (nsubs.total-length(beta.vect.next))
+      pval.vect.final <- 2*pt(-abs(t.vect.final),df.t)
+      parameter.names <- names(score.vect.total[,1])
+      model.parameters <- cbind(beta.vect.final,se.vect.final,z.vect.final,pval.vect.final)
+      dimnames(model.parameters)<-list(parameter.names,c("Estimate","Std. Error","t-value","p-value"))
+    }
    
-    if(CI > 0)
-    {
+    if(CI > 0){
       ci.mult <- qnorm(1-(1-CI)/2)
       low.ci.lp <- model.parameters[,1]-ci.mult*model.parameters[,2]
       hi.ci.lp <- model.parameters[,1]+ci.mult*model.parameters[,2]
       estimate.lp <- model.parameters[,1]
       
-      
-      
       if(family=="gaussian"){
-	ci.mult <- qt((1-(1-CI)/2),df.t)
-      low.ci.lp <- model.parameters[,1]-ci.mult*model.parameters[,2]
-      hi.ci.lp <- model.parameters[,1]+ci.mult*model.parameters[,2]
-      estimate.lp <- model.parameters[,1]
-      estimate.natural <- estimate.lp
-      low.ci.natural <- low.ci.lp
+        ci.mult <- qt((1-(1-CI)/2),df.t)
+        low.ci.lp <- model.parameters[,1]-ci.mult*model.parameters[,2]
+        hi.ci.lp <- model.parameters[,1]+ci.mult*model.parameters[,2]
+        estimate.lp <- model.parameters[,1]
+        estimate.natural <- estimate.lp
+        low.ci.natural <- low.ci.lp
      	hi.ci.natural <- hi.ci.lp
- 	name1 <- paste0("low",CI,"CI")
- 	name2 <- paste0("high",CI,"CI")
-	ci.mat <- cbind(low.ci.lp,hi.ci.lp)
-	dimnames(ci.mat) <- list(NULL,c(name1,name2))
+ 	    name1 <- paste0("low",CI,"CI")
+ 	    name2 <- paste0("high",CI,"CI")
+	    ci.mat <- cbind(low.ci.lp,hi.ci.lp)
+	    dimnames(ci.mat) <- list(NULL,c(name1,name2))
       }
       
       if(family=="binomial"){
@@ -341,8 +312,7 @@ df.t<-(nsubs.total-length(beta.vect.next))
           name5 <- paste0("high",CI,"CI.P_OR")
         }       
         ci.mat <- cbind(low.ci.lp,hi.ci.lp,estimate.natural,low.ci.natural,hi.ci.natural)
-        dimnames(ci.mat) <- list(NULL,c(name1,name2,name3,name4,name5))
-        
+        dimnames(ci.mat) <- list(NULL,c(name1,name2,name3,name4,name5))  
       }
       
       if(family=="poisson"){
@@ -360,8 +330,7 @@ df.t<-(nsubs.total-length(beta.vect.next))
         dimnames(ci.mat) <- list(NULL,c(name1,name2,name3,name4,name5))        
       }
       
-      if(family.identified==0)
-      {
+      if(family.identified==0){
         estimate.natural <- estimate.lp
         low.ci.natural <- low.ci.lp
         hi.ci.natural <- hi.ci.lp
@@ -372,50 +341,43 @@ df.t<-(nsubs.total-length(beta.vect.next))
       }
       
     }
-
     
-    model.parameters<-cbind(model.parameters,ci.mat)
+    model.parameters <- cbind(model.parameters,ci.mat)
 
-#tTestF summary
-mean1<-model.parameters[1,1]
-mean2<-model.parameters[1,1]+model.parameters[2,1]
-mean.diff<-model.parameters[2,1]
-SE.mean.diff<-model.parameters[2,2]
-t.value<-model.parameters[2,3]
-t.df<-df.t
-p.value<-model.parameters[2,4]
-low.ci.mean.diff<-model.parameters[2,5]
-hi.ci.mean.diff<-model.parameters[2,6]
+    # tTestF summary
+    mean1 <- model.parameters[1,1]
+    mean2 <- model.parameters[1,1]+model.parameters[2,1]
+    mean.diff <- model.parameters[2,1]
+    SE.mean.diff <- model.parameters[2,2]
+    t.value <- model.parameters[2,3]
+    t.df <- df.t
+    p.value <- model.parameters[2,4]
+    low.ci.mean.diff <- model.parameters[2,5]
+    hi.ci.mean.diff <- model.parameters[2,6]
+    name.low <- paste0("low",CI,"CI")
+    name.hi <- paste0("high",CI,"CI")
 
-name.low <- paste0("low",CI,"CI")
-name.hi <- paste0("high",CI,"CI")
-
-tTestF.output.matrix<-t(matrix(cbind(mean1,mean2,mean.diff,SE.mean.diff,low.ci.mean.diff,hi.ci.mean.diff,
+    tTestF.output.matrix <- t(matrix(cbind(mean1,mean2,mean.diff,SE.mean.diff,low.ci.mean.diff,hi.ci.mean.diff,
                             t.value,t.df,p.value)))
-dimnames(tTestF.output.matrix)<-list("",c("mean1","mean2","mean.diff","SE.mean.diff",name.low,name.hi,
-                            "t-value","t-df","p-value"))
+    dimnames(tTestF.output.matrix) <- list("",c("mean1","mean2","mean.diff","SE.mean.diff",name.low,name.hi,
+                                           "t-value","t-df","p-value"))
 
-
-
-#glm summary (not used by default)
-   
+    # glm summary (not used by default)
     if(!is.null(offset)&&!is.null(weights)){
-       formulatext <- paste0(Reduce(paste, deparse(formula)), paste0(" + offset(", offset, ")"), paste0(" + weights(", weights, ")"))
-       }
+      formulatext <- paste0(Reduce(paste, deparse(formula)), paste0(" + offset(", offset, ")"), paste0(" + weights(", weights, ")"))
+    }
     if(!is.null(offset)&&is.null(weights)){
-       formulatext <- paste0(Reduce(paste, deparse(formula)), paste0(" + offset(", offset, ")"))
-       }
+      formulatext <- paste0(Reduce(paste, deparse(formula)), paste0(" + offset(", offset, ")"))
+    }
     if(is.null(offset)&&!is.null(weights)){
-       formulatext <- paste0(Reduce(paste, deparse(formula)), paste0(" + weights(", weights, ")"))
-       }
-
+      formulatext <- paste0(Reduce(paste, deparse(formula)), paste0(" + weights(", weights, ")"))
+    }
     if(is.null(offset)&&is.null(weights)){
-       formulatext <- Reduce(paste, deparse(formula))
-       }
-    
+      formulatext <- Reduce(paste, deparse(formula))
+    }
 
-#Create but do not return glmds object
-      glmds <- list(
+    # Create but do not return glmds object
+    glmds <- list(
 				Nvalid=Nvalid.total,
 				Nmissing=Nmissing.total,
 				Ntotal=Ntotal.total,
@@ -433,19 +395,19 @@ dimnames(tTestF.output.matrix)<-list("",c("mean1","mean2","mean.diff","SE.mean.d
     
     class(glmds) <- 'glmds'
     
-#    return(glmds)
+    # return(glmds)
 
-#Main return is tTestF object
-		tTestF.output<-list(results.matrix=tTestF.output.matrix,
-		Nvalid=Nvalid.total,
-		Nmissing=Nmissing.total,
-		Ntotal=Ntotal.total,
-		Nmissing.in.continuous.variable=Nmissing.qvar.total,
-		Nmissing.in.factor=Nmissing.bvar.total)
+    # Main return is tTestF object
+	tTestF.output <- list(results.matrix=tTestF.output.matrix,
+		          Nvalid=Nvalid.total,
+		          Nmissing=Nmissing.total,
+		          Ntotal=Ntotal.total,
+		          Nmissing.in.continuous.variable=Nmissing.qvar.total,
+		          Nmissing.in.factor=Nmissing.bvar.total)
 
-		return(tTestF.output)
+    return(tTestF.output)
 
-  } else {
+  }else{
     warning(paste("Did not converge after", maxit, "iterations. Increase maxit parameter as necessary."))
     return(NULL)
   }

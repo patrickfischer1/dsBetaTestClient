@@ -27,18 +27,16 @@
 #' @export
 ds.testObjExists.o <- function(test.obj.name=NULL, datasources=NULL){
    
-# if no opal login details are provided look for 'opal' objects in the environment
+  # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
      datasources <- findLoginObjects()
   }
 
-#If not character send error message requesting valic object name
-
-if(!is.character(test.obj.name)){
-return.message<-"Error: please provide the name of an object on the data servers as a character string in inverted commas"
-return(return.message=return.message)
-}
-  
+  # if not character send error message requesting valic object name
+  if(!is.character(test.obj.name)){
+    return.message <- "Error: please provide the name of an object on the data servers as a character string in inverted commas"
+    return(return.message=return.message)
+  }
 
 ##########################################################################################################
 #MODULE 5: CHECK KEY DATA OBJECTS EXIST IN EACH SOURCE                                                   #
@@ -93,45 +91,34 @@ if(obj.name.exists.in.all.sources && obj.non.null.in.all.sources){										 #
 #END OF MODULE 5																						 #
 ##########################################################################################################
 
+  # check in each source whether object name exists
+  # and whether object physically exists with a non-null class
+  num.datasources <- length(object.info)
 
-# check in each source whether object name exists
-# and whether object physically exists with a non-null class
-num.datasources<-length(object.info)
+  obj.name.exists.in.all.sources <- TRUE
+  obj.non.null.in.all.sources <- TRUE
 
-
-obj.name.exists.in.all.sources<-TRUE
-obj.non.null.in.all.sources<-TRUE
-
-for(j in 1:num.datasources){
-	if(!object.info[[j]]$test.obj.exists){
-		obj.name.exists.in.all.sources<-FALSE
-		}
-	if(object.info[[j]]$test.obj.class=="ABSENT"){
-		obj.non.null.in.all.sources<-FALSE
-		}
-
-	}
-if(obj.name.exists.in.all.sources && obj.non.null.in.all.sources){
-
-    return.message<-paste0("Data object ", test.obj.name, " exists in all sources")
-	
+  for(j in 1:num.datasources){
+    if(!object.info[[j]]$test.obj.exists){
+      obj.name.exists.in.all.sources <- FALSE
+    }
+    if(object.info[[j]]$test.obj.class=="ABSENT"){
+      obj.non.null.in.all.sources <- FALSE
+    }
+  }
+  
+  if(obj.name.exists.in.all.sources && obj.non.null.in.all.sources){
+    return.message <- paste0("Data object ", test.obj.name, " exists in all sources")
 	return(list(return.message=return.message))
-	
-	}else{
-	
-    return.message.1<-paste0("Error: A valid data object ", test.obj.name, " does NOT exist in all sources")
-    return.message.2<-paste0("It is either ABSENT and/or has no valid content/class,see return.info above")
-	return.message<-list(return.message.1,return.message.2)
-	return.info<-object.info	
-
-	return(list(return.info=return.info,return.message=return.message))
-
-	}
-	
+  }else{
+	return.message.1 <- paste0("Error: A valid data object ", test.obj.name, " does NOT exist in all sources")
+    return.message.2 <- paste0("It is either ABSENT and/or has no valid content/class,see return.info above")
+	return.message <- list(return.message.1,return.message.2)
+	return.info <- object.info	
+    return(list(return.info=return.info,return.message=return.message))
+  }
 
 }
-
-
 #ds.testObjExists.o
 
 

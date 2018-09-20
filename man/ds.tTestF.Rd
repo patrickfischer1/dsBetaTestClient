@@ -11,21 +11,22 @@ ds.tTestF(formula = NULL, data = NULL, family = "gaussian",
 \arguments{
 \item{formula}{a character, a formula which describes the model to be fitted}
 
-\item{data}{a character, the name of an optional data frame containing the variables in 
-in the \code{formula}. The process stops if a non existing data frame is indicated.}
+\item{data}{a character, the name of an optional data frame containing the variables in the
+\code{formula}. The process stops if a non existing data frame is indicated.}
 
 \item{family}{a description of the error distribution function to use in the model}
 
-\item{offset}{a character, null or a numeric vector that can be used to specify an a priori known component 
-to be included in the linear predictor during fitting.}
+\item{offset}{a character, null or a numeric vector that can be used to specify an a priori
+known component to be included in the linear predictor during fitting.}
 
-\item{weights}{a character, the name of an optional vector of 'prior weights' to be used in the fitting 
-process. Should be NULL or a numeric vector.}
+\item{weights}{a character, the name of an optional vector of 'prior weights' to be used in the
+fitting process. Should be NULL or a numeric vector.}
 
-\item{checks}{a boolean, if TRUE (default) checks that takes 1-3min are carried out to verify that the 
-variables in the model are defined (exist) on the server site and that they have the correct characteristics
-required to fit a GLM. The default value is FALSE because checks lengthen the runtime and are mainly meant to be 
-# used as help to look for causes of eventual errors.}
+\item{checks}{a boolean, if TRUE (default) checks that takes 1-3min are carried out to verify
+that the variables in the model are defined (exist) on the server site and that they have the
+correct characteristics required to fit a GLM. The default value is FALSE because checks
+lengthen the runtime and are mainly meant to be used as help to look for causes of eventual
+errors.}
 
 \item{maxit}{the number of iterations of IWLS used
 instructions to each computer requesting non-disclosing summary statistics.
@@ -39,8 +40,6 @@ should be printed on screen or not. Default is FALSE (i.e. only final results ar
 
 \item{datasources}{a list of opal object(s) obtained after login to opal servers;
 these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.}
-
-\item{startBetas}{starting values for the parameters in the linear predictor}
 }
 \value{
 coefficients a named vector of coefficients
@@ -67,34 +66,40 @@ on distinct servers by sending
 \examples{
 {
 
- # load the file that contains the login details
- data(glmLoginData)
+# # load the file that contains the login details
+# data(glmLoginData)
+#
+# # login and assign all the variables to R
+# opals <- datashield.login(logins=glmLoginData, assign=TRUE)
+#
+# # Example 1: run a GLM without interaction (e.g. diabetes prediction using BMI and HDL levels
+# # and GENDER)
+# mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
+# mod
+#
+# # Example 2: run the above GLM model without an intercept
+# # (produces separate baseline estimates for Male and Female)
+# mod <- ds.glm(formula='D$DIS_DIAB~0+D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
+# mod
+#
+# # Example 3: run the above GLM with interaction between GENDER and PM_BMI_CONTINUOUS
+# mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER*D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
+# mod
+#
+# # Example 4: Fit a standard Gaussian linear model with an interaction
+# mod <- ds.glm(formula='D$PM_BMI_CONTINUOUS~D$DIS_DIAB*D$GENDER+D$LAB_HDL', family='gaussian')
+# mod
+#
+# # Example 5: now run a GLM where the error follows a poisson distribution
+# # P.S: A poisson model requires a numeric vector as outcome so in this example we first convert
+# # the categorical BMI, which is of type 'factor', into a numeric vector
+# ds.asNumeric('D$PM_BMI_CATEGORICAL','BMI.123')
+# mod <- ds.glm(formula='BMI.123~D$PM_BMI_CONTINUOUS+D$LAB_HDL+D$GENDER', family='poisson')
+# mod
+# 
+# # clear the Datashield R sessions and logout
+# datashield.logout(opals) 
 
- # login and assign all the variables to R
- opals <- datashield.login(logins=glmLoginData, assign=TRUE)
-
- # Example 1: run a GLM without interaction (e.g. diabetes prediction using BMI and HDL levels and GENDER)
- mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
- mod
- # Example 2: run the above GLM model without an intercept
- # (produces separate baseline estimates for Male and Female)
- mod <- ds.glm(formula='D$DIS_DIAB~0+D$GENDER+D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
- mod
- # Example 3: run the above GLM with interaction between GENDER and PM_BMI_CONTINUOUS
- mod <- ds.glm(formula='D$DIS_DIAB~D$GENDER*D$PM_BMI_CONTINUOUS+D$LAB_HDL', family='binomial')
- mod
- # Example 4: Fit a standard Gaussian linear model with an interaction
- mod <- ds.glm(formula='D$PM_BMI_CONTINUOUS~D$DIS_DIAB*D$GENDER+D$LAB_HDL', family='gaussian')
- mod
- # Example 5: now run a GLM where the error follows a poisson distribution
- # P.S: A poisson model requires a numeric vector as outcome so in this example we first convert
- # the categorical BMI, which is of type 'factor', into a numeric vector
- ds.asNumeric('D$PM_BMI_CATEGORICAL','BMI.123')
- mod <- ds.glm(formula='BMI.123~D$PM_BMI_CONTINUOUS+D$LAB_HDL+D$GENDER', family='poisson')
- mod
- 
- # clear the Datashield R sessions and logout
- datashield.logout(opals) 
 }
 
 }
@@ -104,5 +109,5 @@ on distinct servers by sending
 \link{ds.gee} for generalized estimating equation models
 }
 \author{
-Burton,P;Gaye,A;Laflamme,P
+Burton PR; Gaye A; LaFlamme P
 }
