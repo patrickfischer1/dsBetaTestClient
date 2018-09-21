@@ -7,7 +7,7 @@
 #' @param datasources a list of opal object(s) obtained after login to opal servers;
 #' these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.
 #' @return regression outcome
-#' @author Avraam D
+#' @author Avraam D; Jones EM; van den Heuvel ER
 #' @export
 #' 
 ds.rilm.b <- function(..., y=NULL, datasources=NULL){

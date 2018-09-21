@@ -24,5 +24,5 @@ Runs a Random Intercept Linear Model on horizontally-partinioned data
 see description
 }
 \author{
-Avraam D
+Avraam D; Jones EM; van den Heuvel ER
 }
