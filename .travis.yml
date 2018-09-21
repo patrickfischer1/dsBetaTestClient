@@ -31,7 +31,7 @@ before_install:
     - sudo apt-get install -qq libcurl4-openssl-dev -y
     - sudo apt-get install -qq opal -y
     - sudo /opt/puppetlabs/puppet/bin/gem install r10k
-    - git clone -b ubuntu16 https://github.com/StuartWheater/datashield-infrastructure.git /tmp/datashield-infrastructure
+    - git clone -b ubuntu16 https://github.com/datashield/datashield-infrastructure.git /tmp/datashield-infrastructure
     - sudo gem install r10k
 #    - ls /opt/puppetlabs/puppet/bin/
 #    - sudo find / -name r10k
@@ -42,11 +42,11 @@ install:
 
 script:
     - sudo /tmp/travis-tool.sh install_github jimhester/covr
-    - cd /home/travis/build/StuartWheater/dsBetaTestClient
+    - cd /home/travis/build/datashield/dsBetaTestClient
     - /tmp/travis-tool.sh run_tests
 
 after_failure:
-    - cd /home/travis/build/StuartWheater/dsBetaTestClient && sudo /tmp/travis-tool.sh dump_logs && cd --
+    - cd /home/travis/build/datashield/dsBetaTestClient && sudo /tmp/travis-tool.sh dump_logs && cd --
     - sudo cat /var/log/opal/stdout.log
 
 notifications:
