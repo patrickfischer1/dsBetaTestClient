@@ -5,8 +5,8 @@
 \title{ds.recodeValues.o}
 \usage{
 ds.recodeValues.o(var.name = NULL, values2replace.vector = NULL,
-  new.values.vector = NULL, newobj = NULL, force.output.format = "no",
-  datasources = NULL)
+  new.values.vector = NULL, newobj = NULL,
+  force.output.format = "no", datasources = NULL)
 }
 \arguments{
 \item{var.name}{A character string specifying the name of the vector whose values are to be changed}
