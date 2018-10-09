@@ -137,29 +137,29 @@
 #' @return formula:- see description of formula as an input parameter (above)
 #' @return df.resid:- the residual degrees of freedom around the model
 #' @return deviance.resid:- the residual deviance around the model
-#' @return df.null the degrees of freedom around the null model (with just an intercept)
-#' @return dev.null the deviance around the null model (with just an intercept)
-#' @return CorrMatrix the correlation matrix of parameter estimates
-#' @return VarCovMatrix the variance covariance matrix of parameter estimates
-#' @return weights the vector (if any) holding regression weights
-#' @return offset the vector (if any) holding an offset (enters glm with a coefficient of 1.0)
-#' @return cov.scaled equivalent to VarCovMatrix
-#' @return cov.unscaled equivalent to VarCovMatrix but assuming dispersion (scale) parameter is 1
-#' @return Nmissing the number of missing observations in the given study
-#' @return Nvalid the number of valid (non-missing) observations in the given study
-#' @return Ntotal the total number of observations in the given study (Nvalid+Nmissing)
-#' @return data - equivalent to input parameter dataName (above)
-#' @return dispersion - the estimated dispersion parameter: deviance.resid/df.resid for
+#' @return df.null:- the degrees of freedom around the null model (with just an intercept)
+#' @return dev.null:- the deviance around the null model (with just an intercept)
+#' @return CorrMatrix:- the correlation matrix of parameter estimates
+#' @return VarCovMatrix:- the variance covariance matrix of parameter estimates
+#' @return weights:- the vector (if any) holding regression weights
+#' @return offset:- the vector (if any) holding an offset (enters glm with a coefficient of 1.0)
+#' @return cov.scaled:- equivalent to VarCovMatrix
+#' @return cov.unscaled:- equivalent to VarCovMatrix but assuming dispersion (scale) parameter is 1
+#' @return Nmissing:- the number of missing observations in the given study
+#' @return Nvalid:- the number of valid (non-missing) observations in the given study
+#' @return Ntotal:- the total number of observations in the given study (Nvalid+Nmissing)
+#' @return data:-  equivalent to input parameter dataName (above)
+#' @return dispersion:- - the estimated dispersion parameter: deviance.resid/df.resid for
 #' a gaussian family multiple regression model, 1.0 for logistic and poisson regression
-#' @return call - summary of key elements of the call to fit the model
-#' @return na.action - chosen method of dealing with NAs. Commonly na.action=nam.omit
+#' @return call:-  summary of key elements of the call to fit the model
+#' @return na.action:- chosen method of dealing with NAs. Commonly na.action=nam.omit
 #' indicating any individual with any data missing that are needed for the model is
 #' exluded from the fit. This includes the outcome variable, covariates,
 #' or any values in a regression weight vector or offset vector. By including
 #' more covariates in a model you may delete extra individuals from an analysis
 #' and this can severely distort inferential tests based on assuming models are
 #' nested (eg likelihood ratio tests)
-#' @return iter the number of iterations required to achieve convergence
+#' @return iter:- the number of iterations required to achieve convergence
 #' @return there are a small number of more esoteric items of information returned
 #' by ds.glmSLMA.o. Additional information about these can be found in the help
 #' file for the glm() function in native R.

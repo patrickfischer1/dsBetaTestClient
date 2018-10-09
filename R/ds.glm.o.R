@@ -369,7 +369,7 @@
 #' #TO BE TRUE, AND THE ESTIMATED VALUE OF z-STATISTICS DOUBLED.
 #' #
 #' #$iter
-#'
+#' #
 #' #[1] 9
 #' #
 #' #$family
