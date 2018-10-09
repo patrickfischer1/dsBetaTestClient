@@ -391,7 +391,7 @@ R package metafor to meta-analyse the key parameters.
 #TO BE TRUE, AND THE ESTIMATED VALUE OF z-STATISTICS DOUBLED.
 #
 #$iter
-
+#
 #[1] 9
 #
 #$family
