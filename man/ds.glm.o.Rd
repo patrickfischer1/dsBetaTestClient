@@ -211,33 +211,33 @@ R package metafor to meta-analyse the key parameters.
 {
 #  Example 1:
 #The components of the standard output from ds.glm are listed below. Additional
-explanatory material for some
+#explanatory material for some
 #components appears in square brackets in CAPITALIZED font. The model fitted here
-is a poisson regression model -
+#is a poisson regression model -
 #a piecewise exponential regression model. It regresses a 1/0
-([died,failed]/[survived,censored]) numeric outcome held in the variable 'EVENT'
+#([died,failed]/[survived,censored]) numeric outcome held in the variable 'EVENT'
 #on SEXF (a factor with male=0 and female=1) and AGE.60 ([age - 60] in years). The
-'*' in the formula denotes inclusion of both main effects
+#'*' in the formula denotes inclusion of both main effects
 #and interactions for these covariates. When this formula is interpreted by ds.glm
-itself it separates these out for clarity
+#itself it separates these out for clarity
 #when constructing the list of regression coefficients in the model. So, e.g., the
-final coefficient is named 'SEXF1:AGE.60' where
+#final coefficient is named 'SEXF1:AGE.60' where
 #the notation ':' indicates the interaction between SEXF and AGE.60. TID.f is a
-six level factor that allows the baseline hazard
+#six level factor that allows the baseline hazard
 #to vary across six different time periods that are precisely the same in each
-study: in this particular example the periods
+#study: in this particular example the periods
 #are 0-2 years, 2-3 years, 3-6 yrs, 6-6.5 years, 6.5-8 years and 8-10 years. The
-'1' in the formula explicitly forces the model
+#'1' in the formula explicitly forces the model
 #to include an intercept, which means that the baseline (log) rate of death in
-each period may be obtained as the sum of
+#each period may be obtained as the sum of
 #the coefficient for the intercept + the coefficient for the corresponding period.
-So, for example, the baseline (log)rate
+#So, for example, the baseline (log)rate
 #of death in period 1 is approximately -0.988 + (-1.114) = -2.102. If this is
-exponentiated one obtains the value 0.1222
+#exponentiated one obtains the value 0.1222
 #an estimated event rate of 0.1222 events per annum. If the notation '0' had been
-used instead of '1', no intercept would 
+#used instead of '1', no intercept would 
 #have been fitted and the coefficient for period 2 would have been -2.102 directly
-estimating the baseline log rate in
+#estimating the baseline log rate in
 #period 2.
 #
 #$Nvalid [TOTAL NUMBER OF VALID OBSERVATIONAL UNITS ACROSS ALL STUDIES]
@@ -252,7 +252,7 @@ estimating the baseline log rate in
 #
 #$disclosure.risk
 #       RISK OF DISCLOSURE [THE VALUE 1 INDICATES THAT ONE OF THE DISCLOSURE TRAPS
-HAS BEEN TRIGGERED IN THAT STUDY]
+#HAS BEEN TRIGGERED IN THAT STUDY]
 #study1                  0
 #study2                  0
 #study3                  0
