@@ -2,8 +2,8 @@
 #' @title ds.listDisclosureSettings.o
 #' @description Lists current values for disclosure control filters in all Opal servers
 #' @details This function lists out the current values of the four disclosure
-#' filters in each of the Opal servers specified by datasources. The four
-#' filters are: (1) nfilter.tab, the minimum non-zero cell count allowed in any cell
+#' filters in each of the Opal servers specified by datasources. Six filters can
+#' currently be set: (1) nfilter.tab, the minimum non-zero cell count allowed in any cell
 #' if a contingency table is to be returned. This applies to one dimensional and two
 #' dimensional tables of counts tabulated across one or two factors and to tables
 #' of a mean of a quantitative variable tabulated across a factor. Default usually set
@@ -25,12 +25,11 @@
 #' (4) nfilter.string, the maximum length of a string argument if that argument is to
 #' be subject to testing of its length. Default value = 80. The aim of this nfilter
 #' is to make it difficult for hackers to find a way to embed malicious code
-#' in a valid string argument that is actively interpreted.
-#'
-#' To avoid a mistake that, in practice, proves very easy to make, the client and server side
-#' functions both come in the form of two
-#' equivalent aliases: ds.listDisclosureSettings which calls listDisclosureSettingsDS;
-#' and ds.listDisclosureSetting which calls listDisclosureSettingDS.
+#' in a valid string argument that is actively interpreted. (5) nfilter.stringShort
+#' to be used when a string must be specified but that when valid that string
+#' should be short. (6) nfilter.kNN applies to graphical plots based on working
+#' with the k nearest neighbours of each point. nfilter.kNN specifies the minimum
+#' allowable value for the number of nearest neighbours used, typically defaulted to 3
 #' @param datasources a list of the particular Opal servers to have their values listed
 #' @return a list containing the current settings of the nfilters in each study specified
 #' @author DataSHIELD Team
@@ -38,25 +37,21 @@
 #' @examples{
 #' #WORKING EXAMPLES NOT PROVIDED (MULTIPLE OPALS AND R SESSIONS MAKE THIS DIFFICULT)
 #' ##Client-side function call to list current disclosure settings in all Opal servers
-#' #ds.listDisclosureSettings()
+#' #ds.listDisclosureSettings.o()
 #' #
 #' ##Equivalent call directly to server-side function to list current disclosure settings in all
 #' ##Opal servers not recommended unless you are experienced DataSHIELD user
-#' #ds.look("listDisclosureSettingsDS()") 
+#' #ds.look("listDisclosureSettingsDS.o()") 
 #' #
 #' ##Call to client-side function and save output as an R object to refer to later
-#' #current.DisclosureSettings<-ds.listDisclosureSettings()
+#' #current.DisclosureSettings<-ds.listDisclosureSettings.o()
 #' ##Interrogate ouput later
 #' #current.DisclosureSettings[[1]]
 #' #
 #' #Restrict call to list disclosure settings only to the first, or second Opals
-#' #ds.listDisclosureSettings(datasources=opals.em[1])
-#' #ds.listDisclosureSettings(datasources=opals.em[2])
+#' #ds.listDisclosureSettings.o(datasources=opals.em[1])
+#' #ds.listDisclosureSettings.o(datasources=opals.em[2])
 #' #
-#' #Use aliased function names ("Setting" not "Settings") because experience showed
-#' #this naming error was made regularly and was hard to see
-#' #' ds.look("listDisclosureSettingDS()")
-#' #' ds.listDisclosureSetting()
 #' }
 #' 
 ds.listDisclosureSettings.o <- function(datasources=NULL){
@@ -75,5 +70,4 @@ ds.listDisclosureSettings.o <- function(datasources=NULL){
   
 }
 # ds.listDisclosureSettings.o
-
 
