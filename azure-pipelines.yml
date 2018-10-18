@@ -3,7 +3,7 @@ pool:
 
 steps:
 - bash: |
-    sudo service mysql stop 
+    sudo service mysql stop
     sudo apt-get update
     sudo apt-get remove --purge mysql-client mysql-server mysql-common -y
     sudo apt-get purge mysql-client mysql-server mysql-common -y
@@ -50,4 +50,5 @@ steps:
 
 - bash: |
     cat azure-pipelines.Rout
+    grep "0 error" azure-pipelines.Rout
   displayName: 'Results'
