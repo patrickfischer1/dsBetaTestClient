@@ -1,5 +1,5 @@
 #'
-#'  @title ds.glm calling glmDS1, glmDS2
+#' @title ds.glm calling glmDS1, glmDS2
 #' @description Fits a generalized linear model (glm) on data from a single or multiple sources
 #' @details Fits a glm on data from a single source or from multiple sources. In the latter case 
 #' the data are co-analysed (when using ds.glm) by using an approach that is mathematically

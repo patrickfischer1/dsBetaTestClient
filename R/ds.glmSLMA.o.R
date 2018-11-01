@@ -1,4 +1,4 @@
- #>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
+#' 
 #' @title ds.glmSLMA.o calling glmDS1.o, glmDSSLMA2.o
 #' @description Fits a generalized linear model (glm) on data from a single or multiple sources
 #' @details Fits a glm on data from a single source or from multiple sources. In the latter case 
@@ -51,7 +51,7 @@
 #' ds.glm has been written to fit family="gaussian" (i.e. a
 #' conventional linear model, family="binomial"
 #' (i.e. a conventional
-#' [unconditional] logistic regression model), and family = "poisson" (i.e. a
+#' unconditional logistic regression model), and family = "poisson" (i.e. a
 #' Poisson regression model - of which perhaps the most commonly used application
 #' is for survival analysis
 #' using Piecewise Exponential Regression (PER) which
@@ -136,7 +136,7 @@
 #' elements are included last in the return list because they then appear at the
 #' bottom of a simple print out of the return object. In reverse order, these
 #' key elements in reverse order are:
-#' @return coefficients a matrix in which the first column contains the names of
+#' @return coefficients:- a matrix in which the first column contains the names of
 #' all of the regression parameters (coefficients) in the model, the second column
 #' contains the estimated values, the third their corresponding standard errors,
 #' the fourth the ratio of estimate/standard error and the fifth the p-value
@@ -189,7 +189,6 @@
 #' @export
 ds.glmSLMA.o<-function(formula=NULL, family=NULL, offset=NULL, weights=NULL, combine.with.metafor=TRUE,dataName=NULL,
 checks=FALSE, maxit=15, datasources=NULL) {
-#THIS VERSION DOES NO MORE THAN ADD try() TO MATRIX INVERSION SO SHOULD WORK JUST THE SAME AS USUAL IF MATRIX IS INVERTABLE
 
 # details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){

@@ -46,7 +46,7 @@ the model. At present
 ds.glm has been written to fit family="gaussian" (i.e. a
 conventional linear model, family="binomial"
 (i.e. a conventional
-[unconditional] logistic regression model), and family = "poisson" (i.e. a
+unconditional logistic regression model), and family = "poisson" (i.e. a
 Poisson regression model - of which perhaps the most commonly used application
 is for survival analysis
 using Piecewise Exponential Regression (PER) which
@@ -140,7 +140,7 @@ elements are included last in the return list because they then appear at the
 bottom of a simple print out of the return object. In reverse order, these
 key elements in reverse order are:
 
-coefficients a matrix in which the first column contains the names of
+coefficients:- a matrix in which the first column contains the names of
 all of the regression parameters (coefficients) in the model, the second column
 contains the estimated values, the third their corresponding standard errors,
 the fourth the ratio of estimate/standard error and the fifth the p-value

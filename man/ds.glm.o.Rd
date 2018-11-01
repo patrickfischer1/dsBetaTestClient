@@ -2,7 +2,7 @@
 % Please edit documentation in R/ds.glm.o.R
 \name{ds.glm.o}
 \alias{ds.glm.o}
-\title{@title ds.glm calling glmDS1, glmDS2}
+\title{ds.glm calling glmDS1, glmDS2}
 \usage{
 ds.glm.o(formula = NULL, data = NULL, family = NULL, offset = NULL,
   weights = NULL, checks = FALSE, maxit = 15, CI = 0.95,
