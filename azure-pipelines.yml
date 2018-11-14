@@ -46,7 +46,7 @@ steps:
 
 - bash: |
     ls -l
-    R CMD BATCH --quiet azure-pipelines.R azure-pipelines.Rout
+    Rscript azure-pipelines.R > azure-pipelines.Rout 2>&1
   displayName: 'Test'
 
 - bash: |
