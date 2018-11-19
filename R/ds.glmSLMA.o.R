@@ -124,8 +124,12 @@
 #' estimates and standard errors for each regression coefficient are pooled across
 #' studies using random effects meta-analysis under maximum likelihood (ML),
 #' restricted maximum likelihood (REML), or fixed effects meta-analysis (FE).
-#' @param datasources a list of opal object(s) obtained after login to opal servers;
-#' these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.
+#' @param datasources specifies the particular opal object(s) to use, if it is not specified
+#' the default set of opals will be used. The default opals are always called default.opals.
+#' This parameter is set without inverted commas: e.g. datasources=opals.em or datasources=default.opals
+#' If you wish to specify the second opal server in a set of three, the parameter is specified:
+#' e.g. datasources=opals.em[2]. If you wish to specify the first and third opal servers in a set specify:
+#' e.g. datasources=opals.em[2,3]
 #' @return many of the elements of the output list returned by ds.glmSLMA.o from
 #' each study separately are 
 #' equivalent to those from glm() in native R with potentially disclosive elements
@@ -184,7 +188,7 @@
 #' regression coefficient across all studies with pooling under SLMA via 
 #' random effects meta-analysis under maximum likelihood (ML), restricted maximum
 #' likelihood (REML) or via fixed effects meta-analysis (FE)
-#' @author Paul Burton, Demetris Avraam
+#' @author DataSHIELD Development Team
 #' @seealso \link{ds.lexis} for survival analysis using piecewise exponential regression
 #' @export
 ds.glmSLMA.o<-function(formula=NULL, family=NULL, offset=NULL, weights=NULL, combine.with.metafor=TRUE,dataName=NULL,

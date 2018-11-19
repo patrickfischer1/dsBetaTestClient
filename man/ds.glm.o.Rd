@@ -2,7 +2,7 @@
 % Please edit documentation in R/ds.glm.o.R
 \name{ds.glm.o}
 \alias{ds.glm.o}
-\title{ds.glm calling glmDS1, glmDS2}
+\title{ds.glm.o calling glmDS1.o, glmDS2.o}
 \usage{
 ds.glm.o(formula = NULL, data = NULL, family = NULL, offset = NULL,
   weights = NULL, checks = FALSE, maxit = 15, CI = 0.95,
@@ -132,8 +132,13 @@ of parameter estimates. TRUE=yes, FALSE=no, default=FALSE}
 \item{viewCor}{a boolean indicating whether to return the correlation matrix of
 parameter estimates. TRUE=yes, FALSE=no, default=FALSE}
 
-\item{datasources}{a list of opal object(s) obtained after login to opal servers;
-these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.}
+\item{datasources}{specifies the particular opal object(s) to use, if it is not
+specified the default set of opals will be used. The default opals are always
+called default.opals. This parameter is set without inverted commas:
+e.g. datasources=opals.em or datasources=default.opals
+If you wish to specify the second opal server in a set of three, the parameter
+is specified: e.g. datasources=opals.em[2]. If you wish to specify the first and third
+opal servers in a set specify: e.g. datasources=opals.em[2,3]}
 }
 \value{
 The main elements of the output returned by ds.glm are
@@ -391,7 +396,7 @@ R package metafor to meta-analyse the key parameters.
 #TO BE TRUE, AND THE ESTIMATED VALUE OF z-STATISTICS DOUBLED.
 #
 #$iter
-#
+
 #[1] 9
 #
 #$family
@@ -477,5 +482,5 @@ R package metafor to meta-analyse the key parameters.
 \link{ds.gee} for generalized estimating equation models
 }
 \author{
-Burton PR; Gaye A; LaFlamme P
+DataSHIELD Development Team
 }

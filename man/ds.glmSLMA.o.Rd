@@ -125,8 +125,12 @@ to be alerted
 much more quickly than this if there is a delay in convergence, or you may wish to
 allow MORE iterations.}
 
-\item{datasources}{a list of opal object(s) obtained after login to opal servers;
-these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.}
+\item{datasources}{specifies the particular opal object(s) to use, if it is not specified
+the default set of opals will be used. The default opals are always called default.opals.
+This parameter is set without inverted commas: e.g. datasources=opals.em or datasources=default.opals
+If you wish to specify the second opal server in a set of three, the parameter is specified:
+e.g. datasources=opals.em[2]. If you wish to specify the first and third opal servers in a set specify:
+e.g. datasources=opals.em[2,3]}
 }
 \value{
 many of the elements of the output list returned by ds.glmSLMA.o from
@@ -236,5 +240,5 @@ there is heterogeneity in the effect of scientific interest.
 \link{ds.lexis} for survival analysis using piecewise exponential regression
 }
 \author{
-Paul Burton, Demetris Avraam
+DataSHIELD Development Team
 }
