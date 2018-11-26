@@ -45,7 +45,7 @@ steps:
   displayName: 'Install R client'
 
 - bash: |
-    R -e "devtools::check(error_on='note')" 
+    R -e "devtools::check(error_on='warning')" 
   displayName: 'devtools::check()'
   continueOnError: true
   failOnStderr: true
