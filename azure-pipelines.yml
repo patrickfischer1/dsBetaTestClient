@@ -48,6 +48,7 @@ steps:
     R -e "devtools::check(error_on='note')" 
   displayName: 'devtools::check()'
   continueOnError: true
+  failOnStderr: true
 
 
 - bash: |
