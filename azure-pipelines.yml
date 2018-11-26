@@ -48,8 +48,6 @@ steps:
     R -e "devtools::check(error_on='warning')" 
   displayName: 'devtools::check()'
   continueOnError: true
-  failOnStderr: true
-
 
 - bash: |
     R CMD BATCH --quiet azure-pipelines.R azure-pipelines.Rout || true
