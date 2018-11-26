@@ -33,7 +33,7 @@ steps:
     git clone -b ubuntu16 https://github.com/datashield/datashield-infrastructure.git ../datashield-infrastructure
     pushd ../datashield-infrastructure/puppet/environments/datashield_travis && sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install && popd
     sudo /opt/puppetlabs/bin/puppet apply ../datashield-infrastructure/puppet/environments/datashield_travis/manifests/site.pp --environment datashield_travis --environmentpath ../datashield-infrastructure/puppet/environments
-  displayName: 'Install Server'
+  displayName: 'Install DataSHIELD server'
 
 - bash: |
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
@@ -42,11 +42,12 @@ steps:
     sudo apt-get install -qq libxml2-dev libcurl4-openssl-dev libssl-dev -y
     sudo apt-get install -qq r-base -y
     sudo R -e "install.packages('devtools', dependencies=TRUE)"
-  displayName: 'Install R'
+  displayName: 'Install R client'
 
 - bash: |
     R -e "devtools::check(error_on='note')" 
   displayName: 'devtools::check()'
+  continueOnError: true
 
 
 - bash: |
