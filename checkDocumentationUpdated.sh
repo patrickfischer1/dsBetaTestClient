@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 # Check if the documentation in the man directory matches what should be in it
 # based on what is in the headers of the R scripts.
-echo "starting"
-whereis find
-whereis sort
-whereis md5sum
+echo "Starting documentation check."
 
 # Concatenate all the files in the man dir into one long string and md5sum it.
 orig_sum=$(find man -type f | sort -u | xargs cat | md5sum)
 
 # Rebuild the documentation.
-R -e "devtools::document()" 2&> /dev/null
+R -e "devtools::document()"
 
 # Concatenate all the files in the man dir into one long string and md5sum it.
 new_sum=$(find man -type f | sort -u | xargs cat | md5sum)
