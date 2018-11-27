@@ -18,7 +18,7 @@
 options(verbose=FALSE)
 
 options(opal.username='administrator', 
-        opal.password='datashield_test&')
+        opal.password='password')
 
 options(opal.url='http://localhost:8080')
 #options(opal.url='http://demo.obiba.org:8080')
