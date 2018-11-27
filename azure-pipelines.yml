@@ -3,10 +3,11 @@ pool:
 
 steps:
 - bash: |
-    checkDocumentationUpdated.sh
-    displayName: 'roxygen2::roxygenise() run check'
-    continueOnError: true
-    failOnStderr: true
+    echo "hello"
+    ./checkDocumentationUpdated.sh
+  displayName: 'roxygen2::roxygenise() run check'
+  continueOnError: true
+  failOnStderr: true
 
 - bash: |
     sudo service mysql stop
