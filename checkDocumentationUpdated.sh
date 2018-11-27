@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Check if the documentation in the man directory matches what should be in it
 # based on what is in the headers of the R scripts.
 echo "starting"
