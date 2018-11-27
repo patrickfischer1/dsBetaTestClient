@@ -1,5 +1,9 @@
 # Check if the documentation in the man directory matches what should be in it
 # based on what is in the headers of the R scripts.
+echo "starting"
+whereis find
+whereis sort
+whereis md5sum
 
 # Concatenate all the files in the man dir into one long string and md5sum it.
 orig_sum=$(find man -type f | sort -u | xargs cat | md5sum)
