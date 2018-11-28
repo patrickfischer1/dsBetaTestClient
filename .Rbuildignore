@@ -1,5 +1,6 @@
 ## Ignore travis config file
 ^\.travis\.yml$
+^\.--travis\.yml--$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^azure-pipelines\.yml$
