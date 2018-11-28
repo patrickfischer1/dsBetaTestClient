@@ -12,7 +12,7 @@
 # Datashield test suite set up
 #
 
-#library(dsbaseclient)
+#library(dsBetaTestClient)
 #library(testthat)
 
 options(verbose=FALSE)
