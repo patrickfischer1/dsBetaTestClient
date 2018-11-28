@@ -45,8 +45,7 @@ steps:
   displayName: 'Install R client'
 
 - bash: |
-    echo "hello"
-    ./checkDocumentationUpdated.sh
+    ./checkDocumentationUpdated.sh 2>&1
   displayName: 'roxygen2::roxygenise() run check'
   continueOnError: true
   failOnStderr: true
