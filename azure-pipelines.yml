@@ -46,7 +46,7 @@ steps:
 
 - bash: |
     ./checkDocumentationUpdated.sh 2>&1
-  displayName: 'roxygen2::roxygenise() run check'
+  displayName: 'devtools::document() run check'
   continueOnError: true
   failOnStderr: true
 
@@ -55,14 +55,3 @@ steps:
   displayName: 'devtools::check()'
   continueOnError: true
   failOnStderr: true
-
-
-
-- bash: |
-    R CMD BATCH --quiet azure-pipelines.R azure-pipelines.Rout || true
-  displayName: 'Test'
-
-- bash: |
-    cat azure-pipelines.Rout
-    grep "0 error" azure-pipelines.Rout
-  displayName: 'Results'
