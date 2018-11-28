@@ -1,6 +1,6 @@
 Package: dsBetaTestClient
 Title: New DataSHIELD Client Functions
-Version: 0.1.4
+Version: 0.2.0
 Author: DataSHIELD Developers <datashield@newcastle.ac.uk>
 Maintainer: DataSHIELD Developers <datashield@newcastle.ac.uk>
 Description: Beta versions of new DataSHIELD client functions. Collected in this
@@ -12,5 +12,5 @@ Depends:
     dsGraphicsClient,
     dsModellingClient,
     opal
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Encoding: UTF-8
