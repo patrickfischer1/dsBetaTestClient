@@ -51,7 +51,7 @@ steps:
   failOnStderr: true
 
 - bash: |
-    R -e "devtools::check(error_on='warning')"
+    R -e "devtools::check(error_on='warning')"  2>&1
   displayName: 'devtools::check()'
   continueOnError: true
   failOnStderr: true
