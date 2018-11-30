@@ -31,9 +31,7 @@ user <- c(getOption("opal.username"), getOption("opal.username"), getOption("opa
 password <- c(getOption("opal.password"), getOption("opal.password"), getOption("opal.password"))
 table <- c("CNSIM.CNSIM1", "CNSIM.CNSIM2", "CNSIM.CNSIM3")
 logindata <- data.frame(server,url,user,password,table)
+opals <- datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))
 
-adminopals <- opal.login(username=getOption("opal.username"),password=getOption("opal.password"),url=getOption("opal.url"))
-opaladmin::dsadmin.install_package(opal=adminopals,pkg="dsBetaTest",githubusername="StuartWheater",ref="master")
-opal.logout(adminopals)
-
-opals <- opal::datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))
+# adminopals <- opal.login(username=getOption("opal.username"),password=getOption("opal.password"),url=getOption("opal.url"))
+# opaladmin::dsadmin.install_package(opal=adminopals,pkg="dsBetaTest",githubusername="StuartWheater",ref="master")
