@@ -1,5 +1,5 @@
 #' 
-#' @title ds.glmSLMA.o calling glmDS1.o, glmDSSLMA2.o
+#' @title ds.glmSLMA.o calling glmDS1.o, glmSLMADS2.o
 #' @description Fits a generalized linear model (glm) on data from a single or multiple sources
 #' @details Fits a glm on data from a single source or from multiple sources. In the latter case 
 #' (when using ds.glmSLMA.o), the glm is fitted to convergence in each data source and the
@@ -359,7 +359,7 @@ stop("DATA ERROR")
 
 #NOW CALL SECOND COMPONENT OF glmDS TO GENERATE SCORE VECTORS AND INFORMATION MATRICES
  
-    cally2 <- call('glmDSSLMA2.o', formula, family, offset, weights, dataName)
+    cally2 <- call('glmSLMADS2.o', formula, family, offset, weights, dataName)
 
     study.summary <- datashield.aggregate(datasources, cally2)
 

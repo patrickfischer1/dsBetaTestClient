@@ -2,7 +2,7 @@
 % Please edit documentation in R/ds.glmSLMA.o.R
 \name{ds.glmSLMA.o}
 \alias{ds.glmSLMA.o}
-\title{ds.glmSLMA.o calling glmDS1.o, glmDSSLMA2.o}
+\title{ds.glmSLMA.o calling glmDS1.o, glmSLMADS2.o}
 \usage{
 ds.glmSLMA.o(formula = NULL, family = NULL, offset = NULL,
   weights = NULL, combine.with.metafor = TRUE, dataName = NULL,
