@@ -2,7 +2,7 @@
 % Please edit documentation in R/ds.make.o.R
 \name{ds.make.o}
 \alias{ds.make.o}
-\title{ds.make}
+\title{ds.make.o}
 \usage{
 ds.make.o(toAssign = NULL, newobj = "newObject", datasources = NULL)
 }

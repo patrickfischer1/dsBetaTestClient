@@ -1,6 +1,4 @@
 #' 
-#################################################################################################### 100 hashes
-
 #' @title ds.dataFrame.o calling dataFrameDS.o
 #' @description Creates a data frame from its elemental components: pre-existing data frames;
 #' single variables; matrices
@@ -23,8 +21,6 @@
 #' the native R environment on the client server:
 #' x.components<-c('DF_input1','matrix.m','DF_input2', 'var_age'); 
 #' ds.dataFrame.o(x=x.components,newobj='DF_output')
-#' @param newobj This a character string providing a name for the output
-#' data.frame which defaults to 'df.new' if no name is specified.
 #' @param row.names	NULL or a single integer or character string specifying a
 #' column to be used as row names, or a character or integer vector giving the
 #' row names for the data frame.
@@ -47,16 +43,33 @@
 #' will be deleted.
 #' @param DataSHIELD.checks logical: If TRUE undertakes all DataSHIELD checks (time
 #' consuming). Default FALSE.
-#' @param datasources a list of opal object(s) obtained after login to opal servers;
-#' these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.
-#' @return the object specified by the newobj argument (or default name df.new) is written to the
-#' serverside and a validity message indicating whether the newobject has been correctly
-#' created at each source is returned to the client. If it has not been correctly created the return object
-#' return.info details in which source the problem exists and whether: (a) the object exists at all; (b) it has meaningful
-#' content indicated by a valid class. 
+#' @param newobj This a character string providing a name for the output
+#' data.frame which defaults to 'df_new' if no name is specified.
+#' @param datasources specifies the particular opal object(s) to use. If the <datasources>
+#' argument is not specified the default set of opals will be used. The default opals
+#' are called default.opals and the default can be set using the function
+#' {ds.setDefaultOpals.o}. If the <datasources> is to be specified, it should be set without
+#' inverted commas: e.g. datasources=opals.em or datasources=default.opals. If you wish to
+#' apply the function solely to e.g. the second opal server in a set of three,
+#' the argument can be specified as: e.g. datasources=opals.em[2].
+#' If you wish to specify the first and third opal servers in a set you specify:
+#' e.g. datasources=opals.em[c(1,3)]
+#' @return the object specified by the <newobj> argument (or default name <df_new>).
+#' which is written to the serverside. In addition, two validity messages are returned
+#' indicating whether <newobj> has been created in each data source and if so whether
+#' it is in a valid form. If its form is not valid in at least one study - e.g. because
+#' a disclosure trap was tripped and creation of the full output object was blocked -
+#' ds.dataFrame.o() also returns any studysideMessages that can explain the error in creating
+#' the full output object. As well as appearing on the screen at run time,if you wish to
+#' see the relevant studysideMessages at a later date you can use the {ds.message.o}
+#' function. If you type ds.message.o("newobj") it will print out the relevant
+#' studysideMessage from any datasource in which there was an error in creating <newobj>
+#' and a studysideMessage was saved. If there was no error and <newobj> was created
+#' without problems no studysideMessage will have been saved and ds.message.o("newobj")
+#' will return the message: "ALL OK: there are no studysideMessage(s) on this datasource".
 #' @author DataSHIELD Development Team
 #' @export
-ds.dataFrame.o<-function(x=NULL,newobj="df.new",row.names=NULL,check.rows=FALSE,check.names=TRUE,stringsAsFactors=TRUE,completeCases=FALSE,DataSHIELD.checks=FALSE,datasources=NULL){
+ds.dataFrame.o<-function(x=NULL,row.names=NULL,check.rows=FALSE,check.names=TRUE,stringsAsFactors=TRUE,completeCases=FALSE,DataSHIELD.checks=FALSE,newobj='df_new',datasources=NULL){
   
   # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
@@ -95,7 +108,7 @@ if(DataSHIELD.checks)
   
   # check newobj not actively declared as null
   if(is.null(newobj)){
-    newobj <- "df.new"
+    newobj <- "df_new"
   }
 }
 
@@ -185,9 +198,8 @@ if(num.duplicates[m]!="0")
   datashield.assign(datasources, newobj, as.symbol(cally))
   
  
- 
 #############################################################################################################
-#DataSHIELD MODULE: CHECK KEY DATA OBJECTS SUCCESSFULLY CREATED                                                     	#
+#DataSHIELD CLIENTSIDE MODULE: CHECK KEY DATA OBJECTS SUCCESSFULLY CREATED                                  #
 																											#
 #SET APPROPRIATE PARAMETERS FOR THIS PARTICULAR FUNCTION                                                 	#
 test.obj.name<-newobj																					 	#
@@ -222,10 +234,8 @@ for(j in 1:num.datasources){																			 	#
 if(obj.name.exists.in.all.sources && obj.non.null.in.all.sources){										 	#
 																											#
 	return.message<-																					 	#
-    paste0("Data object <", test.obj.name, "> created in all specified data sources")		 	 		 	#
+    paste0("A data object <", test.obj.name, "> has been created in all specified data sources")		 	#
 																											#
-																											#
-	return(list(return.message=return.message))															 	#
 																											#
 	}else{																								 	#
 																											#
@@ -241,12 +251,31 @@ if(obj.name.exists.in.all.sources && obj.non.null.in.all.sources){										 	#
 																											#
 	return.message<-list(return.message.1,return.message.2,return.message.3)							 	#
 																											#
-	return.info<-object.info																			 	#
+	}																										#
 																											#
-	return(list(return.info=return.info,return.message=return.message))									 	#
+	calltext <- call("messageDS.o", test.obj.name)															#
+    studyside.message<-datashield.aggregate(datasources, calltext)											#
+																											#	
+	no.errors<-TRUE																							#
+	for(nd in 1:num.datasources){																			#
+		if(studyside.message[[nd]]!="ALL OK: there are no studysideMessage(s) on this datasource"){			#
+		no.errors<-FALSE																					#
+		}																									#
+	}																										#	
 																											#
-	}																									 	#
-#END OF MODULE 5																						 	#
+																											#
+	if(no.errors){																							#
+	validity.check<-paste0("<",test.obj.name, "> appears valid in all sources")							    #
+	return(list(is.object.created=return.message,validity.check=validity.check))						    #
+	}																										#
+																											#
+if(!no.errors){																								#
+	validity.check<-paste0("<",test.obj.name,"> invalid in at least one source. See studyside.messages:")   #
+	return(list(is.object.created=return.message,validity.check=validity.check,					    		#
+	            studyside.messages=studyside.message))			                                            #
+	}																										#
+																											#
+#END OF CHECK OBJECT CREATED CORECTLY MODULE															 	#
 #############################################################################################################
 
 }
