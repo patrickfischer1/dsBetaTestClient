@@ -1,38 +1,67 @@
 #' 
-#################################################################################################### 100 hashes
-
-#' @title ds.Boole.o
-#' @description Converts the individual elements of a vector or other object into Boolean
-#' indicators(TRUE/FALSE or 1/0) based on the standard set of Boolean operators:
-#' ==, !=, >, >=, <, <=.
-#' @details A combination of operators reflected in AND can be obtained by multiplying two or more
-#' binary/Boolean vectors together: observations taking the value 1 in every vector will then
-#' take the value 1 while all others will take the value 0. The combination OR can be obtained by
-#' adding two or more vectors and then then reapply ds.Boole.o using the operator >= 1: any
-#' observation taking the value 1 in one or more vectors will take the value 1 in the final vector.
-#' @param V1 A character string specifying the name of the vector to which the Boolean operator
-#' is to be applied
-#' @param V2 A character string specifying the name of the vector or scalar to which <V1> is to
-#' be compared. So, if <V2> is a scalar (e.g. '4') and the Boolean operator is '<=', the
-#' output vector will be a binary/Boolean variable with elements taking the value 1 or TRUE
-#' if the corresponding element of <V1> is 4 or less and 0 or FALSE otherwise. On the other
-#' hand, if <V2> is a vector and the Boolean operator is '==', the output vector will be a
-#' binary/Boolean variable with elements taking the value 1 or TRUE if the corresponding
-#' elements of <V1> and <V2> are equal and 0 or FALSE otherwise. If <V2> is a vector rather than
-#' a scalar it must be of the same length as <V1>
-#' @param Boolean.operator A character string specifying one of six possible Boolean operators:
-#' '==', '!=', '>', '>=', '<', '<='
-#' @param numeric.output a TRUE/FALSE indicator defaulting to TRUE determining whether the final
-#' output variable should be of class numeric (1/0) or class logical (TRUE/FALSE). It is easy
-#' to convert a logical class variable to numeric using the ds.asNumeric() function and to
-#' convert a numeric (1/0) variable to logical you can apply ds.Boole.o with <Boolean.operator>
-#' '==', <V2> the scalar '1' and <numeric.output> FALSE. 
-#' @param na.assign A character string taking values 'NA', '1' or '0'. If 'NA' then any NA
-#' values in the input vector remain as NAs in the output vector. If '1' or '0' NA values in
-#' the input vector are all converted to 1 or 0 respectively.
-#' @param newobj A character string specifying the name of the vector to which the output
-#' vector is to be written. If no <newobj> argument is specified, the output vector defaults
-#' to "V1_Boole" where <V1> is the first argument of the function.
+#' @title ds.dataFrameSort.o calling dataFrameSortDS.o
+#' @description Sorts a data frame using a specified sort key
+#' @details A data frame is a list of variables all with the same number of rows,
+#' which is of class 'data.frame'. ds.dataFrameSort.o will sort a specified
+#' data.frame on the serverside using a sort key also on the serverside. The
+#' sort key can either sit in the data.frame or outside it. The sort key
+#' can be forced to be interpreted as either alphabetic or numeric
+#' but not both. If neither interpretation is forced, the sort.key will
+#' interpreted naturally: as numeric if it is numeric, otherwise as alphabetic
+#' ie as if it is a vector of character strings.
+#'
+#' It should be noted that although we are all well used to seeing numbers
+#' sorted numerically, and character strings (words) sorted alphabetically
+#' when a numeric vector is sorted alphabetically, the order can look confusing.
+#' It is worth mentioning this because Opal sometimes sorts its data tables
+#' alphabetically using ID. This can be confusing and one of the reasons for
+#' using the ds.dataFrameSort.o() function is to re-sort a data.frame derived
+#' from an Opal data table so its order is more natural. To explain alphabetic
+#' and numeric sorting further, here are some illustrations.
+#' SORTING NUMBERS:
+#' vector.2.sort = (-192   76  841   NA 1670  163  147  101 -112 -231   -9  119  112   NA)
+#' numeric.sort = (-231 -192 -112   -9   76  101  112  119  147  163  841 1670   NA   NA)
+#' alphabetic.sort = (-112 -192 -231   -9  101  112  119  147  163 1670   76  841   NA   NA)
+#' Notes:
+#' Ascending numeric sorting of a numeric vector orders the values in
+#' naturally increasing manner with negative values first. The positioning of NAs
+#' (missing values) defaults to last.
+#' Ascending alphabetic sorting of a numeric vector treats each number as a word
+#' and then working from the front of the word, sorts all numbers by the first
+#' character of the word, then breaks ties using the second character and so on.
+#' ie as is usual in alphabetic sorting of alphabetic words. The sort order can
+#' look strange in certain settings. (1) If a number is negative, the first character is
+#' '-' which lies ahead of any of the numeric digits in the alphanumeric alphabet. Thus
+#' negative numbers appear first (as in numeric sorting) but the ordering of the
+#' negative numbers is then the opposite way round to expectation. Thus, instead of
+#' the order -231, -192, -112, as in the numeric sort one obtains -112, -192, -231.
+#' This is because these three numbers 'tie' on the first character '-' so are then
+#' sorted on their second characters. The individual numeric digits have the same
+#' alphabetic order as numeric order (0,1,2, ... , 8, 9). This means that having tied
+#' on '-' the numbers with second character '1' come before those with second character
+#' '2'. (2) Under a numeric sorts, and assuming no decimal point or negative sign,
+#' numbers with more digits are of larger magnitude than those with fewer. But under
+#' an alphabetic sort all that matters is the sort order of the first character
+#' that is not tied with the corresponding number in another number.
+#' So the numerically sorted set of numbers 76 841 1670 becomes 1670 76  841
+#' under alphabetic sorting.
+#' SORTING CHARACTER STRINGS (WORDS):
+#' words.2.sort = ("a"  "L"  "p"  "h"  "A"  ""   "nu" "Me" "R"  "IC" "")
+#' alphabetic.sort = (""   ""   "a"  "A"  "h"  "IC" "L"  "Me" "nu" "p"  "R")
+#' There are few surprises here, perhaps the only thing to note is that
+#' missing values (empty strings) get ordered first by default rather than last. 
+#' @param df.name a character string providing the name for the data.frame
+#' to be sorted
+#' @param sort.key.name a character string providing the name for the sort key
+#' @param sort.descending logical, if TRUE the data.frame will be sorted
+#' by the sort key in descending order. Default = FALSE (sort order ascending)
+#' @param sort.alphabetic logical, if TRUE the sort key is treated as if alphabetic
+#' Default=FALSE.
+#' @param sort.numeric logical, if TRUE the sort key is treated as if numeric
+#' Default=FALSE.
+#' @param newobj This a character string providing a name for the output
+#' data.frame which defaults to '<df.name>_sorted' if no name is specified
+#' where <df.name> is the first argument of ds.dataFrameSort.o().
 #' @param datasources specifies the particular opal object(s) to use. If the <datasources>
 #' argument is not specified the default set of opals will be used. The default opals
 #' are called default.opals and the default can be set using the function
@@ -42,12 +71,12 @@
 #' the argument can be specified as: e.g. datasources=opals.em[2].
 #' If you wish to specify the first and third opal servers in a set you specify:
 #' e.g. datasources=opals.em[c(1,3)]
-#' @return the object specified by the <newobj> argument (or default name <V1>_Boole)
+#' @return the object specified by the <newobj> argument (or default name <df.name>_sorted)
 #' which is written to the serverside. In addition, two validity messages are returned
 #' indicating whether <newobj> has been created in each data source and if so whether
 #' it is in a valid form. If its form is not valid in at least one study - e.g. because
 #' a disclosure trap was tripped and creation of the full output object was blocked -
-#' ds.Boole.o also returns any studysideMessages that can explain the error in creating
+#' ds.dataFrameSort.o() also returns any studysideMessages that can explain the error in creating
 #' the full output object. As well as appearing on the screen at run time,if you wish to
 #' see the relevant studysideMessages at a later date you can use the {ds.message.o}
 #' function. If you type ds.message.o("newobj") it will print out the relevant
@@ -57,82 +86,24 @@
 #' will return the message: "ALL OK: there are no studysideMessage(s) on this datasource".
 #' @author DataSHIELD Development Team
 #' @export
-#'
-ds.Boole.o<-function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=TRUE, na.assign="NA",newobj=NULL, datasources=NULL){
-  
-  # if no opal login details are provided look for 'opal' objects in the environment
+ds.dataFrameSort.o<-function(df.name=NULL, sort.key.name=NULL, sort.descending=FALSE, sort.alphabetic=FALSE,sort.numeric=FALSE, newobj=NULL, datasources=NULL){
+
+   # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
     datasources <- findLoginObjects()
   }
+ 
+  if(is.null(newobj)){newobj<-paste0(df.name,"_sorted")}
   
-  # check if user has provided the name of the column or scalar that holds V1
-  if(is.null(V1)){
-    stop("Please provide the name of the column or scalar that holds V1!", call.=FALSE)
-  }
-
-  # check if user has provided the name of a column or scalar holding V2 or has declared a scalar value: eg '3'
-  if(is.null(V2)){
-    stop("Please provide the name of a column or scalar holding V2 or declare a scalar in character format: eg '3'", call.=FALSE)
-  }
-
-  # check if user has provided a Boolean operator in character format: eg '==' or '>=' or '<' or '!='
-  if(is.null(Boolean.operator)){
-    stop("Please provide a Boolean operator in character format: eg '==' or '>=' or '<' or '!='", call.=FALSE)
-  }
-  
-  #check if na.assign has legal value
-  if(!(na.assign=="NA"||na.assign=="0"||na.assign=="1")){
-    stop("Error: na.assign must be a character string taking value 'NA', '0' or '1'- if <na.action> not specified default is 'NA'", call.=FALSE)
-  }
-  
-  
-
-#convert Boolean operator to numeric
-
-BO.n<-0
-if(Boolean.operator == "=="){
-   BO.n<-1
-}
-
-if(Boolean.operator == "!="){
-   BO.n<-2
-}
-
-if(Boolean.operator == "<"){
-   BO.n<-3
-}
-
-if(Boolean.operator == "<="){
-   BO.n<-4
-}
-
-if(Boolean.operator == ">"){
-   BO.n<-5
-}
-
-if(Boolean.operator == ">="){
-   BO.n<-6
-}
-
-  # if no value spcified for output object, then specify a default
-  if(is.null(newobj)){
-    newobj <- paste0(V1,"_Boole")
-  }
-
-# CALL THE MAIN SERVER SIDE FUNCTION
-  calltext <- call("BooleDS.o", V1, V2, BO.n, na.assign,numeric.output)
-  datashield.assign(datasources, newobj, calltext)
+    calltext <- call("dataFrameSortDS.o", df.name, sort.key.name, sort.descending, sort.alphabetic, sort.numeric)
+  	datashield.assign(datasources, newobj, calltext)
 
 #############################################################################################################
 #DataSHIELD CLIENTSIDE MODULE: CHECK KEY DATA OBJECTS SUCCESSFULLY CREATED                                  #
 																											#
 #SET APPROPRIATE PARAMETERS FOR THIS PARTICULAR FUNCTION                                                 	#
 test.obj.name<-newobj																					 	#
-																											#
-#TRACER																									 	#
-#return(test.obj.name)																					 	#
-#}                                                                                   					 	#
-																											#
+																											#																											#
 																											#							
 # CALL SEVERSIDE FUNCTION                                                                                	#
 calltext <- call("testObjExistsDS.o", test.obj.name)													 	#
@@ -202,7 +173,6 @@ if(!no.errors){																								#
 																											#
 #END OF CHECK OBJECT CREATED CORECTLY MODULE															 	#
 #############################################################################################################
-
 }
-#ds.Boole.o
+#ds.dataFrameSort.o
 

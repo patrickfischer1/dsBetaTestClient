@@ -2,11 +2,11 @@
 % Please edit documentation in R/ds.glmSLMA.o.R
 \name{ds.glmSLMA.o}
 \alias{ds.glmSLMA.o}
-\title{ds.glmSLMA.o calling glmDS1.o, glmDSSLMA2.o}
+\title{ds.glmSLMA.o calling glmDS1.o, glmSLMADS2.o}
 \usage{
 ds.glmSLMA.o(formula = NULL, family = NULL, offset = NULL,
-  weights = NULL, dataName = NULL, checks = FALSE, maxit = 15,
-  datasources = NULL)
+  weights = NULL, combine.with.metafor = TRUE, dataName = NULL,
+  checks = FALSE, maxit = 15, datasources = NULL)
 }
 \arguments{
 \item{formula}{Denotes an object of class formula which is a character string which describes
@@ -46,7 +46,7 @@ the model. At present
 ds.glm has been written to fit family="gaussian" (i.e. a
 conventional linear model, family="binomial"
 (i.e. a conventional
-[unconditional] logistic regression model), and family = "poisson" (i.e. a
+unconditional logistic regression model), and family = "poisson" (i.e. a
 Poisson regression model - of which perhaps the most commonly used application
 is for survival analysis
 using Piecewise Exponential Regression (PER) which
@@ -91,6 +91,11 @@ written directly into the glm formula. Using weights provides an alternative way
 to fit PER models
 if you want to avoid using an offset, but this approach may be viewed as less 'elegant'}
 
+\item{combine.with.metafor}{This argument is Boolean. If TRUE (the default) the
+estimates and standard errors for each regression coefficient are pooled across
+studies using random effects meta-analysis under maximum likelihood (ML),
+restricted maximum likelihood (REML), or fixed effects meta-analysis (FE).}
+
 \item{dataName}{A character string specifying the name of an (optional) dataframe that contains
 all of the variables in the glm formula. This avoids you having to specify the name of the
 dataframe in front of each covariate in the formula e.g. if the dataframe is
@@ -120,25 +125,33 @@ to be alerted
 much more quickly than this if there is a delay in convergence, or you may wish to
 allow MORE iterations.}
 
-\item{datasources}{a list of opal object(s) obtained after login to opal servers;
-these objects also hold the data assigned to R, as a \code{dataframe}, from opal datasources.}
+\item{datasources}{specifies the particular opal object(s) to use, if it is not specified
+the default set of opals will be used. The default opals are always called default.opals.
+This parameter is set without inverted commas: e.g. datasources=opals.em or datasources=default.opals
+If you wish to specify the second opal server in a set of three, the parameter is specified:
+e.g. datasources=opals.em[2]. If you wish to specify the first and third opal servers in a set specify:
+e.g. datasources=opals.em[2,3]}
 }
 \value{
 many of the elements of the output list returned by ds.glmSLMA.o from
 each study separately are 
 equivalent to those from glm() in native R with potentially disclosive elements
-such as individual-level residuals and linear predictors blocked. The most important
+such as individual-level residuals and linear predictors blocked. 
+The return results from each study appear first in the return list with one
+block of results from each study in the order they appear in datasources.
+As regards the elements within each study the most important
 elements are included last in the return list because they then appear at the
 bottom of a simple print out of the return object. In reverse order, these
 key elements in reverse order are:
 
-coefficients a matrix in which the first column contains the names of
+coefficients:- a matrix in which the first column contains the names of
 all of the regression parameters (coefficients) in the model, the second column
 contains the estimated values, the third their corresponding standard errors,
 the fourth the ratio of estimate/standard error and the fifth the p-value
 treating that as a standardised normal deviate
 
-family:- indicates the error distribution and link function used in the glm
+family:- indicates the error distribution and link function used
+in the glm
 
 formula:- see description of formula as an input parameter (above)
 
@@ -168,14 +181,14 @@ Nvalid:- the number of valid (non-missing) observations in the given study
 
 Ntotal:- the total number of observations in the given study (Nvalid+Nmissing)
 
-data:-  equivalent to input parameter dataName (above)
+data:- - equivalent to input parameter dataName (above)
 
 dispersion:- - the estimated dispersion parameter: deviance.resid/df.resid for
 a gaussian family multiple regression model, 1.0 for logistic and poisson regression
 
-call:-  summary of key elements of the call to fit the model
+call:- - summary of key elements of the call to fit the model
 
-na.action:- chosen method of dealing with NAs. Commonly na.action=nam.omit
+na.action:- - chosen method of dealing with NAs. Commonly na.action=nam.omit
 indicating any individual with any data missing that are needed for the model is
 exluded from the fit. This includes the outcome variable, covariates,
 or any values in a regression weight vector or offset vector. By including
@@ -188,6 +201,21 @@ iter:- the number of iterations required to achieve convergence
 there are a small number of more esoteric items of information returned
 by ds.glmSLMA.o. Additional information about these can be found in the help
 file for the glm() function in native R.
+
+input.beta.matrix.for.SLMA:- a matrix containing the vector of coefficient
+estimates from each study. In combination with the corresponding standard errors
+(see input.se.matrix.for.SLMA) these can be imported directly into a study level
+meta-analysis (SLMA) package such as metafor to generate estimates pooled via SLMA
+
+input.se.matrix.for.SLMA:- a matrix containing the vector of standard error
+estimates for coefficients from each study. In combination with the coefficients
+(see input.beta.matrix.for.SLMA) these can be imported directly into a study level
+meta-analysis (SLMA) package such as metafor to generate estimates pooled via SLMA
+
+SLMA.pooled.estimates:- a matrix containing pooled estimates for each
+regression coefficient across all studies with pooling under SLMA via 
+random effects meta-analysis under maximum likelihood (ML), restricted maximum
+likelihood (REML) or via fixed effects meta-analysis (FE)
 }
 \description{
 Fits a generalized linear model (glm) on data from a single or multiple sources
@@ -212,5 +240,5 @@ there is heterogeneity in the effect of scientific interest.
 \link{ds.lexis} for survival analysis using piecewise exponential regression
 }
 \author{
-DataSHIELD team
+DataSHIELD Development Team
 }
