@@ -19,7 +19,7 @@ library(opaladmin)
 
 options(verbose=FALSE)
 
-options(opal.username='administrator', 
+options(opal.username='administrator',
         opal.password='password')
 
 options(opal.url='http://localhost:8080')
