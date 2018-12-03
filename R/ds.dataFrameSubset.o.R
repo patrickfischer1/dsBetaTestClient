@@ -1,38 +1,59 @@
-#' 
-#################################################################################################### 100 hashes
-
-#' @title ds.Boole.o
-#' @description Converts the individual elements of a vector or other object into Boolean
-#' indicators(TRUE/FALSE or 1/0) based on the standard set of Boolean operators:
-#' ==, !=, >, >=, <, <=.
-#' @details A combination of operators reflected in AND can be obtained by multiplying two or more
-#' binary/Boolean vectors together: observations taking the value 1 in every vector will then
-#' take the value 1 while all others will take the value 0. The combination OR can be obtained by
-#' adding two or more vectors and then then reapply ds.Boole.o using the operator >= 1: any
-#' observation taking the value 1 in one or more vectors will take the value 1 in the final vector.
-#' @param V1 A character string specifying the name of the vector to which the Boolean operator
-#' is to be applied
-#' @param V2 A character string specifying the name of the vector or scalar to which <V1> is to
-#' be compared. So, if <V2> is a scalar (e.g. '4') and the Boolean operator is '<=', the
-#' output vector will be a binary/Boolean variable with elements taking the value 1 or TRUE
-#' if the corresponding element of <V1> is 4 or less and 0 or FALSE otherwise. On the other
-#' hand, if <V2> is a vector and the Boolean operator is '==', the output vector will be a
-#' binary/Boolean variable with elements taking the value 1 or TRUE if the corresponding
-#' elements of <V1> and <V2> are equal and 0 or FALSE otherwise. If <V2> is a vector rather than
-#' a scalar it must be of the same length as <V1>
+#' @title ds.dataFrameSubset.o calling dataFrameSubsetDS1.o and dataFrameSubsetDS2.o
+#' @description Subsets a data frame by row or by column.
+#' @details A data frame is a list of variables all with the same number of rows,
+#' which is of class 'data.frame'. ds.dataFrameSubset.o will subset a 
+#' pre-existing data.frame by specifying the values of a subsetting variable
+#' (subsetting by row) or by selecting columns to keep or remove (subsetting
+#' by column). When subsetting by row, the resultant subset must strictly be
+#' as large or larger than the disclosure trap value nfilter.subset. If you
+#' wish to keep all rows in the subset (e.g. if the primary plan is to subset by column
+#' not by row) then V1.name can be used to specify a vector of the same length
+#' as the data.frame to be subsetted in each study in which every
+#' element is 1 and there are no NAs. Such a vector can be created as follows:
+#' First identify a convenient numeric variable with no missing values (typically a numeric
+#' individual ID) let us call it indID, which is equal in length to the data.frame
+#' to be subsetted. Then use the ds.make.o() function with the call
+#' ds.make.o('indID-indID+1','ONES'). This creates a vector of ones (called 'ONES')
+#' in each source equal in length to the indID vector in that source. 
+#' @param df.name a character string providing the name for the data.frame
+#' to be sorted. 
+#' @param V1.name A character string specifying the name of a subsetting vector
+#' to which a Boolean operator will be applied to define the subset to be created. Note
+#' if the plan is to subset by column using ALL rows, then <V1.name>
+#' might, for example, specify a vector consisting all of ones (see 'details' for how
+#' to create such a vector.
+#' @param V2.name A character string specifying the name of the vector
+#' or scalar to which the values in the vector specified by the argument <V1.name>
+#' is to be compared. So, for example, if <V2.name>
+#' is a scalar (e.g. '4')
+#' and the <Boolean.operator> argument is '<=', the subset data.frame that is created
+#' will include all rows that correspond to a value of 4 or less in the subsetting
+#' vector specified by the <V1.name> argument. If <V2.name> specifies a vector
+#' (which must be of strictly the same length as the vector specified by <V1.name>)
+#' and the <Boolean.operator> argument is '==', the subset data.frame that is
+#' created will include
+#' all rows in which the values in the vectors specified by <V1.name> and <V2.name>
+#' are equal. If you are subsetting by column and want to keep all rows in the final subset,
+#' <V1.name> can be specified as indicating a "ONES" vector created as described (above)
+#' under 'details', <V2.name> can be specified as the scalar "1" and the <Boolean operator>
+#' argument can be specified as "=="
 #' @param Boolean.operator A character string specifying one of six possible Boolean operators:
 #' '==', '!=', '>', '>=', '<', '<='
-#' @param numeric.output a TRUE/FALSE indicator defaulting to TRUE determining whether the final
-#' output variable should be of class numeric (1/0) or class logical (TRUE/FALSE). It is easy
-#' to convert a logical class variable to numeric using the ds.asNumeric() function and to
-#' convert a numeric (1/0) variable to logical you can apply ds.Boole.o with <Boolean.operator>
-#' '==', <V2> the scalar '1' and <numeric.output> FALSE. 
-#' @param na.assign A character string taking values 'NA', '1' or '0'. If 'NA' then any NA
-#' values in the input vector remain as NAs in the output vector. If '1' or '0' NA values in
-#' the input vector are all converted to 1 or 0 respectively.
-#' @param newobj A character string specifying the name of the vector to which the output
-#' vector is to be written. If no <newobj> argument is specified, the output vector defaults
-#' to "V1_Boole" where <V1> is the first argument of the function.
+#' @param keep.cols a numeric vector specifying the numbers of the columns to be kept in the
+#' final subset when subsetting by column. For example: keep.cols=c(2:5,7,12) will keep
+#' columns 2,3,4,5,7 and 12.
+#' @param rm.cols a numeric vector specifying the numbers of the columns to be removed before
+#' creating the final subset when subsetting by column. For example: rm.cols=c(2:5,7,12)
+#' will remove columns 2,3,4,5,7 and 12.
+#' @param keep.NAs logical, if TRUE any NAs in the vector holding the final Boolean vector
+#' indicating whether a given row should be included in the subset will be converted into
+#' 1s and so they will be included in the subset. Such NAs could be caused by NAs in
+#' either <V1.name> or <V2.name>. If FALSE or NULL NAs in the final Boolean vector will
+#' be converted to 0s and the corresponding row will therefore be excluded from the subset.
+#' @param newobj This a character string providing a name for the subset
+#' data.frame representing the primary output of the ds.dataFrameSubset.o() function.
+#' This defaults to '<df.name>_subset' if no name is specified
+#' where <df.name> is the first argument of ds.dataFrameSubset.o()
 #' @param datasources specifies the particular opal object(s) to use. If the <datasources>
 #' argument is not specified the default set of opals will be used. The default opals
 #' are called default.opals and the default can be set using the function
@@ -42,12 +63,12 @@
 #' the argument can be specified as: e.g. datasources=opals.em[2].
 #' If you wish to specify the first and third opal servers in a set you specify:
 #' e.g. datasources=opals.em[c(1,3)]
-#' @return the object specified by the <newobj> argument (or default name <V1>_Boole)
+#' @return the object specified by the <newobj> argument (or default name '<df.name>_subset').
 #' which is written to the serverside. In addition, two validity messages are returned
 #' indicating whether <newobj> has been created in each data source and if so whether
 #' it is in a valid form. If its form is not valid in at least one study - e.g. because
 #' a disclosure trap was tripped and creation of the full output object was blocked -
-#' ds.Boole.o also returns any studysideMessages that can explain the error in creating
+#' ds.dataFrame.o() also returns any studysideMessages that can explain the error in creating
 #' the full output object. As well as appearing on the screen at run time,if you wish to
 #' see the relevant studysideMessages at a later date you can use the {ds.message.o}
 #' function. If you type ds.message.o("newobj") it will print out the relevant
@@ -57,22 +78,27 @@
 #' will return the message: "ALL OK: there are no studysideMessage(s) on this datasource".
 #' @author DataSHIELD Development Team
 #' @export
-#'
-ds.Boole.o<-function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=TRUE, na.assign="NA",newobj=NULL, datasources=NULL){
+
+ds.dataFrameSubset.o<-function(df.name=NULL, V1.name=NULL, V2.name=NULL, Boolean.operator=NULL, keep.cols=NULL, rm.cols=NULL, keep.NAs=NULL, newobj=NULL, datasources=NULL){
   
   # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
     datasources <- findLoginObjects()
   }
   
+  # check if user has provided the name of the data.frame to be subsetted
+  if(is.null(df.name)){
+    stop("Please provide the name of the data.frame to be subsetted as a character string: eg 'xxx'", call.=FALSE)
+  }
+   
   # check if user has provided the name of the column or scalar that holds V1
-  if(is.null(V1)){
-    stop("Please provide the name of the column or scalar that holds V1!", call.=FALSE)
+  if(is.null(V1.name)){
+    stop("Please provide the name of the column or scalar that holds V1 as a character string: eg 'xxx' or '3'", call.=FALSE)
   }
 
-  # check if user has provided the name of a column or scalar holding V2 or has declared a scalar value: eg '3'
-  if(is.null(V2)){
-    stop("Please provide the name of a column or scalar holding V2 or declare a scalar in character format: eg '3'", call.=FALSE)
+    # check if user has provided the name of the column or scalar that holds V2
+  if(is.null(V2.name)){
+    stop("Please provide the name of the column or scalar that holds V2 as a character string: eg 'xxx' or '3'", call.=FALSE)
   }
 
   # check if user has provided a Boolean operator in character format: eg '==' or '>=' or '<' or '!='
@@ -80,12 +106,10 @@ ds.Boole.o<-function(V1=NULL, V2=NULL, Boolean.operator=NULL, numeric.output=TRU
     stop("Please provide a Boolean operator in character format: eg '==' or '>=' or '<' or '!='", call.=FALSE)
   }
   
-  #check if na.assign has legal value
-  if(!(na.assign=="NA"||na.assign=="0"||na.assign=="1")){
-    stop("Error: na.assign must be a character string taking value 'NA', '0' or '1'- if <na.action> not specified default is 'NA'", call.=FALSE)
+  #if keep.NAs is set as NULL convert to FALSE as otherwise the call to datashield.assign will fail
+  if(is.null(keep.NAs)){
+  keep.NAs<-FALSE
   }
-  
-  
 
 #convert Boolean operator to numeric
 
@@ -116,23 +140,46 @@ if(Boolean.operator == ">="){
 
   # if no value spcified for output object, then specify a default
   if(is.null(newobj)){
-    newobj <- paste0(V1,"_Boole")
+    newobj <- paste0(df.name,"_subset")
   }
 
-# CALL THE MAIN SERVER SIDE FUNCTION
-  calltext <- call("BooleDS.o", V1, V2, BO.n, na.assign,numeric.output)
-  datashield.assign(datasources, newobj, calltext)
+ if(!is.null(keep.cols)){
+  keep.cols<-paste0(as.character(keep.cols),collapse=",")
+ } 
+ 
+if(!is.null(rm.cols)){
+  rm.cols<-paste0(as.character(rm.cols),collapse=",")
+ } 
+  
+  
+  
+    calltext1 <- call("dataFrameSubsetDS1.o", df.name, V1.name, V2.name, BO.n, keep.cols, rm.cols, keep.NAs=keep.NAs)
+  	return.warning.message<-datashield.aggregate(datasources, calltext1)
+
+    calltext2 <- call("dataFrameSubsetDS2.o", df.name, V1.name, V2.name, BO.n, keep.cols, rm.cols, keep.NAs=keep.NAs)
+  	datashield.assign(datasources, newobj, calltext2)
+	
+ 
+	numsources<-length(datasources)
+	for(s in 1:numsources){
+	num.messages<-length(return.warning.message[[s]])
+	if(num.messages==1){
+	cat("\nSource",s,"\n",return.warning.message[[s]][[1]],"\n\n")
+	}else{
+	cat("\nSource",s,"\n")
+		for(m in 1:(num.messages-1)){
+		cat(return.warning.message[[s]][[m]],"\n")
+		}
+		cat(return.warning.message[[s]][[num.messages]],"\n\n")
+	}
+}
 
 #############################################################################################################
 #DataSHIELD CLIENTSIDE MODULE: CHECK KEY DATA OBJECTS SUCCESSFULLY CREATED                                  #
 																											#
 #SET APPROPRIATE PARAMETERS FOR THIS PARTICULAR FUNCTION                                                 	#
 test.obj.name<-newobj																					 	#
-																											#
-#TRACER																									 	#
-#return(test.obj.name)																					 	#
-#}                                                                                   					 	#
-																											#
+																											#																											#
 																											#							
 # CALL SEVERSIDE FUNCTION                                                                                	#
 calltext <- call("testObjExistsDS.o", test.obj.name)													 	#
@@ -204,5 +251,5 @@ if(!no.errors){																								#
 #############################################################################################################
 
 }
-#ds.Boole.o
+#ds.dataFrameSubset.o
 
