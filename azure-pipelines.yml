@@ -45,13 +45,11 @@ steps:
   displayName: 'Install R client'
 
 - bash: |
-    ./checkDocumentationUpdated.sh 2>&1
-  displayName: 'devtools::document() run check'
+    R CMD BATCH --quiet azure-pipelines.R azure-pipelines.Rout || true
+  displayName: 'Tests and Checks'
   continueOnError: true
-  failOnStderr: true
 
 - bash: |
-    R -e "devtools::check(error_on='warning')"  2>&1
-  displayName: 'devtools::check()'
-  continueOnError: true
-  failOnStderr: true
+    cat azure-pipelines.Rout
+    ./checkDocumentationUpdated.sh && grep "0 error" azure-pipelines.Rout && grep "Failed:   0" azure-pipelines.Rout
+  displayName: 'Results'

@@ -1,5 +1,6 @@
 library(devtools)
 
-check()
+devtools::check()
+devtools::test()
 
 quit(status=0)
