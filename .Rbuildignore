@@ -6,3 +6,4 @@
 ^azure-pipelines\.yml$
 ^azure-pipelines\.R$
 ^azure-pipelines\.Rout$
+^checkDocumentationUpdated\.sh$

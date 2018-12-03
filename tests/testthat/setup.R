@@ -25,14 +25,15 @@ options(opal.username='administrator',
 options(opal.url='http://localhost:8080')
 #options(opal.url='http://demo.obiba.org:8080')
 
-adminopals <- opal.login(username=getOption("opal.username"),password=getOption("opal.password"),url=getOption("opal.url"))
-opaladmin::dsadmin.install_package(opal=adminopals,pkg="dsBetaTest",githubusername="datashield",ref="master")
-opal.logout(adminopals)
-
 server <- c("sim1", "sim2", "sim3")
 url <- c(getOption("opal.url"), getOption("opal.url"), getOption("opal.url"))
 user <- c(getOption("opal.username"), getOption("opal.username"), getOption("opal.username"))
 password <- c(getOption("opal.password"), getOption("opal.password"), getOption("opal.password"))
 table <- c("CNSIM.CNSIM1", "CNSIM.CNSIM2", "CNSIM.CNSIM3")
 logindata <- data.frame(server,url,user,password,table)
+
+adminopals <- datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))
+opaladmin::dsadmin.install_package(opal=adminopals,pkg="dsBetaTest",githubusername="datashield",ref="master")
+datashield.logout(adminopals)
+
 opals <- datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))
