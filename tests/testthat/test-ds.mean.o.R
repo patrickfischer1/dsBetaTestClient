@@ -23,7 +23,7 @@ source("setup.R")
 
 context("dsBetaTestClient::ds.mean.o(type=combine)")
 
-stat.mean <- ds.mean.o(x='D$LAB_TSC',type='combine')
+stat.mean <- ds.mean.o(x='D$LAB_TSC',type='combine',datasources=opals)
 #print(stat.mean)
 test_that("mean values [combine]", {
   expect_false(is.na(stat.mean$Global.Mean[1]))
@@ -32,7 +32,7 @@ test_that("mean values [combine]", {
 
 context("dsBetaTestClient::ds.mean.o(type=combine) loose")
  ds.assign("D$LAB_TSC", "tsc")
-stat.mean <- ds.mean.o(x='tsc',type='combine')
+stat.mean <- ds.mean.o(x='tsc',type='combine',datasources=opals)
 #print(stat.mean)
 test_that("mean values [combine] loose", {
   expect_false(is.na(stat.mean$Global.Mean[1]))
@@ -41,7 +41,7 @@ test_that("mean values [combine] loose", {
 
 context("dsBetaTestClient::ds.mean.o(type=split)")
 
-stat.mean <- ds.mean.o(datasources=opals, x='D$LAB_TSC', type='split')
+stat.mean <- ds.mean.o(datasources=opals, x='D$LAB_TSC', type='split',datasources=opals)
 #print(stat.mean)
 test_that("mean values [split]", {
   expect_false(is.na(stat.mean$Mean.by.Study[1]))
@@ -55,9 +55,9 @@ test_that("mean values [split]", {
 context("dsBetaTestClient::ds.mean.o() test errors")
 ds.asCharacter(x='D$LAB_TSC', newobj="not_a_numeric")
 test_that("mean_erros", {
-    expect_error(ds.mean.o(), "Please provide the name of the input vector!", fixed=TRUE)
-    expect_error(ds.mean.o(x='D$LAB_TSC', type='datashield'), 'Function argument "type" has to be either "combine" or "split"', fixed=TRUE)
-    expect_error(ds.mean.o(x='not_a_numeric'), "The input object must be an integer or a numeric vector.", fixed=TRUE)
+    expect_error(ds.mean.o(datasources=opals), "Please provide the name of the input vector!", fixed=TRUE)
+    expect_error(ds.mean.o(x='D$LAB_TSC', type='datashield',datasources=opals), 'Function argument "type" has to be either "combine" or "split"', fixed=TRUE)
+    expect_error(ds.mean.o(x='not_a_numeric',datasources=opals), "The input object must be an integer or a numeric vector.", fixed=TRUE)
 })
 #
 # Tear down
