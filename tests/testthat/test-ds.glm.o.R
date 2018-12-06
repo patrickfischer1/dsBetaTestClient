@@ -17,7 +17,7 @@ context("dsBetaTestClient::ds.glm.o")
 
 options(opal.server1="survival1", opal.server2="survival2", opal.server3="survival3")
 options(opal.table1='SURVIVAL.EXPAND_WITH_MISSING1', opal.table2='SURVIVAL.EXPAND_WITH_MISSING2', opal.table3='SURVIVAL.EXPAND_WITH_MISSING3')
-options(datashield.variables=list('servtime', 'time.id', 'female', 'age.60'))
+options(datashield.variables=list('survtime', 'time.id', 'female', 'age.60'))
 source("setup.R")
 
 #
