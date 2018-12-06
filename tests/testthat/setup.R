@@ -20,16 +20,16 @@ library(opaladmin)
 options(verbose=FALSE)
 
 options(opal.username='administrator',
-        opal.password='password')
+        opal.password='datashield_test&')
 
 options(opal.url='http://localhost:8080')
 #options(opal.url='http://demo.obiba.org:8080')
 
-server <- c("sim1", "sim2", "sim3")
+server <- c(getOption("opal.server1"), getOption("opal.server2"), getOption("opal.server3"))
 url <- c(getOption("opal.url"), getOption("opal.url"), getOption("opal.url"))
 user <- c(getOption("opal.username"), getOption("opal.username"), getOption("opal.username"))
 password <- c(getOption("opal.password"), getOption("opal.password"), getOption("opal.password"))
-table <- c("CNSIM.CNSIM1", "CNSIM.CNSIM2", "CNSIM.CNSIM3")
+table <- c(getOption("opal.table1"), getOption("opal.table2"), getOption("opal.table3"))
 logindata <- data.frame(server,url,user,password,table)
 
 # adminopals <- datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))

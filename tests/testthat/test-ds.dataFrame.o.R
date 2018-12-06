@@ -1,9 +1,22 @@
+.#-------------------------------------------------------------------------------
+# Copyright (c) 2014 OBiBa,
+#               2018 University of Newcastle upon Tyne. All rights reserved.
+#
+# This program and the accompanying materials
+# are made available under the terms of the GNU Public License v3.0.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#-------------------------------------------------------------------------------
+
 #
 # Set up
 #
 
-context("dsClient::ds.dataFrame")
+context("dssBetaTestClient::ds.dataFrame.o")
 
+options(opal.server1="sim1", opal.server2="sim2", opal.server3="sim3")
+options(opal.table1="CNSIM.CNSIM1", opal.table2="CNSIM.CNSIM2", opal.table3="CNSIM.CNSIM3")
 options(datashield.variables=list('LAB_TSC','LAB_HDL'))
 source("setup.R")
 
@@ -11,7 +24,7 @@ source("setup.R")
 # Tests
 #
 
-context("dsBetaTestClient::ds.dataFrame() create a dataframe")
+context("dsBetaTestClient::ds.dataFrame.o() create a dataframe")
 myvectors <- c('D$LAB_TSC', 'D$LAB_HDL')
 ds.dataFrame.o(x=myvectors)
 res <- ds.ls()
@@ -22,7 +35,7 @@ test_that("dataframe_exists", {
 })
 
 
-context("dsBetaTestClient::ds.dataFrame() errors")
+context("dsBetaTestClient::ds.dataFrame.o() errors")
 test_that("dataframe_errors", {
     expect_error(ds.dataframe(), "argument is of length zero", fixed=TRUE)
 })
