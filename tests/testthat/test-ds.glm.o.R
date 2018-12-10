@@ -24,6 +24,18 @@ source("setup.R")
 # Tests
 #
 
+context("dsBetaTestClient::ds.glm.o(): Standard Gaussian regression model for piecewise exponential regression analysis")
+
+mod.D<-ds.glm.o('D$LAB_TSC~D$LAB_TRIG',family="gaussian")
+output.D<-c(mod.D$coefficients[,1],mod.D$coefficients[,2])
+
+mod.R<-glm('D$LAB_TSC~D$LAB_TRIG',family="gaussian")
+output.R<-c(summary(mod.R)$coefficients[,1],summary(mod.R)$coefficients[,2])
+
+test_that("glm_gaussian", {
+    expect_equal(ds.ls()$sim1[2],output.D,output.R)
+})
+
 context("dsBetaTestClient::ds.glm.o(): Standard Poisson regression model for piecewise exponential regression analysis")
 
 mod.D<-ds.glm.o("survtime~1+time.id+female+age.60",family="poisson",offset="log.surv")
