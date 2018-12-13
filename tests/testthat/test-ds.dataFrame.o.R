@@ -13,7 +13,7 @@
 # Set up
 #
 
-context("dssBetaTestClient::ds.dataFrame.o")
+context("dsBetaTestClient::ds.dataFrame.o")
 
 options(opal.server1="sim1", opal.server2="sim2", opal.server3="sim3")
 options(opal.table1="CNSIM.CNSIM1", opal.table2="CNSIM.CNSIM2", opal.table3="CNSIM.CNSIM3")
