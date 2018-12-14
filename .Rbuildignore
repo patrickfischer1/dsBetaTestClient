@@ -1,9 +1,9 @@
 ## Ignore travis config file
 ^\.travis\.yml$
-^\.--travis\.yml--$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^azure-pipelines\.yml$
-^azure-pipelines\.R$
-^azure-pipelines\.Rout$
+^azure-pipelines_site\.pp$
+^azure-pipelines_check\.Rout$
+^azure-pipelines_test\.Rout$
 ^checkDocumentationUpdated\.sh$
