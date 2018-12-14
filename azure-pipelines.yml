@@ -49,15 +49,18 @@ steps:
     R -e "library('devtools'); devtools::check()" | tee azure-pipelines_check.Rout
     grep --quiet "0 error" azure-pipelines_check.Rout
   displayName: 'Devtools checks'
-  condition: always()
+  continueOnError: true
+  failOnStderr: true
 
 - bash: |
     R -e "library('devtools'); devtools::test()" | tee azure-pipelines_test.Rout
     grep --quiet "Failed:   0" azure-pipelines_test.Rout
   displayName: 'Devtools tests'
-  condition: always()
+  continueOnError: true
+  failOnStderr: true
 
 - bash: |
     ./checkDocumentationUpdated.sh
   displayName: 'Check documents'
-  condition: always()
+  continueOnError: true
+  failOnStderr: true
