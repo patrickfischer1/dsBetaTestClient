@@ -50,17 +50,14 @@ steps:
     grep --quiet "0 error" azure-pipelines_check.Rout
   displayName: 'Devtools checks'
   continueOnError: true
-  failOnStderr: true
 
 - bash: |
     R -e "library('devtools'); devtools::test()" | tee azure-pipelines_test.Rout
     grep --quiet "Failed:   0" azure-pipelines_test.Rout
   displayName: 'Devtools tests'
   continueOnError: true
-  failOnStderr: true
 
 - bash: |
     ./checkDocumentationUpdated.sh
   displayName: 'Check documents'
   continueOnError: true
-  failOnStderr: true
