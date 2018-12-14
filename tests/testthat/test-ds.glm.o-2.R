@@ -13,31 +13,26 @@
 # Set up
 #
 
-context("dsBetaTestClient::ds.dataFrame.o")
+context("dsBetaTestClient::ds.glm.o 2")
 
 options(opal.server1="sim1", opal.server2="sim2", opal.server3="sim3")
 options(opal.table1="CNSIM.CNSIM1", opal.table2="CNSIM.CNSIM2", opal.table3="CNSIM.CNSIM3")
-options(datashield.variables=list('LAB_TSC','LAB_HDL'))
+options(datashield.variables=list("LAB_TSC", "LAB_TRIG"))
 source("setup.R")
 
 #
 # Tests
 #
 
-context("dsBetaTestClient::ds.dataFrame.o() create a dataframe")
-myvectors <- c('D$LAB_TSC', 'D$LAB_HDL')
-ds.dataFrame.o(x=myvectors)
-res <- ds.ls()
-test_that("dataframe_exists", {
-    expect_equal(ds.ls()$sim1[2], "dframe")
-    expect_equal(ds.ls()$sim2[2], "dframe")
-    expect_equal(ds.ls()$sim3[2], "dframe")
-})
+context("dsBetaTestClient::ds.glm.o(): Standard Gaussian regression model for piecewise exponential regression analysis")
 
+mod.D<-ds.glm.o('D$LAB_TSC~D$LAB_TRIG',family="gaussian")
+output.D<-c(mod.D$coefficients[,1],mod.D$coefficients[,2])
 
-context("dsBetaTestClient::ds.dataFrame.o() errors")
-test_that("dataframe_errors", {
-    expect_error(ds.dataframe(), "argument is of length zero", fixed=TRUE)
+output.R<-NULL
+
+test_that("glm_gaussian", {
+    expect_equal(ds.ls()$sim1[2],output.D,output.R)
 })
 
 #
