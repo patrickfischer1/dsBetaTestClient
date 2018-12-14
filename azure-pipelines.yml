@@ -46,12 +46,14 @@ steps:
   displayName: 'Install R client'
 
 - bash: |
-    R -e "library('devtools'); devtools::check()"
+    R -e "library('devtools'); devtools::check()" | tee azure-pipelines_check.Rout
+    grep --quiet "0 error" azure-pipelines_check.Rout
   displayName: 'Devtools checks'
   condition: always()
 
 - bash: |
-    R -e "library('devtools'); devtools::test()"
+    R -e "library('devtools'); devtools::test()" | tee azure-pipelines_test.Rout
+    grep --quiet "Failed:   0" azure-pipelines_test.Rout
   displayName: 'Devtools tests'
   condition: always()
 
