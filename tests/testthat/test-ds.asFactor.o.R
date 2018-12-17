@@ -74,12 +74,16 @@ context("dsBetaTestClient::ds.asFactor.o(fixed.dummy.vars)")
 
 ds.asFactor.o("TID","TID.mat1",fixed.dummy.vars=TRUE)
 test_that("with fixed.dummy.vars of TRUE", {
-  expect_true(ds.class("TID.mat1"))
+  expect_equal("matrix", ds.class("TID.mat1")$`survival1`)
+  expect_equal("matrix", ds.class("TID.mat1")$`survival2`)
+  expect_equal("matrix", ds.class("TID.mat1")$`survival3`)
 })
 
 ds.asFactor.o("TID","TID.mat6",fixed.dummy.vars=TRUE,baseline.level=6)
 test_that("with fixed.dummy.vars of TRUE and baseline.level of 6", {
-  expect_true(ds.class("TID.mat6"))
+  expect_equal("matrix", ds.class("TID.mat6")$`survival1`)
+  expect_equal("matrix", ds.class("TID.mat6")$`survival2`)
+  expect_equal("matrix", ds.class("TID.mat6")$`survival3`)
 })
 
 #
