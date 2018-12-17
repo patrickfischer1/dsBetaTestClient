@@ -12,4 +12,5 @@
 
 if (!is.null(opals)) {
     datashield.logout(opals)
+    opals <- NULL
 }
