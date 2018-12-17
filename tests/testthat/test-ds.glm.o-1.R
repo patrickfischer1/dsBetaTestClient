@@ -38,7 +38,7 @@ test_that("glm_poisson", {
 
 context("dsBetaTestClient::ds.glm.o() errors")
 test_that("glm_errors", {
-    expect_error(ds.glm.o(), "argument is of length zero", fixed=TRUE)
+    expect_error(ds.glm.o(), "Please provide a valid regression formula!", fixed=TRUE)
 })
 
 #
