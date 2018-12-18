@@ -28,8 +28,10 @@ context("dsBetaTestClient::ds.glm.o(): Standard Gaussian regression model for pi
 
 mod.D<-ds.glm.o('D$LAB_TSC~D$LAB_TRIG',family="gaussian")
 output.D<-c(mod.D$coefficients[,1],mod.D$coefficients[,2])
+output.D
 
 output.R<-NULL
+output.R
 
 test_that("glm_gaussian", {
     expect_equal(ds.ls()$sim1[2],output.D,output.R)
