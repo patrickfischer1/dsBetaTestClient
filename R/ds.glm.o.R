@@ -1,4 +1,3 @@
-#'
 #' @title ds.glm.o calling glmDS1.o, glmDS2.o
 #' @description Fits a generalized linear model (glm) on data from a single or multiple sources
 #' @details Fits a glm on data from a single source or from multiple sources. In the latter case 
