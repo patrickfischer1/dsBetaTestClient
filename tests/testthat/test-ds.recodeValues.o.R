@@ -26,16 +26,19 @@ source("setup.R")
 
 context("dsBetaTestClient::ds.recodeValues.o(...) valid arguments")
 
-ds.recodeValues.o(var.name="D$age.60", values2replace.vector=c(-1,-6), new.values.vector=c(-10,-16), datasources=opals)
+test_that("recodeValues_checks", {
+    res <- ds.recodeValues.o(var.name="age.60", values2replace.vector=c(-1,-6), new.values.vector=c(-10,-16), datasources=opals)
+    print(res)
+})
 
 context("dsBetaTestClient::ds.recodeValues.o(...) invalid arguments")
 
 test_that("recodeValues_erros", {
     expect_error(ds.recodeValues.o(var.name=NULL), "Please provide the name of the variable to be recoded: eg 'xxx'")
-    expect_error(ds.recodeValues.o(var.name="D$age.60", values2replace.vector=NULL), "Please provide a vector specifying the values to be replaced eg c(1,7,NA)")
-    expect_error(ds.recodeValues.o(var.name="D$age.60", values2replace.vector=c(-1, -6), new.values.vector=NULL), "Please provide a vector specifying the new values to be set eg c(3,NA,4)")
-    expect_error(ds.recodeValues.o(var.name="D$age.60", values2replace.vector=c(-1, -6, -8), new.values.vector=c(-10, -16)), "Please ensure that values2replace.vector and new.values.vector have same length and are in the same order")
-    expect_error(ds.recodeValues.o(var.name="D$age.60", values2replace.vector=c(-1, -6, -6), new.values.vector=c(-10, -16, -17)), "No value may appear more than once in the values2replace.vector")
+    expect_error(ds.recodeValues.o(var.name="age.60", values2replace.vector=NULL), "Please provide a vector specifying the values to be replaced eg c\\(1\\,7\\,NA\\)")
+    expect_error(ds.recodeValues.o(var.name="age.60", values2replace.vector=c(-1, -6), new.values.vector=NULL), "Please provide a vector specifying the new values to be set eg c\\(3\\,NA\\,4\\)")
+    expect_error(ds.recodeValues.o(var.name="age.60", values2replace.vector=c(-1, -6, -8), new.values.vector=c(-10, -16)), "Please ensure that values2replace.vector and new.values.vector have same length and are in the same order")
+    expect_error(ds.recodeValues.o(var.name="age.60", values2replace.vector=c(-1, -6, -6), new.values.vector=c(-10, -16, -17)), "No value may appear more than once in the values2replace.vector")
 })
 
 context("dsBetaTestClient::ds.recodeValues.o done")

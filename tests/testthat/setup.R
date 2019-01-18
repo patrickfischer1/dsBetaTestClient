@@ -34,9 +34,5 @@ table <- c(getOption("opal.table1"), getOption("opal.table2"), getOption("opal.t
 if (!is.null(getOption("opal.server1"))) {
     logindata <- data.frame(server,url,user,password,table)
 
-# adminopals <- datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))
-# opaladmin::dsadmin.install_package(opal=adminopals,pkg="dsBetaTest",githubusername="datashield",ref="master")
-# datashield.logout(adminopals)
-
     opals <- datashield.login(logins=logindata,assign=TRUE,variables=getOption("datashield.variables", NULL))
 }
