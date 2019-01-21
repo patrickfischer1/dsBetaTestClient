@@ -27,7 +27,7 @@ source("setup.R")
 context("dsBetaTestClient::ds.recodeValues.o(...) valid arguments")
 
 test_that("recodeValues_checks", {
-    res <- ds.recodeValues.o(var.name="age.60", values2replace.vector=c(-1,-6), new.values.vector=c(-10,-16), datasources=opals)
+    res <- ds.recodeValues.o(var.name="D$age.60", values2replace.vector=c(-1,-6), new.values.vector=c(-10,-16), datasources=opals)
     print(res)
 })
 
