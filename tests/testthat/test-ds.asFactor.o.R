@@ -30,60 +30,67 @@ ds.asNumeric("D$time.id","TID")
 
 context("dsBetaTestClient::ds.asFactor.o(force.factor.levels)")
 
-ds.asFactor.o("TID","TID.f")
 test_that("with no force.factor.levels", {
-  expect_equal("factor", ds.class("TID.f")$`survival1`)
-  expect_equal("factor", ds.class("TID.f")$`survival2`)
-  expect_equal("factor", ds.class("TID.f")$`survival3`)
-  expect_equal("All tables are valid!", ds.table1D("TID.f")$validity)
+    ds.asFactor.o("TID", "TID.f")
+
+    expect_equal("factor", ds.class("TID.f")$`survival1`)
+    expect_equal("factor", ds.class("TID.f")$`survival2`)
+    expect_equal("factor", ds.class("TID.f")$`survival3`)
+    expect_equal("All tables are valid!", ds.table1D("TID.f")$validity)
 })
 
-ds.asFactor.o("TID","TID.f2",forced.factor.levels=1:6)
 test_that("with forced.factor.levels of 1:6", {
-  expect_equal("factor", ds.class("TID.f2")$`survival1`)
-  expect_equal("factor", ds.class("TID.f2")$`survival2`)
-  expect_equal("factor", ds.class("TID.f2")$`survival3`)
-  expect_equal("All tables are valid!", ds.table1D("TID.f2")$validity)
+    ds.asFactor.o("TID", "TID.f2", forced.factor.levels=1:6)
+
+    expect_equal("factor", ds.class("TID.f2")$`survival1`)
+    expect_equal("factor", ds.class("TID.f2")$`survival2`)
+    expect_equal("factor", ds.class("TID.f2")$`survival3`)
+    expect_equal("All tables are valid!", ds.table1D("TID.f2")$validity)
 })
 
-ds.asFactor.o("TID","TID.f3",forced.factor.levels=0:10)
 test_that("with force.factor.levels of 0:10", {
-  expect_equal("factor", ds.class("TID.f3")$`survival1`)
-  expect_equal("factor", ds.class("TID.f3")$`survival2`)
-  expect_equal("factor", ds.class("TID.f3")$`survival3`)
-  expect_equal("All tables are valid!", ds.table1D("TID.f3")$validity)
+    ds.asFactor.o("TID", "TID.f3", forced.factor.levels=0:10)
+
+    expect_equal("factor", ds.class("TID.f3")$`survival1`)
+    expect_equal("factor", ds.class("TID.f3")$`survival2`)
+    expect_equal("factor", ds.class("TID.f3")$`survival3`)
+    expect_equal("All tables are valid!", ds.table1D("TID.f3")$validity)
 })
 
-ds.asFactor.o("TID","TID.f4",forced.factor.levels=2:3)
 test_that("with force.factor.levels of 2:3", {
-  expect_equal("factor", ds.class("TID.f4")$`survival1`)
-  expect_equal("factor", ds.class("TID.f4")$`survival2`)
-  expect_equal("factor", ds.class("TID.f4")$`survival3`)
-  expect_equal("All tables are valid!", ds.table1D("TID.f4")$validity)
+    ds.asFactor.o("TID", "TID.f4", forced.factor.levels=2:3)
+
+    expect_equal("factor", ds.class("TID.f4")$`survival1`)
+    expect_equal("factor", ds.class("TID.f4")$`survival2`)
+    expect_equal("factor", ds.class("TID.f4")$`survival3`)
+    expect_equal("All tables are valid!", ds.table1D("TID.f4")$validity)
 })
 
-ds.asFactor.o("TID","TID.f5",forced.factor.levels=c(1,2,3,4,'a','h',5))
 test_that("with force.factor.levels of c(1,2,3,4,'a','h',5)", {
-  expect_equal("factor", ds.class("TID.f5")$`survival1`)
-  expect_equal("factor", ds.class("TID.f5")$`survival2`)
-  expect_equal("factor", ds.class("TID.f5")$`survival3`)
-  expect_equal("All tables are valid!", ds.table1D("TID.f5")$validity)
+    ds.asFactor.o("TID", "TID.f5", forced.factor.levels=c(1,2,3,4,'a','h',5))
+
+    expect_equal("factor", ds.class("TID.f5")$`survival1`)
+    expect_equal("factor", ds.class("TID.f5")$`survival2`)
+    expect_equal("factor", ds.class("TID.f5")$`survival3`)
+    expect_equal("All tables are valid!", ds.table1D("TID.f5")$validity)
 })
 
 context("dsBetaTestClient::ds.asFactor.o(fixed.dummy.vars)")
 
-ds.asFactor.o("TID","TID.mat1",fixed.dummy.vars=TRUE)
 test_that("with fixed.dummy.vars of TRUE", {
-  expect_equal("matrix", ds.class("TID.mat1")$`survival1`)
-  expect_equal("matrix", ds.class("TID.mat1")$`survival2`)
-  expect_equal("matrix", ds.class("TID.mat1")$`survival3`)
+    ds.asFactor.o("TID", "TID.mat1", fixed.dummy.vars=TRUE)
+
+    expect_equal("matrix", ds.class("TID.mat1")$`survival1`)
+    expect_equal("matrix", ds.class("TID.mat1")$`survival2`)
+    expect_equal("matrix", ds.class("TID.mat1")$`survival3`)
 })
 
-ds.asFactor.o("TID","TID.mat6",fixed.dummy.vars=TRUE,baseline.level=6)
 test_that("with fixed.dummy.vars of TRUE and baseline.level of 6", {
-  expect_equal("matrix", ds.class("TID.mat6")$`survival1`)
-  expect_equal("matrix", ds.class("TID.mat6")$`survival2`)
-  expect_equal("matrix", ds.class("TID.mat6")$`survival3`)
+    ds.asFactor.o("TID", "TID.mat6", fixed.dummy.vars=TRUE,baseline.level=6)
+
+    expect_equal("matrix", ds.class("TID.mat6")$`survival1`)
+    expect_equal("matrix", ds.class("TID.mat6")$`survival2`)
+    expect_equal("matrix", ds.class("TID.mat6")$`survival3`)
 })
 
 #
@@ -91,3 +98,5 @@ test_that("with fixed.dummy.vars of TRUE and baseline.level of 6", {
 #
 
 source("teardown.R")
+
+context("dsBetaTestClient::ds.asFactor.o done")
