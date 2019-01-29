@@ -46,7 +46,7 @@ steps:
   displayName: 'Install R client'
 
 - bash: |
-    R -e "library('devtools'); devtools::check()" | tee azure-pipelines_check.Rout
+    R -e "library('devtools'); devtools::check(args = c('--no-examples'))" | tee azure-pipelines_check.Rout
     grep --quiet "0 error" azure-pipelines_check.Rout
   displayName: 'Devtools checks'
   condition: always()
