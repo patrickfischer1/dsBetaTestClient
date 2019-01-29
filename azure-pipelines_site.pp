@@ -12,6 +12,8 @@ class { ::datashield:
   remote_mongodb => false,        # There is not a remote mongodb server
   remote_mysql   => false,        # There is not a remote mysql server
 
+  opal_release => '2.12.2',
+
   dsbase_githubusername      => 'datashield',
   dsbase_ref                 => 'master',
   dsstats_githubusername     => 'datashield', 
