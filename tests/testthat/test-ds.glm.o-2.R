@@ -25,14 +25,17 @@ source("setup.R")
 #
 
 context("dsBetaTestClient::ds.glm.o(): Standard Gaussian regression model for piecewise exponential regression analysis")
-
-mod.D<-ds.glm.o('D$LAB_TSC~D$LAB_TRIG',family="gaussian")
-output.D<-c(mod.D$coefficients[,1],mod.D$coefficients[,2])
-
-output.R<-NULL
-
 test_that("glm_gaussian", {
-    expect_equal(ds.ls()$sim1[2],output.D,output.R)
+    mod.D<-ds.glm.o('D$LAB_TSC~D$LAB_TRIG', family="gaussian")
+#    print(mod.D$errorMessage)
+    print(mod.D$dev)
+
+    expect_equal(mod.D$Nmissing[1], 1579)
+    expect_equal(mod.D$Ntotal, 9379)
+#    expect_equal(mod.D$errorMessage$sim1, "No errors")
+#    expect_equal(mod.D$errorMessage$sim2, "No errors")
+#    expect_equal(mod.D$errorMessage$sim3, "No errors")
+    expect_equal(mod.D$dev, 8936, tolerance = .0005)
 })
 
 #
@@ -40,3 +43,5 @@ test_that("glm_gaussian", {
 #
 
 source("teardown.R")
+
+context("dsBetaTestClient::ds.glm.o 2 done")

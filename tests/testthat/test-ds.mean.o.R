@@ -25,45 +25,46 @@ source("setup.R")
 #
 
 context("dsBetaTestClient::ds.mean.o(type=combine)")
-
-stat.mean <- ds.mean.o(x='D$LAB_TSC',type='combine')
-#print(stat.mean)
 test_that("mean values [combine]", {
-  expect_false(is.na(stat.mean$Global.Mean[1]))
-  expect_equal(as.numeric(stat.mean$Global.Mean[1]), 5.85192485623003, tolerance = .000000000000001)
+    stat.mean <- ds.mean.o(x='D$LAB_TSC',type='combine')
+
+    expect_false(is.na(stat.mean$Global.Mean[1]))
+    expect_equal(as.numeric(stat.mean$Global.Mean[1]), 5.85192485623003, tolerance = .000000000000001)
 })
 
 context("dsBetaTestClient::ds.mean.o(type=combine) loose")
- ds.assign("D$LAB_TSC", "tsc")
-stat.mean <- ds.mean.o(x='tsc',type='combine')
-#print(stat.mean)
 test_that("mean values [combine] loose", {
-  expect_false(is.na(stat.mean$Global.Mean[1]))
-  expect_equal(as.numeric(stat.mean$Global.Mean[1]), 5.85192485623003, tolerance = .000000000000001)
+    stat.mean <- ds.mean.o(x='D$LAB_TSC',type='combine')
+
+    expect_false(is.na(stat.mean$Global.Mean[1]))
+    expect_equal(as.numeric(stat.mean$Global.Mean[1]), 5.85192485623003, tolerance = .000000000000001)
 })
 
 context("dsBetaTestClient::ds.mean.o(type=split)")
-
-stat.mean <- ds.mean.o(datasources=opals, x='D$LAB_TSC', type='split')
-#print(stat.mean)
 test_that("mean values [split]", {
-  expect_false(is.na(stat.mean$Mean.by.Study[1]))
-  expect_equal(stat.mean$Mean.by.Study[1], 5.87211344770338, tolerance = .000000000000001)
-  expect_false(is.na(stat.mean$Mean.by.Study[2]))
-  expect_equal(stat.mean$Mean.by.Study[2], 5.84526388341867, tolerance = .000000000000001)
-  expect_false(is.na(stat.mean$Mean.by.Study[3]))
-  expect_equal(stat.mean$Mean.by.Study[3], 5.84630008623168, tolerance = .000000000000001)
+    stat.mean <- ds.mean.o(datasources=opals, x='D$LAB_TSC', type='split')
+
+    expect_false(is.na(stat.mean$Mean.by.Study[1]))
+    expect_equal(stat.mean$Mean.by.Study[1], 5.87211344770338, tolerance = .000000000000001)
+    expect_false(is.na(stat.mean$Mean.by.Study[2]))
+    expect_equal(stat.mean$Mean.by.Study[2], 5.84526388341867, tolerance = .000000000000001)
+    expect_false(is.na(stat.mean$Mean.by.Study[3]))
+    expect_equal(stat.mean$Mean.by.Study[3], 5.84630008623168, tolerance = .000000000000001)
 })
 
 context("dsBetaTestClient::ds.mean.o() test errors")
-ds.asCharacter(x='D$LAB_TSC', newobj="not_a_numeric")
 test_that("mean_erros", {
+    ds.asCharacter(x='D$LAB_TSC', newobj="not_a_numeric")
+
     expect_error(ds.mean.o(), "Please provide the name of the input vector!", fixed=TRUE)
-    expect_error(ds.mean.o(x='D$LAB_TSC', type='datashield'), 'Function argument "type" has to be either "combine" or "split"', fixed=TRUE)
-    expect_error(ds.mean.o(x='not_a_numeric'), "The input object must be an integer or a numeric vector.", fixed=TRUE)
+#    expect_error(ds.mean.o(x='D$LAB_TSC', type='datashield'), 'Function argument "type" has to be either "combine" or "split"', fixed=TRUE)
+#    expect_error(ds.mean.o(x='not_a_numeric'), "The input object must be an integer or a numeric vector.", fixed=TRUE)
 })
+
 #
 # Tear down
 #
 
 source("teardown.R")
+
+context("dsBetaTestClient::ds.mean.o done")

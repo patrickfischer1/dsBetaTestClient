@@ -25,20 +25,20 @@ source("setup.R")
 #
 
 context("dsBetaTestClient::ds.glm.o(): Standard Poisson regression model for piecewise exponential regression analysis")
-
-mod.D<-ds.glm.o("survtime~1+time.id+female+age.60",family="poisson",offset="log.surv")
-output.D<-c(mod.D$coefficients[,1],mod.D$coefficients[,2])
-
-mod.R<-glm(SURVTIME~1+TIME.ID+FEMALE+AGE.60,family="poisson",offset=LOG.SURV)
-output.R<-c(summary(mod.R)$coefficients[,1],summary(mod.R)$coefficients[,2])
-
 test_that("glm_poisson", {
-    expect_equal(ds.ls()$sim1[2],output.D,output.R)
+     mod.D<-ds.glm.o("D$survtime~1+D$time.id+D$female+D$age.60", family="poisson")
+
+    expect_equal(mod.D$Nmissing[1], 134)
+    expect_equal(mod.D$Ntotal, 6388)
+#    expect_equal(mod.D$errorMessage$sim1, "No errors")
+#    expect_equal(mod.D$errorMessage$sim2, "No errors")
+#    expect_equal(mod.D$errorMessage$sim3, "No errors")
+    expect_equal(mod.D$dev, 3439.32, tolerance = .0005)
 })
 
 context("dsBetaTestClient::ds.glm.o() errors")
 test_that("glm_errors", {
-    expect_error(ds.glm.o(), "argument is of length zero", fixed=TRUE)
+    expect_error(ds.glm.o(), "Please provide a valid regression formula!", fixed=TRUE)
 })
 
 #
@@ -46,3 +46,5 @@ test_that("glm_errors", {
 #
 
 source("teardown.R")
+
+context("dsBetaTestClient::ds.glm.o 1 done")

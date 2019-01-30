@@ -25,19 +25,23 @@ source("setup.R")
 #
 
 context("dsBetaTestClient::ds.dataFrame.o() create a dataframe")
-myvectors <- c('D$LAB_TSC', 'D$LAB_HDL')
-ds.dataFrame.o(x=myvectors)
-res <- ds.ls()
 test_that("dataframe_exists", {
-    expect_equal(ds.ls()$sim1[2], "dframe")
-    expect_equal(ds.ls()$sim2[2], "dframe")
-    expect_equal(ds.ls()$sim3[2], "dframe")
+    myvectors <- c('D$LAB_TSC', 'D$LAB_HDL')
+    ds.dataFrame.o(x=myvectors)
+    res <- ds.ls()
+
+    expect_equal("D", res$sim1[1])
+    expect_equal("df_new", res$sim1[2])
+    expect_equal("D", res$sim2[1])
+    expect_equal("df_new", res$sim2[2])
+    expect_equal("D", res$sim3[1])
+    expect_equal("df_new", res$sim3[2])
 })
 
 
 context("dsBetaTestClient::ds.dataFrame.o() errors")
 test_that("dataframe_errors", {
-    expect_error(ds.dataframe(), "argument is of length zero", fixed=TRUE)
+    expect_error(ds.dataframe(), "Please provide the name of the list that holds the input vectors!", fixed=TRUE)
 })
 
 #
@@ -45,3 +49,5 @@ test_that("dataframe_errors", {
 #
 
 source("teardown.R")
+
+context("dsBetaTestClient::ds.dataFrame.o done")
