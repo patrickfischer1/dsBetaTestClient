@@ -42,10 +42,13 @@ steps:
     sudo apt-get install -qq libxml2-dev libcurl4-openssl-dev libssl-dev -y
     sudo apt-get install -qq r-base -y
     sudo R -e "install.packages('devtools', dependencies=TRUE)"
-    sudo R -e "install.packages('datashieldclient', repos=c(getOption('repos'), 'https://cran.obiba.org'), dependencies=TRUE)"
+    sudo R -e "library('devtools'); devtools::install_github(repo='datashield/dsModellingClient', ref='master'), dependencies=TRUE)"
+    sudo R -e "library('devtools'); devtools::install_github(repo='datashield/dsGraphicsClient', ref='master'), dependencies=TRUE)"
+    sudo R -e "library('devtools'); devtools::install_github(repo='datashield/dsGeoClient', ref='master'), dependencies=TRUE)"
+    sudo R -e "library('devtools'); devtools::install_github(repo='datashield/dsStatsClient', ref='master'), dependencies=TRUE)"
     sudo R -e "install.packages('opal', repos=c(getOption('repos'), 'https://cran.obiba.org'), dependencies=TRUE)"
     sudo R -e "install.packages('opaladmin', repos=c(getOption('repos'), 'https://cran.obiba.org'), dependencies=TRUE)"
-    sudo R -e "library('devtools'); library('opal'); library('opaladmin'); opals <- opal.login(username='administrator', password='password', url='http://127.0.0.1:8080'); opaladmin::dsadmin.install_package(opal=opals,pkg='dsBetaTest',githubusername='datashield',ref='master'); datashield.logout(opals)"
+    sudo R -e "library('devtools'); library('opal'); library('opaladmin'); opals <- opal.login(username='administrator', password='password', url='http://127.0.0.1:8080'); opaladmin::dsadmin.install_package(opal=opals,pkg='dsBetaTest',githubusername='datashield',ref='master'); opal.logout(opals)"
   displayName: 'Install R client'
 
 - bash: |
