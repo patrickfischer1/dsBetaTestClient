@@ -6,8 +6,7 @@
 #' This way no matter what the user calls his opal login object it will be captured. 
 #' @keywords internal
 #' @return a list of opal object obtained after login into the servers
-#' @author Gaye A
-#'
+#' @author Amadou Gaye, Paul Burton (updated 15/10/18). THIS IS VERSION TO USE 8/2/19.
 getOpals <- function(){
   
   # get the names of all the objects in the current work environment
