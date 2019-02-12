@@ -18,6 +18,6 @@ in the global environment; if more than one list is found it return the lastest.
 This way no matter what the user calls his opal login object it will be captured.
 }
 \author{
-Gaye A
+Amadou Gaye, Paul Burton (updated 15/10/18). THIS IS VERSION TO USE 8/2/19.
 }
 \keyword{internal}
