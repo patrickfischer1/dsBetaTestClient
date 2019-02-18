@@ -28,7 +28,7 @@ context("dsBetaTestClient::ds.rm.o()")
 test_that("mean values [combine]", {
     rm.list <- ds.rm.o('D$LAB_TSC')
 
-    expect_true(length(rm.list) == 0)
+    expect_true(length(rm.list) != 0)
 })
 
 #
