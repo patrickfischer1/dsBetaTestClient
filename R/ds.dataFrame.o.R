@@ -36,7 +36,7 @@
 #' there are never any duplicates when check.names is invoked by the
 #' serverside function dataFrameDS.o
 #' @param stringsAsFactors logical: should character vectors be converted
-#' to factors? The ‘factory-fresh’ default is TRUE.
+#' to factors? The 'factory-fresh' default is TRUE.
 #' @param completeCases logical. Default FALSE. If TRUE then any rows with
 #' missing values
 #' in any of the elemental components of the final output data.frame

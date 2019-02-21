@@ -2,11 +2,11 @@
 #' @title ds.reShape.o calling reShapeDS.o
 #' @description This function is similar to R function \code{reshape}
 #' @details This is an assign function that uses the native R function reshape() that reshapes a
-#' data frame between ‘wide’ format with repeated measurements in separate columns of the same
-#' record and ‘long’ format with the repeated measurements in separate records. 
+#' data frame between 'wide' format with repeated measurements in separate columns of the same
+#' record and 'long' format with the repeated measurements in separate records. 
 #' @param data.name, the name of the data frame.
 #' @param varying, names of sets of variables in the wide format that correspond to single
-#' variables in long format (‘time-varying’).
+#' variables in long format ('time-varying').
 #' @param v.names, the names of variables in the long format that correspond to multiple variables
 #' in the wide format
 #' @param timevar.name, the name of the variable in long format that differentiates multiple records from the same
