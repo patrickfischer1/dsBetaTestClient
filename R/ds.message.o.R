@@ -34,6 +34,12 @@
 #' of each call. In combination, these two notes alert the user to the fact that if there is
 #' an error, there may be additional information available in a studysideMessage, and also
 #' tells them how to retrieve that message.
+#' @param datasources specifies the particular opal object(s) to use, if it is not specified
+#' the default set of opals will be used. The default opals are always called default.opals.
+#' This parameter is set without inverted commas: e.g. datasources=opals.em or datasources=default.opals
+#' If you wish to specify the second opal server in a set of three, the parameter is specified:
+#' e.g. datasources=opals.em[2]. If you wish to specify the first and third opal servers in a set specify:
+#' e.g. datasources=opals.em[2,3]
 #' @return a list object from each study, containing whatever message has been written by
 #' DataSHIELD into $studysideMessage.
 #' @author Burton PR

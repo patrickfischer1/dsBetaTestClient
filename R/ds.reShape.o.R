@@ -21,8 +21,8 @@
 #' names in varying. This is also used to create variable names when reshaping to wide format.
 #' @param newobj, the name of the new data frame. If this argument is not defined by the user,
 #' the name of the new data frame is set to the name of the input data frame with the
-#' suffix '_long' if \type{direction} is set to 'long' and with the suffix '_wide' if
-#' \type{direction} is set to 'wide'.
+#' suffix '_long' if \code{direction} is set to 'long' and with the suffix '_wide' if
+#' \code{direction} is set to 'wide'.
 #' @param datasources a list of opal object(s) obtained after login in to opal servers;
 #' these objects hold also the data assign to R, as \code{dataframe}, from opal datasources.
 #' @return the object specified by the newobj argument (or default name newObject) is written to the

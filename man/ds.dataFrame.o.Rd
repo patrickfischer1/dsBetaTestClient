@@ -39,7 +39,7 @@ there are never any duplicates when check.names is invoked by the
 serverside function dataFrameDS.o}
 
 \item{stringsAsFactors}{logical: should character vectors be converted
-to factors? The ‘factory-fresh’ default is TRUE.}
+to factors? The 'factory-fresh' default is TRUE.}
 
 \item{completeCases}{logical. Default FALSE. If TRUE then any rows with
 missing values
