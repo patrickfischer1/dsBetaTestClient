@@ -2,11 +2,11 @@
 #' @title ds.reShape.o calling reShapeDS.o
 #' @description This function is similar to R function \code{reshape}
 #' @details This is an assign function that uses the native R function reshape() that reshapes a
-#' data frame between ‘wide’ format with repeated measurements in separate columns of the same
-#' record and ‘long’ format with the repeated measurements in separate records. 
+#' data frame between 'wide' format with repeated measurements in separate columns of the same
+#' record and 'long' format with the repeated measurements in separate records. 
 #' @param data.name, the name of the data frame.
 #' @param varying, names of sets of variables in the wide format that correspond to single
-#' variables in long format (‘time-varying’).
+#' variables in long format ('time-varying').
 #' @param v.names, the names of variables in the long format that correspond to multiple variables
 #' in the wide format
 #' @param timevar.name, the name of the variable in long format that differentiates multiple records from the same
@@ -21,8 +21,8 @@
 #' names in varying. This is also used to create variable names when reshaping to wide format.
 #' @param newobj, the name of the new data frame. If this argument is not defined by the user,
 #' the name of the new data frame is set to the name of the input data frame with the
-#' suffix '_long' if \type{direction} is set to 'long' and with the suffix '_wide' if
-#' \type{direction} is set to 'wide'.
+#' suffix '_long' if \code{direction} is set to 'long' and with the suffix '_wide' if
+#' \code{direction} is set to 'wide'.
 #' @param datasources a list of opal object(s) obtained after login in to opal servers;
 #' these objects hold also the data assign to R, as \code{dataframe}, from opal datasources.
 #' @return the object specified by the newobj argument (or default name newObject) is written to the
