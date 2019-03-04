@@ -61,3 +61,6 @@ but with no structure). If you wish to reconstruct the original
 data.frame you therefore need to specify this structure again e.g.
 the column names etc
 }
+\author{
+Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+}

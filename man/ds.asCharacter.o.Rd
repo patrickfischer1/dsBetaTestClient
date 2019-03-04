@@ -45,3 +45,6 @@ this function is based on the native R function {as.character}
 \details{
 See details of the native R function {as.character}.
 }
+\author{
+Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+}

@@ -45,3 +45,6 @@ this function is based on the native R function {as.logical}
 \details{
 See details of the native R function {as.logical}.
 }
+\author{
+Paul Burton, for DataSHIELD Development Team
+}

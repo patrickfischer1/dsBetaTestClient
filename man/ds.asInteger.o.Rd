@@ -45,3 +45,6 @@ this function is based on the native R function {as.integer}
 \details{
 See details of the native R function {as.integer}.
 }
+\author{
+Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+}
