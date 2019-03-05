@@ -42,7 +42,7 @@
 #' coerces objects to list depends on the class of the object, and so
 #' the class of the unlisted output will depend on how the original
 #' list was formed - see details
-#' @authors Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+#' @author Amadou Gaye, Paul Burton, for DataSHIELD Development Team
 #' @export
 ds.unList.o <- function(x.name=NULL, recursive=TRUE, newobj=NULL, datasources=NULL){
   

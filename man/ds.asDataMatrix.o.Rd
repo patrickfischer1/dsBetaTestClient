@@ -52,3 +52,6 @@ a data.frame the native R function {data.matrix} converts
 the data.frame to a matrix but maintains all data columns in their
 original class
 }
+\author{
+Paul Burton, for DataSHIELD Development Team
+}

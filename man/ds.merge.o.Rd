@@ -102,3 +102,6 @@ in DataSHIELD it is required that all the vectors which dictate the merging
 are explicitly identified for both data.frames using the <by.x.names> and 
 <by.y.names> arguments
 }
+\author{
+Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+}

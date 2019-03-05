@@ -73,7 +73,7 @@
 #' and a studysideMessage was saved. If there was no error and <newobj> was created
 #' without problems no studysideMessage will have been saved and ds.message.o(<newobj>)
 #' will return the message: "ALL OK: there are no studysideMessage(s) on this datasource".
-#' @authors Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+#' @author Amadou Gaye, Paul Burton, for DataSHIELD Development Team
 #' @export
 
 

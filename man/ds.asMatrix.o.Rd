@@ -51,3 +51,6 @@ original class you should use the native R function {data.matrix}
 and in DataSHIELD this is called by ds.asDataMatrix.o which calls
 asDataMatrixDS.o
 }
+\author{
+Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+}

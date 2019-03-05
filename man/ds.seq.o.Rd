@@ -79,3 +79,6 @@ the desire effect of <to>. These include: <from>, the starting value of the
 sequence; <by>, its increment (+ or -), and <length.out> the length of the final vector
 in each data source.
 }
+\author{
+Paul Burton for DataSHIELD Development Team
+}

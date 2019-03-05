@@ -90,3 +90,6 @@ which is written to the serverside. For more details see
 the native R function {rbind}. The handling of argument <x>
 is similar to that of functions {ds.cbind.o} and {ds.dataFrame.o}
 }
+\author{
+Paul Burton for DataSHIELD Development Team
+}

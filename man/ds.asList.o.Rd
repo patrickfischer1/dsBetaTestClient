@@ -44,3 +44,6 @@ specially with a created object (<newobj>) if it is of class list.
 Reconfiguring the function as an aggregate function
 works around this problem.
 }
+\author{
+Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+}

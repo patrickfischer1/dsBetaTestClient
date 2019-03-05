@@ -27,7 +27,7 @@
 #' object has been created, the second states its class. The way that {as.list}
 #' coerces objects to list depends on the class of the object, but in general
 #' the class of the output object should usually be 'list'
-#' @authors Amadou Gaye, Paul Burton, for DataSHIELD Development Team
+#' @author Amadou Gaye, Paul Burton, for DataSHIELD Development Team
 #' @export
 ds.asList.o = function(x.name=NULL, newobj=NULL, datasources=NULL){
   
