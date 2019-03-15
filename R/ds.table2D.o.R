@@ -1,7 +1,7 @@
 #' 
 #' @title Generates 2-dimensional contingency tables
 #' @description The function ds.table2D.o is a client-side wrapper function. It calls the server-side function 
-#' 'table2DDS.o' to generate a 2-dimensional contingency table for each data source. 
+#' 'table2DDS.o' that generates a 2-dimensional contingency table for each data source. 
 #' @details The table returned by the server side function might be valid (non disclosive - no table cell have 
 #' counts between 1 and the minimal number agreed by the data owner and set in opal as the "nfilter.tab") or
 #' invalid (potentially disclosive - one or more table cells have a count between 1 and the minimal number agreed
@@ -30,7 +30,7 @@
 #' table.}
 #' \item{validity}{a text that informs the analyst about the validity of the output tables. If any tables are invalid the
 #' studies they are originated from are also mentioned in the text message.}
-#' @author Amadou Gaye, Paul Burton, Demetris Avraam for DataSHIELD Development Team
+#' @author Amadou Gaye, Paul Burton, Demetris Avraam, for DataSHIELD Development Team
 #' @seealso \link{ds.table1D} for the tabulating one vector.
 #' @export
 #' @examples {
@@ -82,7 +82,7 @@
 #' 
 #' }
 #' 
-ds.table2D.o<-function(x=NULL, y=NULL, type='both', warningMessage=TRUE, datasources=NULL){ 
+ds.table2D.o <- function(x=NULL, y=NULL, type='both', warningMessage=TRUE, datasources=NULL){ 
   
   # if no opal login details are provided look for 'opal' objects in the environment
   if(is.null(datasources)){
@@ -175,8 +175,8 @@ ds.table2D.o<-function(x=NULL, y=NULL, type='both', warningMessage=TRUE, datasou
   rowPercentTables <- vector("list", length(stdnames))
   colPercentTables <- vector("list", length(stdnames))
   for(i in 1:length(stdnames)){
-    rowPercentTables[[i]]  <- rowPercent(countTables[[i]])
-    colPercentTables[[i]]  <- colPercent(countTables[[i]])
+    rowPercentTables[[i]] <- rowPercent(countTables[[i]])
+    colPercentTables[[i]] <- colPercent(countTables[[i]])
   }  
   names(rowPercentTables) <- paste0(stdnames,"-",paste0(x,"(row)|",y,"(col)")) 
   names(colPercentTables) <- paste0(stdnames,"-",paste0(x,"(row)|",y,"(col)")) 
@@ -191,7 +191,6 @@ ds.table2D.o<-function(x=NULL, y=NULL, type='both', warningMessage=TRUE, datasou
       options(warn = -1) # suppress warning temporarily to avoid 'nuisance' message, analyst will found out chi2 results anyway.
       chi2Tests[[i]] <- chisq.test(contingencyTable )
       options(warn = 0)  # put warning back
-
     }
   }
   names(chi2Tests) <- paste0(stdnames,"-",paste0(x,"(row)|",y,"(col)"))   
@@ -226,10 +225,10 @@ ds.table2D.o<-function(x=NULL, y=NULL, type='both', warningMessage=TRUE, datasou
     }
     out.split <- (list(colPercent=colPercentTables, rowPercent=rowPercentTables, chi2Test=chi2Tests, counts=countTables,  validity=validityValue))
     output.object <- out.split
-		if(type=="both"){
+    if(type=="both"){
       output.object <- list(colPercent=colPercentTables, colPercent.all.studies=pooledColPercent,rowPercent=rowPercentTables,rowPercent.all.studies=pooledRowPercent, 
-		  chi2Test=chi2Tests, chi2Test.all.studies=pooledChi2test, counts=countTables, counts.all.studies=pooledCounts, validity=validityValue)
-		}
+		 chi2Test=chi2Tests, chi2Test.all.studies=pooledChi2test, counts=countTables, counts.all.studies=pooledCounts, validity=validityValue)
+    }
   }		
 	
   return(output.object)
