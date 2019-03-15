@@ -113,9 +113,6 @@ if(type == 'both' | type == 'b' ) type <- 'both'                                
 #MODIFY FUNCTION CODE TO DEAL WITH ALL THREE TYPES                                                #
 ###################################################################################################
 
- 
-  # number of studies
-  num.sources <- length(datasources)
   
   cally <- paste0("meanDS.o(", x, ")")
   ss.obj <- datashield.aggregate(datasources, as.symbol(cally))
@@ -188,4 +185,3 @@ print("Data object <mean.all.studies> created successfully in all sources") #
 
 }
 #ds.mean.o
-
