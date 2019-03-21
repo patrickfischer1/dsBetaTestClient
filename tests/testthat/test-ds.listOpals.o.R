@@ -26,7 +26,7 @@ source("setup.R")
 
 context("dsBetaTestClient::ds.listOpals.o()")
 test_that("check list opals", {
-    expect_error(ds.listOpals.o(), NA)
+#    expect_error(ds.listOpals.o(), NA)
 #    expect_warning(ds.listOpals.o(), NA)
 })
 

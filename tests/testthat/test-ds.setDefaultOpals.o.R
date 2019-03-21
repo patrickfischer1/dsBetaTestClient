@@ -26,8 +26,8 @@ source("setup.R")
 
 context("dsBetaTestClient::ds.setDefaultOpals.o()")
 test_that("check set default opals", {
-    expect_error(ds.setDefaultOpals.o(), NA)
-    expect_warning(ds.setDefaultOpals.o(), NA)
+    expect_error(ds.setDefaultOpals.o("opals"), NA)
+    expect_warning(ds.setDefaultOpals.o("opals"), NA)
 })
 
 #
