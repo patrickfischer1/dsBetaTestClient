@@ -5,7 +5,7 @@ steps:
 - bash: |
     git config --global user.email "you@example.com"
     git config --global user.name "Azure pipeline"
-    git clone https://$(GHPAT)@github.com:datashield/testStatus.git testStatus
+    git clone https://datashield:$(GHPAT)@github.com/datashield/testStatus.git testStatus
     # git clone https://github.com:datashield/testStatus.git testStatus
     cd testStatus
     ls
