@@ -3,8 +3,8 @@ pool:
 
 steps:
 - bash: |
-    git config user.email "you@example.com"
-    git config user.name "Azure pipeline"
+    git config --global user.email "you@example.com"
+    git config --global user.name "Azure pipeline"
     git clone https://github.com/datashield/testStatus.git testStatus
     cd testStatus
     echo "test" > testfile
