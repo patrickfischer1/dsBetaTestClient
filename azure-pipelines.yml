@@ -65,7 +65,10 @@ steps:
 - bash: |
     git config --global user.email "you@example.com"
     git config --global user.name "Azure pipeline"
+    ls
     git clone https://datashield:$(GHPAT)@github.com/datashield/testStatus.git testStatus
+    ls
+    ls ../
     cp test_restults.xml testStatus/
     cd testStatus
     git add test_restults.xml
