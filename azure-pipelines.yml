@@ -3,6 +3,14 @@ pool:
 
 steps:
 - bash: |
+    git clone https://github.com/datashield/testStatus.git testStatus
+    cd testStatus
+    echo "test" > testfile
+    git add testfile
+    git commit -m "adding new status file"
+    git push
+
+- bash: |
     sudo service mysql stop
     sudo apt-get update
     sudo apt-get remove --purge mysql-client mysql-server mysql-common -y
