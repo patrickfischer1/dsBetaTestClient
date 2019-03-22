@@ -71,4 +71,6 @@ steps:
     git add test_restults.xml
     git commit -m "adding new test_restults file"
     git push
+  displayName: 'Parse test results'
+  condition: always()
 
