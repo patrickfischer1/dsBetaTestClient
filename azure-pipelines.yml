@@ -7,6 +7,7 @@ steps:
     git config --global user.name "Azure pipeline"
     git clone https://github.com/datashield/testStatus.git testStatus
     cd testStatus
+    ls
     echo "test" > testfile
     git add testfile
     git commit -m "adding new status file"
