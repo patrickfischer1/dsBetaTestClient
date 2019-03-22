@@ -3,18 +3,6 @@ pool:
 
 steps:
 - bash: |
-    git config --global user.email "you@example.com"
-    git config --global user.name "Azure pipeline"
-    git clone https://datashield:$(GHPAT)@github.com/datashield/testStatus.git testStatus
-    # git clone https://github.com:datashield/testStatus.git testStatus
-    cd testStatus
-    ls
-    echo "test" > testfile
-    git add testfile
-    git commit -m "adding new status file"
-    git push
-
-- bash: |
     sudo service mysql stop
     sudo apt-get update
     sudo apt-get remove --purge mysql-client mysql-server mysql-common -y
@@ -64,7 +52,7 @@ steps:
   condition: always()
 
 - bash: |
-    R -e "library('devtools'); devtools::test()" | tee azure-pipelines_test.Rout
+    R -e "library('devtools'); options(testthat.output_file = "test_results.xml"); devtools::test(reporter = "junit")" | tee azure-pipelines_test.Rout
     grep --quiet "Failed:   0" azure-pipelines_test.Rout
   displayName: 'Devtools tests'
   condition: always()
@@ -73,3 +61,14 @@ steps:
     ./checkDocumentationUpdated.sh
   displayName: 'Check documents'
   condition: always()
+
+- bash: |
+    git config --global user.email "you@example.com"
+    git config --global user.name "Azure pipeline"
+    git clone https://datashield:$(GHPAT)@github.com/datashield/testStatus.git testStatus
+    cp test_restults.xml testStatus/
+    cd testStatus
+    git add test_restults.xml
+    git commit -m "adding new test_restults file"
+    git push
+
