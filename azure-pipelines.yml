@@ -65,12 +65,13 @@ steps:
 - bash: |
     git config --global user.email "you@example.com"
     git config --global user.name "Azure pipeline"
+    git clone https://datashield:$(GHPAT)@github.com/datashield/dsBetaTestClient.git dsBetaTestClient
     git clone https://datashield:$(GHPAT)@github.com/datashield/testStatus.git testStatus
-    cp test_results.xml testStatus/
+    testStatus/source/status.py
+    cp status.html testStatus/
     cd testStatus
-    git add test_results.xml
+    git add status.html
     git commit -m "adding new test_results file"
     git push
   displayName: 'Parse test results'
   condition: always()
-
