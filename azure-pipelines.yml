@@ -52,7 +52,7 @@ steps:
   condition: always()
 
 - bash: |
-    R -e "library('devtools'); options(testthat.output_file = 'test_results.xml'); devtools::test(reporter = 'junit')" #| tee azure-pipelines_test.Rout
+    R -e "library('devtools'); options(testthat.output_file = 'test_results.xml'); devtools::test(reporter = 'junit')" | tee azure-pipelines_test.Rout
     #grep --quiet "Failed:   0" azure-pipelines_test.Rout
   displayName: 'Devtools tests'
   condition: always()
