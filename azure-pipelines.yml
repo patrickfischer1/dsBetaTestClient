@@ -68,9 +68,9 @@ steps:
     git clone https://datashield:$(GHPAT)@github.com/datashield/dsBetaTestClient.git dsBetaTestClient
     git clone https://datashield:$(GHPAT)@github.com/datashield/testStatus.git testStatus
     testStatus/source/status.py
-    cp status.html testStatus/
-    cd testStatus
-    git add status.html
+    cp status.html testStatus/docs/latest/index.html
+    cd testStatus/docs/latest/
+    git add index.html
     git commit -m "adding new test_results file"
     git push
   displayName: 'Parse test results'
