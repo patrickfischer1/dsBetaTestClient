@@ -7,7 +7,7 @@
 ds.listClientsideFunctions.o(all.functions = TRUE,
   dsBaseClient = FALSE, dsGraphicsClient = FALSE,
   dsModellingClient = FALSE, dsStatsClient = FALSE,
-  userDefinedClient = FALSE)
+  dsBetaTestClient = FALSE, userDefinedClient = FALSE)
 }
 \arguments{
 \item{all.functions}{logical, if TRUE will list all client-side functions
@@ -24,6 +24,9 @@ in "package:dsModellingClient". Default = FALSE.}
 
 \item{dsStatsClient}{logical, if TRUE will selectively list client-side functions
 in "package:dsStatsClient". Default = FALSE.}
+
+\item{dsBetaTestClient}{logical, if TRUE will selectively list client-side functions
+in "package:dsBetaTestClient". Default = FALSE.}
 
 \item{userDefinedClient}{logical, if TRUE will selectively list user defined
 client-side functions held as R objects with name "ds. ..." in .Global.env". Default = FALSE.}
