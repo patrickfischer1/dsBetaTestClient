@@ -2,7 +2,12 @@
 #' @title ds.var.o calling aggregate function varDS.o
 #' @description Computes the variance of a given vector
 #' This function is similar to the R function \code{var}.
-#' @details It is a wrapper for the server side function
+#' @details It is a wrapper for the server side function. 
+#' The server side function returns a list with the sum of the input variable, the sum of squares
+#' of the input variable, the number of missing values, the number of valid values, the number of
+#' total lenght of the variable, and a study message indicating whether the number of valid is less
+#' than the disclosure threshold. The variance is calculated at the client side by the formula 
+#' $var(X)=\frac{\sum{x_i^2}}{N-1}-\frac{(\sum{x_i})^2}{N(N-1)}$
 #' @param x a character, the name of a numerical vector.
 #' @param type a character which represents the type of analysis to carry out. 
 #' If \code{type} is set to 'combine', 'combined', 'combines' or 'c', a global variance is calculated 
@@ -102,20 +107,46 @@ ds.var.o <- function(x=NULL, type='split', checks=FALSE, datasources=NULL){
   ss.obj <- datashield.aggregate(datasources, as.symbol(cally))
   
   Nstudies <- length(datasources)
-  ss.mat <- matrix(as.numeric(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,1:4]),nrow=Nstudies)
-  dimnames(ss.mat) <- c(list(names(ss.obj),names(ss.obj[[1]])[1:4]))
+  EstimatedVar <- c()
+  Nvalid <- c()
+  Nmissing <- c()
+  Ntotal <- c()
+  for (i in 1:Nstudies){
+    EstimatedVar[i] <- ss.obj[[i]][[2]]/(ss.obj[[i]][[4]]-1) - (ss.obj[[i]][[1]])^2/(ss.obj[[i]][[4]]*(ss.obj[[i]][[4]]-1))
+    Nvalid[i] <- as.numeric(ss.obj[[i]][[4]])
+    Nmissing[i] <- as.numeric(ss.obj[[i]][[3]])
+    Ntotal[i] <- as.numeric(ss.obj[[i]][[5]])
+  }
+  ss.mat <- matrix(c(EstimatedVar,Nmissing,Nvalid,Ntotal),nrow=Nstudies)
+  dimnames(ss.mat) <- c(list(names(ss.obj),c('EstimatedVar','Nmissing','Nvalid','Ntotal')))
   
-  ValidityMessage.mat <- matrix(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,5],nrow=Nstudies)
-  dimnames(ValidityMessage.mat) <- c(list(names(ss.obj),names(ss.obj[[1]])[5]))
+  ValidityMessage.mat <- matrix(matrix(unlist(ss.obj),nrow=Nstudies,byrow=TRUE)[,6],nrow=Nstudies)
+  dimnames(ValidityMessage.mat) <- c(list(names(ss.obj),names(ss.obj[[1]])[6]))
   
   ss.mat.combined <- t(matrix(ss.mat[1,]))
   
-  ss.mat.combined[1,1] <- (t(matrix(ss.mat[,3]))%*%ss.mat[,1])/(sum(ss.mat[,3]))
+  GlobalSum.new <- 0
+  GlobalSumSquares.new <- 0
+  GlobalNvalid.new <- 0
+  for (i in 1:Nstudies){
+    GlobalSum <- GlobalSum.new +  ss.obj[[i]][[1]]
+    GlobalSumSquares <- GlobalSumSquares.new +  ss.obj[[i]][[2]]
+    GlobalNvalid <- GlobalNvalid.new +  ss.obj[[i]][[4]]
+    GlobalSum.new <- GlobalSum
+    GlobalSumSquares.new <- GlobalSumSquares
+    GlobalNvalid.new <- GlobalNvalid
+  }
+  
+  GlobalVar <- GlobalSumSquares/(GlobalNvalid-1) - (GlobalSum^2)/(GlobalNvalid*(GlobalNvalid-1))
+  
+  
+  ss.mat.combined[1,1] <- GlobalVar
   ss.mat.combined[1,2] <- sum(ss.mat[,2])
   ss.mat.combined[1,3] <- sum(ss.mat[,3])
   ss.mat.combined[1,4] <- sum(ss.mat[,4])
+
   
-  dimnames(ss.mat.combined) <- c(list("studiesCombined"),list(names(ss.obj[[1]])[1:4]))
+  dimnames(ss.mat.combined) <- c(list("studiesCombined",c('EstimatedVar','Nmissing','Nvalid','Ntotal')))
   
   #PRIMARY FUNCTION OUTPUT SUMMARISE RESULTS FROM
   #AGGREGATE FUNCTION AND RETURN TO CLIENT-SIDE
