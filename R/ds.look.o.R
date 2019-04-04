@@ -27,7 +27,7 @@
 #' the argument can be specified as: e.g. datasources=opals.em[2].
 #' If you wish to specify the first and third opal servers in a set you specify:
 #' e.g. datasources=opals.em[c(1,3)]
-#' @returns the output from the specified server side aggregate function to the client side
+#' @return the output from the specified server side aggregate function to the client side
 #' @author Gaye, A, Burton PR.
 #' @export
 ds.look.o<-function(toAggregate=NULL, checks=FALSE, datasources=NULL){
