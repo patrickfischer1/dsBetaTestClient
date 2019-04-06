@@ -26,11 +26,11 @@ source("setup.R")
 
 context("dsBetaTestClient::ds.var.o()")
 test_that("simple var", {
-    var.res <- ds.var.o(x = 'D$LAB_TSC')
+    var.res <- ds.var.o(x = 'D$LAB_TSC', datasources = opals)
 
-print(var.res)
-
-    expect_true(var.res != 0)
+    expect_equal(var.res$Variance.by.Study[1], 1.229163, tolerance = .000001)
+    expect_equal(var.res$Variance.by.Study[2], 1.140606, tolerance = .000001)
+    expect_equal(var.res$Variance.by.Study[3], 1.134995, tolerance = .000001)
 })
 
 #
