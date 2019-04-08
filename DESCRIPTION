@@ -1,6 +1,6 @@
 Package: dsBetaTestClient
 Title: New DataSHIELD Client Functions
-Version: 0.4.2
+Version: 0.4.3.1
 Author: DataSHIELD Developers <datashield@newcastle.ac.uk>
 Maintainer: DataSHIELD Developers <datashield@newcastle.ac.uk>
 Description: Beta versions of new DataSHIELD client functions. Collected in this
